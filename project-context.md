@@ -2,19 +2,20 @@
 
 ## Product
 
-A web (?) and mobile system for lending and renting books within a local
-community.
--
+A web and mobile system for lending and renting books within a local
+community. Our plan is to start in Cal Poly SLO and move up!
 
 ## Constraints
 
 - Do not include real customer addresses, names, or package IDs
   in GenAI prompts.
 - Status changes must preserve an audit history.
+- Keep it local and assume handoffs will be arranged in person via dropoffs. We should not be storing or processing actual addresses for the moment.
 
 ## Open questions
 
--
+- How will lenders be able to report unresponsive or damaging borrowers? Likewise, will borrowers be able to do the same for rude lenders?
+- Will we provide in-app messaging for users to use?
 
 ## Task prompt pattern
 
