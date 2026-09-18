@@ -28,13 +28,13 @@ CREATED FROM SRD DOC
 
 ### Document History
 
-| Last Date Changed | Who | What Was Changed |
-| --- | --- | --- |
-| [Date] | [Name] | [Description of change] |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| Last Date Changed | Who    | What Was Changed        |
+| ----------------- | ------ | ----------------------- |
+| [Date]            | [Name] | [Description of change] |
+|                   |        |                         |
+|                   |        |                         |
+|                   |        |                         |
+|                   |        |                         |
 
 ---
 
@@ -73,7 +73,7 @@ CREATED FROM SRD DOC
 
 **Problem Statement:** What specific problem are you solving?
 
-The importance of books in today's modern world is often understated. Many Cal Poly students are aware of this and even bring books with them to keep them company while at school. However, most books brought to school are personal favorites and are rarely ones they haven't read before. We'd like to fix this problem by allowing people to trade their books and 
+The importance of books in today's modern world is often understated. Many Cal Poly students are aware of this and even bring books with them to keep them company while at school. However, most books brought to school are personal favorites and are rarely ones they haven't read before. We'd like to fix this problem by allowing people to trade their books and
 
 ### 1.2 Intended Audience
 
@@ -93,12 +93,12 @@ User stories follow this format:
 
 > **As a [type of user], I want to [action] so that [value or benefit].**
 
-| ID | Requirement | Priority |
-| --- | --- | ---: |
-| US-01 | As a user, I want to authenticate via username and password. | 2 |
-| US-02 | As a user, I want to store workout information. | 1 |
-| US-03 | As a user, I want to search my workout history. | 3 |
-| US-04 | As a user, I want to add new workout types. | 4 |
+| ID    | Requirement                                                  | Priority |
+| ----- | ------------------------------------------------------------ | -------: |
+| US-01 | As a user, I want to authenticate via username and password. |        2 |
+| US-02 | As a user, I want to store workout information.              |        1 |
+| US-03 | As a user, I want to search my workout history.              |        3 |
+| US-04 | As a user, I want to add new workout types.                  |        4 |
 
 ## 3. Functional Requirements
 
@@ -106,12 +106,12 @@ Functional requirements should follow this format:
 
 > **The system shall...**
 
-| ID | Requirement | Priority |
-| --- | --- | ---: |
-| FR-01 | The system shall authenticate users via username and password. | 2 |
-| FR-02 | The system shall allow users to store workout information. | 1 |
-| FR-03 | The system shall allow users to search their workout history. | 3 |
-| FR-04 | The system shall allow users to add new workout types. | 4 |
+| ID    | Requirement                                                    | Priority |
+| ----- | -------------------------------------------------------------- | -------: |
+| FR-01 | The system shall authenticate users via username and password. |        2 |
+| FR-02 | The system shall allow users to store workout information.     |        1 |
+| FR-03 | The system shall allow users to search their workout history.  |        3 |
+| FR-04 | The system shall allow users to add new workout types.         |        4 |
 
 ## 4. Non-Functional Requirements
 
@@ -131,10 +131,10 @@ Functional requirements should follow this format:
 
 List each planned endpoint using the format `METHOD | URL | DESCRIPTION`.
 
-| Method | URL | Description |
-| --- | --- | --- |
-| `GET` | `/api/resources` | Fetches the resource collection. |
-| `POST` | `/api/resources` | Creates a new resource. |
+| Method | URL              | Description                      |
+| ------ | ---------------- | -------------------------------- |
+| `GET`  | `/api/resources` | Fetches the resource collection. |
+| `POST` | `/api/resources` | Creates a new resource.          |
 
 ### 5.2 Database Schema
 
@@ -158,12 +158,12 @@ List each planned endpoint using the format `METHOD | URL | DESCRIPTION`.
 
 ## 8. Traceability Matrix
 
-| ID | Requirement | Implementation Reference |
-| --- | --- | --- |
-| US-01 | The system will authenticate users via username and password. | Line 152 |
-| US-02 | Allow users to store workout information. | Line 256 |
-| US-03 | Allow users to search their workout history. | Line 46 |
-| US-04 | Allow users to add new workout types. | Line 45 |
+| ID    | Requirement                                                   | Implementation Reference |
+| ----- | ------------------------------------------------------------- | ------------------------ |
+| US-01 | The system will authenticate users via username and password. | Line 152                 |
+| US-02 | Allow users to store workout information.                     | Line 256                 |
+| US-03 | Allow users to search their workout history.                  | Line 46                  |
+| US-04 | Allow users to add new workout types.                         | Line 45                  |
 
 > **Note:** File paths, function names, issue numbers, or commit references are generally more maintainable than line numbers because line numbers change as the code evolves.
 
