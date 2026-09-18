@@ -8,3 +8,6 @@ CONTRIBUTING.md
    can run 'npx eslint FILENAME' to check a specific file. (eslint is currently
    only setup for .js files. You can edit this in the individual eslint.config.js
    files within the frontend & backend.)
+
+   ESLint9 is the most recent compatible version with some ReactNative components.
+   You might need to use 'npm i --legacy-peer-deps' when installing ESLint.
