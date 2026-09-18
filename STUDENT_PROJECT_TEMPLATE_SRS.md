@@ -30,9 +30,9 @@ CREATED FROM SRD DOC
 
 | Last Date Changed | Who    | What Was Changed        |
 | ----------------- | ------ | ----------------------- |
-| [Date]            | [Name] | [Description of change] |
-|                   |        |                         |
-|                   |        |                         |
+| 9/15/2026         | Gaven  | Wrote down class info & team roles. |
+| 9/18/2026         | Prasi  | Established project purpose & problem statement. |
+| 9/18/2026         | Gaven  | Established preliminary project stakeholders and scope. |
 |                   |        |                         |
 |                   |        |                         |
 
@@ -73,19 +73,19 @@ CREATED FROM SRD DOC
 
 **Problem Statement:** What specific problem are you solving?
 
-The importance of books in today's modern world is often understated. Many Cal Poly students are aware of this and even bring books with them to keep them company while at school. However, most books brought to school are personal favorites and are rarely ones they haven't read before. We'd like to fix this problem by allowing people to trade their books and
+The importance of books in today's modern world is often understated. Many Cal Poly students are aware of this and even bring books with them to keep them company while at school. However, most books brought to school are personal favorites and are rarely ones they haven't read before. We'd like to fix this problem by allowing people to trade their books and __.
 
 ### 1.2 Intended Audience
 
 **Target Audience:** Who are the stakeholders?
 
-[Describe the target audience and stakeholders here.]
+The stakeholders of OurLibrary are us, the developers / product owners, and the users of the app.
 
 ### 1.3 Project Scope
 
 **Scope:** What is the scope of this project?
 
-[Describe what is and is not included in the project.]
+In terms of deployment and testing, OurLibrary's scope will be limited to the Cal Poly campus. However, the functionality of OurLibrary will be designed to used anywhere. (SUBJECT TO CHANGE)
 
 ## 2. User Stories
 
@@ -95,10 +95,14 @@ User stories follow this format:
 
 | ID    | Requirement                                                  | Priority |
 | ----- | ------------------------------------------------------------ | -------: |
-| US-01 | As a user, I want to authenticate via username and password. |        2 |
-| US-02 | As a user, I want to store workout information.              |        1 |
-| US-03 | As a user, I want to search my workout history.              |        3 |
-| US-04 | As a user, I want to add new workout types.                  |        4 |
+| US-01 | As a user, I want to add books to lend.                      |        ? |
+| US-02 | As a user, I want to remove books from my lending library.   |        ? |
+| US-03 | As a user, I want to request to borrow a book.               |        ? |
+| US-04 | As a user, I want to message another user to coordinate book drop offs. |        ? |
+| US-05 | As a user, I want to change my profile picture and bio.      |        ? |
+| US-05 | As a user, I want to mark books that are currently being lended. |        ? |
+| US-06 | As a user, I want to set my lending/borrowing range.         |        ? |
+| US-07 | As a user, I want to filter for books based on certain criteria. |        ? |
 
 ## 3. Functional Requirements
 
@@ -108,10 +112,19 @@ Functional requirements should follow this format:
 
 | ID    | Requirement                                                    | Priority |
 | ----- | -------------------------------------------------------------- | -------: |
-| FR-01 | The system shall authenticate users via username and password. |        2 |
-| FR-02 | The system shall allow users to store workout information.     |        1 |
-| FR-03 | The system shall allow users to search their workout history.  |        3 |
-| FR-04 | The system shall allow users to add new workout types.         |        4 |
+| FR-01 | The system shall authenticate users via username and password. |        ? |
+| FR-02 | The system shall store the users' emails, usernames, and hashed passwords. |        ? |
+| FR-03 | The system shall allow users to change their username and password. |        ? |
+| FR-04 | The system shall send an email to a user if they make a 'forgot my password' request. |        ? |
+| FR-04 | The system shall allow users to add books to their library for lending (and remove books if requested). |        ? |
+| FR-05 | The system shall store book data (title, author, genre).       |        ? |
+| FR-06 | The system shall allow users to notify and message other users about interest in borrowing a book. |        ? |
+| FR-07 | The system shall store and display user uploaded profile pictures. |        ? |
+| FR-08 | The system shall allow users to write and save personal biographes. |        ? |
+| FR-09 | The system shall allow users to mark books as available or lent. |        ? |
+| FR-10 | The system shall allow to add a location range for lending/borrowing books. |        ? |
+| FR-11 | The system shall store a user selected location (with radius), indicating their range of interaction. |        ? |
+| FR-12 | The system shall allow users to search for books by title, author, and/or genre. |        ? |
 
 ## 4. Non-Functional Requirements
 
