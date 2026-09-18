@@ -32,7 +32,7 @@ CREATED FROM SRD DOC
 | ----------------- | ------ | ----------------------- |
 | 9/15/2026         | Gaven  | Wrote down class info & team roles. |
 | 9/18/2026         | Prasi  | Established project purpose & problem statement. |
-| 9/18/2026         | Gaven  | Established preliminary project stakeholders and scope. |
+| 9/18/2026         | Gaven  | Established preliminary project stakeholders, project scope, user stories, and functional requirements. |
 |                   |        |                         |
 |                   |        |                         |
 
@@ -73,7 +73,7 @@ CREATED FROM SRD DOC
 
 **Problem Statement:** What specific problem are you solving?
 
-The importance of books in today's modern world is often understated. Many Cal Poly students are aware of this and even bring books with them to keep them company while at school. However, most books brought to school are personal favorites and are rarely ones they haven't read before. We'd like to fix this problem by allowing people to trade their books and __.
+The importance of books in today's modern world is often understated. Many Cal Poly students are aware of this and even bring books with them to keep them company while at school. However, most books brought to school are personal favorites and are rarely ones they haven't read before. We'd like to fix this problem by allowing people to lend and borrow from fellow readers through a dedicated app.
 
 ### 1.2 Intended Audience
 
