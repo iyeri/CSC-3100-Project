@@ -33,7 +33,7 @@ CREATED FROM SRD DOC
 | 9/15/2026         | Gaven | Wrote down class info & team roles.                                                                     |
 | 9/18/2026         | Prasi | Established project purpose & problem statement.                                                        |
 | 9/18/2026         | Gaven | Established preliminary project stakeholders, project scope, user stories, and functional requirements. |
-|                   |       |                                                                                                         |
+| 9/25/202          | Gwyn  | Items for TE2 (product vision and stories up to date)                                                   |
 |                   |       |                                                                                                         |
 
 ---
@@ -87,6 +87,9 @@ The stakeholders of OurLibrary are us, the developers / product owners, and the 
 
 In terms of deployment and testing, OurLibrary's scope will be limited to the Cal Poly campus. However, the functionality of OurLibrary will be designed to used anywhere. (SUBJECT TO CHANGE)
 
+### 1.4 Project Vision
+For Cal Poly students who want to read books but struggle with affordable access, Our Library is a mobile app that will allow students to easily borrow and lend books out within the campus community. Unlike public libraries or Facebook market place, our app is targeted towards Cal Poly students with no cost, creating an accessible, convenient, and trusted network.
+
 ## 2. User Stories
 
 User stories follow this format:
@@ -100,12 +103,12 @@ User stories follow this format:
 | US-03 | As a user, I want to search for a book by title, genre, or author, so that I can see whether a book to lend is available.                                       |        2 | Gwyn    |
 | US-04 | As a user, I want to communicate with other users, so that I can set up a date, time, and location to meet for the transfer of book(s).                         |        2 | Gaven   |
 | US-05 | As a user, I want to set a time or date for my lent book to be returned, so that I know my book will be returned to me.                                         |        2 | Gaven   |
-| US-06 | As an administrator, I want to use tokens as an incentive to promote more active lending and borrowing on the app.                                              |        2 | Prasi   |
-| US-07 | As an administrator, I want to verify that new signees are Cal Poly students.                                                                                   |        2 | Prasi   |
-| US-08 | As a user, I want to be able to record my book’s ISBN number to automatically retrieve information about the book.                                              |        3 | Sanjana |
+| US-06 | As an administrator, I want to use a token system, so that there is an incentive to promote more active lending and borrowing on the app.                                              |        2 | Prasi   |
+| US-07 | As an administrator, I want to verify that new signees are Cal Poly students, so that the community within the campus scope.                                                                                   |        2 | Prasi   |
+| US-08 | As a user, I want to be able to record my book’s ISBN number, so that I can automatically retrieve information about the book.                                              |        3 | Sanjana |
 | US-09 | As a user, I want to mark my current read, so that no other user can request that book.                                                                         |        3 | Sanjana |
 | US-10 | As a user, I want to set the condition of my book before borrowing, so that my book will be returned in the same condition.                                     |        3 | Gaven   |
-| US-11 | As a user, I want to be able to report a borrower if another user displays disrespectful behavior.                                                              |        3 | Sanjana |
+| US-11 | As a user, I want to be able to report a borrower if another user displays disrespectful behavior, so that the community won't be affected as much.                                                              |        3 | Sanjana |
 | US-12 | As a user, I want to be able to rate borrowers and lenders, so that the community knows which users are active and respectful.                                  |        4 | Prasi   |
 | US-13 | As an administrator, I want to analyze reports of delayed books or responses linked to certain users, so that I can decide whether they should stay on the app. |        4 | Prasi   |
 
