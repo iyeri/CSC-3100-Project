@@ -28,13 +28,13 @@ CREATED FROM SRD DOC
 
 ### Document History
 
-| Last Date Changed | Who    | What Was Changed        |
-| ----------------- | ------ | ----------------------- |
-| 9/15/2026         | Gaven  | Wrote down class info & team roles. |
-| 9/18/2026         | Prasi  | Established project purpose & problem statement. |
-| 9/18/2026         | Gaven  | Established preliminary project stakeholders, project scope, user stories, and functional requirements. |
-|                   |        |                         |
-|                   |        |                         |
+| Last Date Changed | Who   | What Was Changed                                                                                        |
+| ----------------- | ----- | ------------------------------------------------------------------------------------------------------- |
+| 9/15/2026         | Gaven | Wrote down class info & team roles.                                                                     |
+| 9/18/2026         | Prasi | Established project purpose & problem statement.                                                        |
+| 9/18/2026         | Gaven | Established preliminary project stakeholders, project scope, user stories, and functional requirements. |
+|                   |       |                                                                                                         |
+|                   |       |                                                                                                         |
 
 ---
 
@@ -93,16 +93,21 @@ User stories follow this format:
 
 > **As a [type of user], I want to [action] so that [value or benefit].**
 
-| ID    | Requirement                                                  | Priority |
-| ----- | ------------------------------------------------------------ | -------: |
-| US-01 | As a user, I want to add books to lend.                      |        ? |
-| US-02 | As a user, I want to remove books from my lending library.   |        ? |
-| US-03 | As a user, I want to request to borrow a book.               |        ? |
-| US-04 | As a user, I want to message another user to coordinate book drop offs. |        ? |
-| US-05 | As a user, I want to change my profile picture and bio.      |        ? |
-| US-05 | As a user, I want to mark books that are currently being lended. |        ? |
-| US-06 | As a user, I want to set my lending/borrowing range.         |        ? |
-| US-07 | As a user, I want to filter for books based on certain criteria. |        ? |
+| ID    | Requirement                                                                                                                                                     | Priority | Author  |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------: | ------- |
+| US-01 | As a user, I want to list my books to lend, so that I can lend my books and gain more tokens to use.                                                            |        1 | Gwyn    |
+| US-02 | As a user, I want to use my tokens, so that I can borrow a book.                                                                                                |        1 | Gwyn    |
+| US-03 | As a user, I want to search for a book by title, genre, or author, so that I can see whether a book to lend is available.                                       |        2 | Gwyn    |
+| US-04 | As a user, I want to communicate with other users, so that I can set up a date, time, and location to meet for the transfer of book(s).                         |        2 | Gaven   |
+| US-05 | As a user, I want to set a time or date for my lent book to be returned, so that I know my book will be returned to me.                                         |        2 | Gaven   |
+| US-06 | As an administrator, I want to use tokens as an incentive to promote more active lending and borrowing on the app.                                              |        2 | Prasi   |
+| US-07 | As an administrator, I want to verify that new signees are Cal Poly students.                                                                                   |        2 | Prasi   |
+| US-08 | As a user, I want to be able to record my book’s ISBN number to automatically retrieve information about the book.                                              |        3 | Sanjana |
+| US-09 | As a user, I want to mark my current read, so that no other user can request that book.                                                                         |        3 | Sanjana |
+| US-10 | As a user, I want to set the condition of my book before borrowing, so that my book will be returned in the same condition.                                     |        3 | Gaven   |
+| US-11 | As a user, I want to be able to report a borrower if another user displays disrespectful behavior.                                                              |        3 | Sanjana |
+| US-12 | As a user, I want to be able to rate borrowers and lenders, so that the community knows which users are active and respectful.                                  |        4 | Prasi   |
+| US-13 | As an administrator, I want to analyze reports of delayed books or responses linked to certain users, so that I can decide whether they should stay on the app. |        4 | Prasi   |
 
 ## 3. Functional Requirements
 
@@ -110,21 +115,21 @@ Functional requirements should follow this format:
 
 > **The system shall...**
 
-| ID    | Requirement                                                    | Priority |
-| ----- | -------------------------------------------------------------- | -------: |
-| FR-01 | The system shall authenticate users via username and password. |        ? |
-| FR-02 | The system shall store the users' emails, usernames, and hashed passwords. |        ? |
-| FR-03 | The system shall allow users to change their username and password. |        ? |
-| FR-04 | The system shall send an email to a user if they make a 'forgot my password' request. |        ? |
+| ID    | Requirement                                                                                             | Priority |
+| ----- | ------------------------------------------------------------------------------------------------------- | -------: |
+| FR-01 | The system shall authenticate users via username and password.                                          |        ? |
+| FR-02 | The system shall store the users' emails, usernames, and hashed passwords.                              |        ? |
+| FR-03 | The system shall allow users to change their username and password.                                     |        ? |
+| FR-04 | The system shall send an email to a user if they make a 'forgot my password' request.                   |        ? |
 | FR-04 | The system shall allow users to add books to their library for lending (and remove books if requested). |        ? |
-| FR-05 | The system shall store book data (title, author, genre).       |        ? |
-| FR-06 | The system shall allow users to notify and message other users about interest in borrowing a book. |        ? |
-| FR-07 | The system shall store and display user uploaded profile pictures. |        ? |
-| FR-08 | The system shall allow users to write and save personal biographes. |        ? |
-| FR-09 | The system shall allow users to mark books as available or lent. |        ? |
-| FR-10 | The system shall allow to add a location range for lending/borrowing books. |        ? |
-| FR-11 | The system shall store a user selected location (with radius), indicating their range of interaction. |        ? |
-| FR-12 | The system shall allow users to search for books by title, author, and/or genre. |        ? |
+| FR-05 | The system shall store book data (title, author, genre).                                                |        ? |
+| FR-06 | The system shall allow users to notify and message other users about interest in borrowing a book.      |        ? |
+| FR-07 | The system shall store and display user uploaded profile pictures.                                      |        ? |
+| FR-08 | The system shall allow users to write and save personal biographes.                                     |        ? |
+| FR-09 | The system shall allow users to mark books as available or lent.                                        |        ? |
+| FR-10 | The system shall allow to add a location range for lending/borrowing books.                             |        ? |
+| FR-11 | The system shall store a user selected location (with radius), indicating their range of interaction.   |        ? |
+| FR-12 | The system shall allow users to search for books by title, author, and/or genre.                        |        ? |
 
 ## 4. Non-Functional Requirements
 
