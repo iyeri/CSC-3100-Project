@@ -11,6 +11,7 @@ community. Our plan is to start in Cal Poly SLO and move up!
   in GenAI prompts.
 - Status changes must preserve an audit history.
 - Keep it local and assume handoffs will be arranged in person via dropoffs. We should not be storing or processing actual addresses for the moment.
+- Usability and maintainability are the top priorities.
 
 ## Open questions
 
