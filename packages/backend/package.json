@@ -5,7 +5,7 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "index.js",
+  "main": "backend.js",
   "scripts": {
     "lint": "npx eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,10 @@
     "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",
     "eslint": "^10.10.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1"
   }
 }

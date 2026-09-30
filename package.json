@@ -7,6 +7,9 @@
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "author": "",
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
