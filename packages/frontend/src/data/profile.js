@@ -1,0 +1,90 @@
+export const profile = {
+  name: "Maya Park",
+  handle: "@mayareads",
+  initials: "MP",
+  community: "Cal Poly community",
+  bio: "Dog-eared classics, strange little sci-fi books, and excellent campus reads. Happy to lend locally.",
+  interests: ["SCI-FI", "ESSAYS", "CLASSICS"],
+  stats: [
+    { label: "books", value: "18" },
+    { label: "loans", value: "23" },
+    { label: "rating", value: "4.9" },
+  ],
+};
+
+export const books = [
+  {
+    id: "kindred",
+    title: "Kindred",
+    author: "Octavia E. Butler",
+    status: "AVAILABLE",
+    cover: "#EF593F",
+    accent: "#241D1B",
+    mark: "K",
+  },
+  {
+    id: "braiding-sweetgrass",
+    title: "Braiding Sweetgrass",
+    author: "Robin Wall Kimmerer",
+    status: "AVAILABLE",
+    cover: "#173F36",
+    accent: "#DFFF00",
+    mark: "B",
+  },
+  {
+    id: "left-hand-darkness",
+    title: "The Left Hand of Darkness",
+    author: "Ursula K. Le Guin",
+    status: "ON LOAN",
+    cover: "#A7D8F2",
+    accent: "#213568",
+    mark: "L",
+  },
+  {
+    id: "minor-feelings",
+    title: "Minor Feelings",
+    author: "Cathy Park Hong",
+    status: "AVAILABLE",
+    cover: "#F5D96B",
+    accent: "#C74231",
+    mark: "M",
+  },
+  {
+    id: "parable-sower",
+    title: "Parable of the Sower",
+    author: "Octavia E. Butler",
+    status: "AVAILABLE",
+    cover: "#C8BCFF",
+    accent: "#432C75",
+    mark: "P",
+    isCurrentRead: true,
+  },
+  {
+    id: "crying-h-mart",
+    title: "Crying in H Mart",
+    author: "Michelle Zauner",
+    status: "ON LOAN",
+    cover: "#F1A6B9",
+    accent: "#8C1A38",
+    mark: "C",
+  },
+];
+
+export const reviews = [
+  {
+    id: "review-1",
+    borrower: "Theo R.",
+    initials: "TR",
+    rating: "5.0",
+    date: "2 weeks ago",
+    text: "Quick handoff and the book was exactly as described. Maya even included a great recommendation.",
+  },
+  {
+    id: "review-2",
+    borrower: "Jordan L.",
+    initials: "JL",
+    rating: "4.8",
+    date: "1 month ago",
+    text: "Super easy local pickup and friendly communication. Would happily borrow again.",
+  },
+];
