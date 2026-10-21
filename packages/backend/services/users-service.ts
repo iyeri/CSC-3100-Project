@@ -1,4 +1,4 @@
-// user-services.ts
+// users-service.ts
 import { supabase } from "./client.ts";
 
 /* getUsers()
