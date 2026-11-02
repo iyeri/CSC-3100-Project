@@ -2,6 +2,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { colors } from "../theme";
 
+import { BrowseScreen } from "../screens/BrowseScreen";
+import { ProfileScreen} from "../screens/ProfileScreen";
+
 const items = [
   { label: "Home", icon: "⌂" },
   { label: "Browse", icon: "⌕" },
@@ -10,22 +13,25 @@ const items = [
   { label: "Profile", icon: "●", active: true },
 ];
 
-export function BottomNav() {
+export function BottomNav({activeTab, onNavigate}) {
   return (
     <View style={styles.shell}>
       <View style={styles.nav}>
-        {items.map((item) => (
+        {items.map((item) => {
+          const active= activeTab === item.label;
+          return(
           <Pressable
             accessibilityLabel={item.label}
             accessibilityRole="button"
             key={item.label}
+            onPress={()=> onNavigate(item.label)}
             style={({ pressed }) => [styles.item, pressed && styles.pressed]}
           >
             <View style={item.primary ? styles.primaryIcon : styles.iconBox}>
               <Text
                 style={[
                   styles.icon,
-                  item.active && styles.activeIcon,
+                  active && styles.activeIcon,
                   item.primary && styles.primaryIconText,
                 ]}
               >
@@ -33,10 +39,11 @@ export function BottomNav() {
               </Text>
             </View>
             {!item.primary && (
-              <Text style={[styles.label, item.active && styles.activeLabel]}>{item.label}</Text>
+              <Text style={[styles.label, active && styles.activeLabel]}>{item.label}</Text>
             )}
           </Pressable>
-        ))}
+          );
+        })}
       </View>
     </View>
   );

@@ -107,7 +107,6 @@ export function BrowseScreen() {
             )}
           </View>
         </ScrollView>
-        <BottomNav />
       </View>
     </SafeAreaView>
   );
