@@ -7,16 +7,16 @@ import loanService from "./services/loans-service.ts";
 
 // Table columns (object keys) for checking post and patch requests.
 const userKeys = [
-  "uid",
-  "username",
-  "name",
-  "calpoly_email",
-  "bio",
-  "pfp_url",
-  "credit_balance",
-  "on_campus",
-  "date_joined",
-  "account_status",
+    "uid",
+    "username",
+    "name",
+    "calpoly_email",
+    "bio",
+    "pfp_url",
+    "credit_balance",
+    "on_campus",
+    "date_joined",
+    "account_status",
 ];
 const bookKeys = ["book_id", "title", "author", "genre", "description"];
 const listingKeys = [
@@ -78,6 +78,7 @@ app.post("/users", async (req, res) => {
     Object.keys(req.body).filter((key) => !userKeys.includes(key)).length > 0 // Extraneous keys.
   ) {
     res.status(400).send("Bad request.");
+    return;
   }
 
   const newUser = await userService.addUser(req.body);
@@ -89,6 +90,7 @@ app.post("/users", async (req, res) => {
 
   if (newUser.length === 0) {
     res.status(409).send("User already exists.");
+    return;
   }
 
   res.status(200).send(newUser);
@@ -211,6 +213,7 @@ app.post("/books", async (req, res) => {
     Object.keys(req.body).filter((key) => !bookKeys.includes(key)).length > 0 // Extraneous keys.
   ) {
     res.status(400).send("Bad request.");
+    return;
   }
 
   const newBook = await bookService.addBook(req.body);
@@ -222,6 +225,7 @@ app.post("/books", async (req, res) => {
 
   if (newBook.length === 0) {
     res.status(409).send("Book already exists.");
+    return;
   }
 
   res.status(200).send(newBook);
@@ -309,6 +313,7 @@ app.post("/listings", async (req, res) => {
     Object.keys(req.body).filter((key) => !listingKeys.includes(key)).length > 0 // Extraneous keys.
   ) {
     res.status(400).send("Bad request.");
+    return;
   }
 
   const newListing = await listingService.addListing(req.body);
@@ -321,6 +326,7 @@ app.post("/listings", async (req, res) => {
   // This should only occur in a UUID collision.
   if (newListing.length === 0) {
     res.status(409).send("Listing already exists.");
+    return;
   }
 
   res.status(200).send(newListing);
@@ -415,6 +421,7 @@ app.post("/loans", async (req, res) => {
     Object.keys(req.body).filter((key) => !loanKeys.includes(key)).length > 0 // Extraneous keys.
   ) {
     res.status(400).send("Bad request.");
+    return;
   }
 
   const newLoan = await loanService.addLoan(req.body);
@@ -427,6 +434,7 @@ app.post("/loans", async (req, res) => {
   // This should only occur in a UUID collision.
   if (newLoan.length === 0) {
     res.status(409).send("Loan already exists.");
+    return;
   }
 
   res.status(200).send(newLoan);
