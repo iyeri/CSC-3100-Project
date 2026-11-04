@@ -1,90 +1,117 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { colors, spacing } from "../theme";
+import { colors } from "../theme";
 
-const TABS = [
-  { id: "home", label: "Home", icon: "⌂" },
-  { id: "discover", label: "Discover", icon: "⌕" },
-  { id: "list", label: "List", icon: "+", primary: true },
-  { id: "inbox", label: "Inbox", icon: "✉" },
-  { id: "profile", label: "Profile", icon: "○" },
+import { BrowseScreen } from "../screens/BrowseScreen";
+import { ProfileScreen} from "../screens/ProfileScreen";
+
+const items = [
+  { label: "Home", icon: "⌂" },
+  { label: "Browse", icon: "⌕" },
+  { label: "Add", icon: "+", primary: true },
+  { label: "Loans", icon: "⇄" },
+  { label: "Profile", icon: "●", active: true },
 ];
 
-export default function BottomNav({ active = "home" }) {
+export function BottomNav({activeTab, onNavigate}) {
   return (
-    <View style={styles.bar}>
-      {TABS.map((tab) => {
-        const isActive = tab.id === active;
-        if (tab.primary) {
-          return (
-            <Pressable key={tab.id} style={styles.item}>
-              <View style={styles.fab}>
-                <Text style={styles.fabIcon}>{tab.icon}</Text>
-              </View>
-              <Text style={styles.label}>{tab.label}</Text>
-            </Pressable>
-          );
-        }
-        return (
-          <Pressable key={tab.id} style={styles.item}>
-            <Text style={[styles.icon, isActive && styles.iconActive]}>
-              {tab.icon}
-            </Text>
-            <Text style={[styles.label, isActive && styles.labelActive]}>
-              {tab.label}
-            </Text>
+    <View style={styles.shell}>
+      <View style={styles.nav}>
+        {items.map((item) => {
+          const active= activeTab === item.label;
+          return(
+          <Pressable
+            accessibilityLabel={item.label}
+            accessibilityRole="button"
+            key={item.label}
+            onPress={()=> onNavigate(item.label)}
+            style={({ pressed }) => [styles.item, pressed && styles.pressed]}
+          >
+            <View style={item.primary ? styles.primaryIcon : styles.iconBox}>
+              <Text
+                style={[
+                  styles.icon,
+                  active && styles.activeIcon,
+                  item.primary && styles.primaryIconText,
+                ]}
+              >
+                {item.icon}
+              </Text>
+            </View>
+            {!item.primary && (
+              <Text style={[styles.label, active && styles.activeLabel]}>{item.label}</Text>
+            )}
           </Pressable>
-        );
-      })}
+          );
+        })}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  bar: {
+  shell: {
+    backgroundColor: colors.paper,
+    borderTopWidth: 1,
+    borderTopColor: colors.line,
+    paddingBottom: 18,
+  },
+  nav: {
+    height: 62,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.xl,
-    borderTopWidth: 1,
-    borderTopColor: colors.divider,
-    backgroundColor: colors.offWhite,
+    justifyContent: "space-around",
+    maxWidth: 560,
+    width: "100%",
+    alignSelf: "center",
   },
   item: {
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
     gap: 2,
   },
-  icon: {
-    fontSize: 18,
-    color: colors.textMuted,
+  pressed: {
+    opacity: 0.55,
   },
-  iconActive: {
-    color: colors.textPrimary,
-  },
-  label: {
-    fontSize: 10,
-    color: colors.textMuted,
-  },
-  labelActive: {
-    color: colors.textPrimary,
-    fontWeight: "600",
-  },
-  fab: {
-    width: 40,
-    height: 40,
-    borderRadius: 999,
-    backgroundColor: colors.darkGreen,
+  iconBox: {
+    height: 28,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 2,
   },
-  fabIcon: {
-    color: colors.white,
-    fontSize: 20,
+  icon: {
+    color: colors.softMuted,
+    fontSize: 24,
+    lineHeight: 27,
     fontWeight: "600",
-    marginTop: -2,
+  },
+  activeIcon: {
+    color: colors.ink,
+    fontSize: 18,
+  },
+  label: {
+    color: colors.softMuted,
+    fontSize: 9,
+    fontWeight: "700",
+  },
+  activeLabel: {
+    color: colors.ink,
+  },
+  primaryIcon: {
+    width: 48,
+    height: 48,
+    marginTop: -12,
+    borderRadius: 24,
+    backgroundColor: colors.ink,
+    borderWidth: 4,
+    borderColor: colors.paper,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  primaryIconText: {
+    color: colors.paper,
+    fontSize: 30,
+    lineHeight: 31,
+    fontWeight: "300",
   },
 });

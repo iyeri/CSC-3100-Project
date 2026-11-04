@@ -1,133 +1,177 @@
-import { useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { colors, radii, spacing } from "../theme";
-import CoverPattern, { PATTERN_COUNT } from "./CoverPattern";
+import { colors } from "../theme";
 
-// Mirrors the "Fresh finds" grid cell from the Figma mock:
-// a tall color-blocked cover with a heart in the top-right, title + meta below.
-export default function BookCard({ listing }) {
-  const [liked, setLiked] = useState(false);
-  const { width } = useWindowDimensions();
-  // 2-up grid: 20px horizontal screen padding + 16px gutter between cards.
-  const cardWidth = (width - 20 * 2 - 16) / 2;
-
-  // Pick one of 8 cover patterns. If the listing specifies one explicitly
-  // use that; otherwise derive it from the id so it's stable across renders.
-  const patternIndex =
-    typeof listing.pattern === "number"
-      ? listing.pattern
-      : hashId(listing.id) % PATTERN_COUNT;
+export function BookCard({ book, width, onToggleCurrentRead }) {
+  const isAvailable = book.status === "AVAILABLE";
+  const isReading = Boolean(book.isCurrentRead);
 
   return (
     <Pressable
-      style={[styles.card, { width: cardWidth }]}
-      onPress={() => {
-        /* no-op — detail screen not wired up yet */
-      }}
+      accessibilityHint={`View ${book.title} by ${book.author}`}
+      accessibilityRole="button"
+      style={({ pressed }) => [styles.card, { width }, pressed && styles.pressed]}
     >
-      <View style={[styles.cover, { backgroundColor: listing.coverBg }]}>
-        <CoverPattern index={patternIndex} color={listing.accent} />
-        <Text style={styles.coverTitle} numberOfLines={3}>
-          {listing.title}
-        </Text>
-        <Text style={styles.coverAuthor} numberOfLines={1}>
-          {listing.author.toUpperCase()}
-        </Text>
-
-        <Pressable
-          hitSlop={8}
-          style={styles.heartBtn}
-          onPress={() => setLiked((v) => !v)}
-        >
-          <Text style={[styles.heart, liked && styles.heartActive]}>
-            {liked ? "♥" : "♡"}
+      <View style={[styles.cover, { backgroundColor: book.cover }]}>
+        <View style={styles.coverTop}>
+          <View style={[styles.coverRule, { backgroundColor: book.accent }]} />
+          {onToggleCurrentRead ? (
+            <Pressable
+              accessibilityLabel={`Currently reading ${book.title}`}
+              accessibilityRole="switch"
+              accessibilityState={{ checked: isReading }}
+              hitSlop={8}
+              onPress={onToggleCurrentRead}
+              style={({ pressed }) => [
+                styles.readingToggle,
+                isReading && styles.readingToggleOn,
+                pressed && styles.togglePressed,
+              ]}
+            >
+              <Text style={[styles.readingToggleText]}>
+                {isReading ? "✓ READING" : "+ READING"}
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+        <Text style={[styles.coverMark, { color: book.accent }]}>{book.mark}</Text>
+        <View style={styles.coverType}>
+          <Text style={[styles.coverTitle, { color: book.accent }]} numberOfLines={3}>
+            {book.title}
           </Text>
-        </Pressable>
+          <Text style={[styles.coverAuthor, { color: book.accent }]} numberOfLines={1}>
+            {book.author}
+          </Text>
+        </View>
       </View>
 
-      <Text style={styles.title} numberOfLines={1}>
-        {listing.title}
-      </Text>
-      <Text style={styles.meta} numberOfLines={1}>
-        {listing.condition} · {listing.format}
-      </Text>
+      <View style={styles.cardCopy}>
+        <Text style={styles.title} numberOfLines={1}>
+          {book.title}
+        </Text>
+        <Text style={styles.author} numberOfLines={1}>
+          {book.author}
+        </Text>
+        <View style={styles.statusRow}>
+          <View style={[styles.statusDot, !isAvailable && styles.statusDotMuted]} />
+          <Text style={[styles.status, !isAvailable && styles.statusMuted]}>{book.status}</Text>
+        </View>
+      </View>
     </Pressable>
   );
 }
 
-// Tiny deterministic hash so string ids map to a stable pattern index.
-function hashId(id) {
-  const str = String(id);
-  let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = (h * 31 + str.charCodeAt(i)) >>> 0;
-  }
-  return h;
-}
-
 const styles = StyleSheet.create({
   card: {
-    marginBottom: spacing.xl,
+    marginBottom: 24,
+  },
+  pressed: {
+    opacity: 0.72,
+    transform: [{ scale: 0.985 }],
   },
   cover: {
     aspectRatio: 0.78,
-    borderRadius: radii.lg,
-    padding: spacing.md,
+    borderRadius: 4,
+    padding: 14,
     overflow: "hidden",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
+  },
+  coverTop: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    // Keep the toggle above the decorative cover letter.
+    zIndex: 1,
+  },
+  coverRule: {
+    height: 5,
+    width: 42,
+  },
+  readingToggle: {
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.ink,
+    backgroundColor: colors.paper,
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+    marginTop: -6,
+    marginRight: -6,
+  },
+  readingToggleOn: {
+    backgroundColor: colors.acid,
+  },
+  togglePressed: {
+    opacity: 0.6,
+  },
+  readingToggleText: {
+    color: colors.ink,
+    fontSize: 8,
+    fontWeight: "900",
+    letterSpacing: 0.6,
+  },
+  coverMark: {
+    position: "absolute",
+    right: -10,
+    top: 18,
+    fontSize: 96,
+    lineHeight: 104,
+    fontWeight: "900",
+    opacity: 0.16,
+  },
+  coverType: {
+    gap: 5,
   },
   coverTitle: {
-    fontFamily: "serif",
+    maxWidth: "90%",
     fontSize: 18,
-    lineHeight: 22,
-    color: colors.textPrimary,
-    fontWeight: "500",
+    lineHeight: 19,
+    fontWeight: "900",
+    letterSpacing: -0.7,
+    textTransform: "uppercase",
   },
   coverAuthor: {
-    position: "absolute",
-    bottom: spacing.md,
-    left: spacing.md,
-    right: spacing.md,
-    fontSize: 10,
-    letterSpacing: 1.2,
-    color: colors.textPrimary,
-    fontWeight: "600",
+    fontSize: 9,
+    lineHeight: 12,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
   },
-  heartBtn: {
-    position: "absolute",
-    top: spacing.sm,
-    right: spacing.sm,
-    width: 28,
-    height: 28,
-    borderRadius: 999,
-    backgroundColor: colors.white,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  heart: {
-    fontSize: 16,
-    color: colors.heartIdle,
-    marginTop: -2,
-  },
-  heartActive: {
-    color: "#B5533B",
+  cardCopy: {
+    paddingTop: 10,
   },
   title: {
-    marginTop: spacing.sm,
-    fontSize: 15,
-    fontWeight: "600",
-    color: colors.textPrimary,
+    color: colors.ink,
+    fontSize: 14,
+    lineHeight: 18,
+    fontWeight: "800",
   },
-  meta: {
-    marginTop: 2,
+  author: {
+    color: colors.muted,
     fontSize: 12,
-    color: colors.textMuted,
+    lineHeight: 17,
+  },
+  statusRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 6,
+  },
+  statusDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: colors.forest,
+  },
+  statusDotMuted: {
+    backgroundColor: colors.softMuted,
+  },
+  status: {
+    color: colors.forest,
+    fontSize: 10,
+    fontWeight: "900",
+    letterSpacing: 0.8,
+  },
+  statusMuted: {
+    color: colors.softMuted,
   },
 });

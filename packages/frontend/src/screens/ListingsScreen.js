@@ -1,14 +1,14 @@
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
-import BookCard from "../components/BookCard";
-import BottomNav from "../components/BottomNav";
 import CategoryChips from "../components/CategoryChips";
+import ListingCard from "../components/ListingCard";
 import TopBar from "../components/TopBar";
 import { categories, mockListings } from "../data/mockListings";
 import { colors, spacing } from "../theme";
 
 // Discover / home listings screen — matches screen 01 ("Discover") from the
-// OurLibrary Figma mock.
+// OurLibrary Figma mock. Rendered as the "Home" tab from App.js; the shared
+// BottomNav is rendered by App, so this screen does not render its own.
 export default function ListingsScreen() {
   return (
     <SafeAreaView style={styles.safe}>
@@ -19,7 +19,7 @@ export default function ListingsScreen() {
         <FlatList
           data={mockListings}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <BookCard listing={item} />}
+          renderItem={({ item }) => <ListingCard listing={item} />}
           numColumns={2}
           columnWrapperStyle={styles.row}
           contentContainerStyle={styles.list}
@@ -31,8 +31,6 @@ export default function ListingsScreen() {
             </View>
           }
         />
-
-        <BottomNav active="home" />
       </View>
     </SafeAreaView>
   );
