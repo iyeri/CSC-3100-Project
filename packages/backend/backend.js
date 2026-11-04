@@ -92,7 +92,7 @@ app.patch("/users/:uid", async (req, res) => {
   // Check if user exists.
   const user = await userService.getUsers(req.params.uid);
   if (user === undefined) {
-    res.status(404).send("User not found.");
+    res.status(409).send("User not found.");
     return;
   }
 
