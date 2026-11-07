@@ -1,5 +1,11 @@
 // loans-service.ts
-import { supabase } from "./client.ts";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type {
+  Database,
+  Tables,
+  TablesInsert,
+  TablesUpdate,
+} from "./types.ts";
 
 /* getLoans()
  *
@@ -12,13 +18,14 @@ import { supabase } from "./client.ts";
  * On error, returns undefined.
  */
 async function getLoans(
-  loan_id,
-  listing_id,
-  lender,
-  borrower,
-  date_lended,
-  due_date,
-  is_overdue,
+  supabase: SupabaseClient<Database>,
+  loan_id?: Tables<"loans">["loan_id"],
+  listing_id?: Tables<"loans">["listing_id"],
+  lender?: Tables<"loans">["lender"],
+  borrower?: Tables<"loans">["borrower"],
+  date_lended?: NonNullable<Tables<"loans">["date_lended"]>,
+  due_date?: NonNullable<Tables<"loans">["due_date"]>,
+  is_overdue?: NonNullable<Tables<"loans">["is_overdue"]>,
 ) {
   let query = supabase.from("loans").select("*, listings(*, books(*))");
 
@@ -65,7 +72,10 @@ async function getLoans(
  *
  * Errors return undefined.
  */
-async function addLoan(loanData) {
+async function addLoan(
+  supabase: SupabaseClient<Database>,
+  loanData: TablesInsert<"loans">
+) {
   const { data, error } = await supabase
     .from("loans")
     .insert(loanData)
@@ -95,7 +105,10 @@ async function addLoan(loanData) {
  *
  * On error, returns undefined.
  */
-async function deleteLoan(loan_id) {
+async function deleteLoan(
+  supabase: SupabaseClient<Database>,
+  loan_id: Tables<"loans">["loan_id"]
+) {
   const { data, error } = await supabase
     .from("loans")
     .delete()
@@ -118,7 +131,11 @@ async function deleteLoan(loan_id) {
  * Output:
  * An array containing the updated loan.
  */
-async function updateLoan(loan_id, loanData) {
+async function updateLoan(
+  supabase: SupabaseClient<Database>,
+  loan_id: Tables<"loans">["loan_id"],
+  loanData: TablesUpdate<"loans">
+) {
   const { data, error } = await supabase
     .from("loans")
     .update(loanData)
