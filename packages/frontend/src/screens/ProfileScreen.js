@@ -208,7 +208,6 @@ export function ProfileScreen() {
             )}
           </View>
         </ScrollView>
-        <BottomNav />
       </View>
     </SafeAreaView>
   );
