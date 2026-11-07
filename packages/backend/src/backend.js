@@ -1,17 +1,18 @@
 // backend.js
 import express from "express";
-import userService from "./services/users-service.ts";
-import bookService from "./services/books-service.ts";
-import listingService from "./services/listings-service.ts";
-import loanService from "./services/loans-service.ts";
+import userService from "../services/users-service.ts";
+import bookService from "../services/books-service.ts";
+import listingService from "../services/listings-service.ts";
+import loanService from "../services/loans-service.ts";
 import {
   signup,
   login,
-} from "./services/signuplogin-service.ts";
+} from "../services/signuplogin-service.ts";
 import {
   attachAuthContext,
   requireAuth,
-} from "./middlewares/authentication.js";
+} from "../middlewares/authentication.js";
+import cors from "cors";
 
 // Table columns (object keys) for checking post and patch requests.
 const userKeys = [
@@ -48,6 +49,7 @@ const loanKeys = [
 // Initialize express web application.
 const app = express();
 const port = 8000;
+app.use(cors()); // FOR BROWSER TESTING; REMOVE THIS LINE IN PRODUCTION!!
 app.use(express.json()); // Allow express to parse JSON data.
 app.use(attachAuthContext); // Attach authentication context to each request.
 
@@ -88,7 +90,7 @@ app.post("/auth/login", async (req, res) => {
 });
 
 // The /users path.
-app.get("/users", async (req, res) => {
+app.get("/users", requireAuth, async (req, res) => {
   const data = await userService.getUsers(
     req.db_client,
     req.query.uid,
@@ -109,7 +111,7 @@ app.get("/users", async (req, res) => {
   res.status(200).send(data);
 });
 
-app.post("/users", async (req, res) => {
+app.post("/users", requireAuth, async (req, res) => {
   // Validating request...
   if (
     req.body.uid !== undefined || // Not allowed to choose uid.
@@ -196,7 +198,7 @@ app.patch("/users/:uid", requireAuth, async (req, res) => {
   res.status(200).send(updatedUser);
 });
 
-app.get("/users/:uid/loans", async (req, res) => {
+app.get("/users/:uid/loans", requireAuth, async (req, res) => {
   const uid = req.params.uid;
   const role = req.query.role; // Required query parameter, user can be "lender" or "borrower".
 
@@ -286,7 +288,7 @@ app.post("/books", requireAuth, async (req, res) => {
   res.status(200).send(newBook);
 });
 
-app.delete("/books/:book_id", async (req, res) => {
+app.delete("/books/:book_id", requireAuth, async (req, res) => {
   const deletedBook = await bookService.deleteBook(req.db_client, req.params.book_id);
 
   if (deletedBook === undefined) {
@@ -302,7 +304,7 @@ app.delete("/books/:book_id", async (req, res) => {
   res.status(200).send("Book deleted.");
 });
 
-app.patch("/books/:book_id", async (req, res) => {
+app.patch("/books/:book_id", requireAuth, async (req, res) => {
   // Validate request body.
   if (
     req.body.book_id !== undefined || // Not allowed to change book_id.
@@ -383,7 +385,7 @@ app.post("/listings", requireAuth, async (req, res) => {
   res.status(200).send(newListing);
 });
 
-app.delete("/listings/:listing_id", async (req, res) => {
+app.delete("/listings/:listing_id", requireAuth, async (req, res) => {
   const deletedListing = await listingService.deleteListing(
     req.db_client,
     req.params.listing_id,
@@ -402,7 +404,7 @@ app.delete("/listings/:listing_id", async (req, res) => {
   res.status(200).send("Listing deleted.");
 });
 
-app.patch("/listings/:listing_id", async (req, res) => {
+app.patch("/listings/:listing_id", requireAuth, async (req, res) => {
   // Validate request body.
   if (
     req.body.listing_id !== undefined || // Not allowed to change listing_id.
@@ -432,7 +434,7 @@ app.patch("/listings/:listing_id", async (req, res) => {
 });
 
 // The /loans path.
-app.get("/loans", async (req, res) => {
+app.get("/loans", requireAuth, async (req, res) => {
   const data = await loanService.getLoans(
     req.db_client,
     req.query.loan_id,

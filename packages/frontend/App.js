@@ -8,14 +8,15 @@ import { BrowseScreen } from "./src/screens/BrowseScreen";
 import ListingsScreen from "./src/screens/ListingsScreen";
 import { ProfileScreen } from "./src/screens/ProfileScreen";
 import { colors } from "./src/theme";
-
+import { AuthDemoScreen } from "./src/screens/AuthDemoScreen";
+  
 export default function App() {
   const [activeTab, setActiveTab] = useState("Home");
 
   const screen = () => {
     switch (activeTab) {
       case "Home":
-        return <ListingsScreen />;
+        return <AuthDemoScreen />;
       case "Browse":
         return <BrowseScreen />;
       case "Add":
@@ -23,7 +24,7 @@ export default function App() {
       case "Profile":
         return <ProfileScreen />;
       default:
-        return <ListingsScreen />;
+        return <AuthDemoScreen />;
     }
   };
 
