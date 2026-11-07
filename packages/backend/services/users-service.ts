@@ -1,6 +1,7 @@
 // users-service.ts
-import { supabase } from "./client.ts";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
+  Database,
   Tables,
   TablesInsert,
   TablesUpdate,
@@ -20,6 +21,7 @@ import type {
  * On error, returns undefined.
  */
 async function getUsers(
+  supabase: SupabaseClient<Database>,
   uid?: Tables<"users">["uid"],
   username?: Tables<"users">["username"],
   name?: NonNullable<Tables<"users">["name"]>
@@ -59,7 +61,10 @@ async function getUsers(
  *
  * Errors return undefined.
  */
-async function addUser(userData: TablesInsert<"users">) {
+async function addUser(
+  supabase: SupabaseClient<Database>,
+  userData: TablesInsert<"users">
+) {
   const { data, error } = await supabase
     .from("users")
     .insert(userData)
@@ -89,7 +94,10 @@ async function addUser(userData: TablesInsert<"users">) {
  *
  * On error, returns undefined.
  */
-async function deleteUser(uid: Tables<"users">["uid"]) {
+async function deleteUser(
+  supabase: SupabaseClient<Database>,
+  uid: Tables<"users">["uid"]
+) {
   const { data, error } = await supabase
     .from("users")
     .delete()
@@ -113,6 +121,7 @@ async function deleteUser(uid: Tables<"users">["uid"]) {
  * An array containing the updated user.
  */
 async function updateUser(
+  supabase: SupabaseClient<Database>,
   uid: Tables<"users">["uid"],
   userData: TablesUpdate<"users">
 ) {

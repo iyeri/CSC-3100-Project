@@ -1,6 +1,7 @@
 // books-service.ts
-import { supabase } from "./client.ts";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
+  Database,
   Tables,
   TablesInsert,
   TablesUpdate,
@@ -21,10 +22,11 @@ import type {
  * On error, returns undefined.
  */
 async function getBooks(
+  supabase: SupabaseClient<Database>,
   book_id?: Tables<"books">["book_id"],
-  title?: Tables<"books">["title"],
-  author?: Tables<"books">["author"],
-  genre?: Tables<"books">["genre"]
+  title?: NonNullable<Tables<"books">["title"]>,
+  author?: NonNullable<Tables<"books">["author"]>,
+  genre?: NonNullable<Tables<"books">["genre"]>
 ) {
   let query = supabase.from("books").select();
 
@@ -62,7 +64,10 @@ async function getBooks(
  *
  * Errors return undefined.
  */
-async function addBook(bookData: TablesInsert<"books">) {
+async function addBook(
+  supabase: SupabaseClient<Database>,
+  bookData: TablesInsert<"books">
+) {
   const { data, error } = await supabase
     .from("books")
     .insert(bookData)
@@ -92,7 +97,10 @@ async function addBook(bookData: TablesInsert<"books">) {
  *
  * On error, returns undefined.
  */
-async function deleteBook(book_id: Tables<"books">["book_id"]) {
+async function deleteBook(
+  supabase: SupabaseClient<Database>,
+  book_id: Tables<"books">["book_id"]
+) {
   const { data, error } = await supabase
     .from("books")
     .delete()
@@ -116,10 +124,11 @@ async function deleteBook(book_id: Tables<"books">["book_id"]) {
  * An array containing the updated book.
  */
 async function updateBook(
+  supabase: SupabaseClient<Database>,
   book_id: Tables<"books">["book_id"], 
   bookData: TablesUpdate<"books">
 ) {
-  const { data, error } = await supabase
+  const { data, error } = await supabase  
     .from("books")
     .update(bookData)
     .eq("book_id", book_id)
