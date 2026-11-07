@@ -13,7 +13,6 @@ import {
 
 import {
   API_URL,
-  deleteUserProfile,
   getUserById,
   loginWithPassword,
   logout,
@@ -79,7 +78,6 @@ export function AuthDemoScreen() {
   const [password, setPassword] = useState("");
   const [lookupUserId, setLookupUserId] = useState(DEMO_USER_ID);
   const [userId, setUserId] = useState("");
-  const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const [hasToken, setHasToken] = useState(false);
   const [busy, setBusy] = useState(false);
   const [protectionFeedback, setProtectionFeedback] = useState(null);
@@ -87,7 +85,6 @@ export function AuthDemoScreen() {
     text: "Checking for a saved session…",
     isError: false,
   });
-  const [deleteFeedback, setDeleteFeedback] = useState(null);
 
   useEffect(() => {
     let mounted = true;
@@ -200,45 +197,9 @@ export function AuthDemoScreen() {
       await logout();
       setHasToken(false);
       setUserId("");
-      setDeleteConfirmation("");
       setAuthFeedback({ text: "The stored access token was removed.", isError: false });
     } catch (error) {
       setAuthFeedback({ text: error.message, isError: true });
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    if (!userId.trim()) {
-      setDeleteFeedback({
-        text: "Sign in again so the authenticated user ID can be loaded.",
-        isError: true,
-      });
-      return;
-    }
-
-    if (deleteConfirmation !== "DELETE") {
-      setDeleteFeedback({
-        text: "Type DELETE exactly to confirm account deletion.",
-        isError: true,
-      });
-      return;
-    }
-
-    setBusy(true);
-
-    try {
-      const result = await deleteUserProfile(userId.trim());
-      setHasToken(false);
-      setUserId("");
-      setDeleteConfirmation("");
-      setDeleteFeedback({
-        text: formatPayload(result),
-        isError: false,
-      });
-    } catch (error) {
-      setDeleteFeedback({ text: formatApiError(error), isError: true });
     } finally {
       setBusy(false);
     }

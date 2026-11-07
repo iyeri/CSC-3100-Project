@@ -7,6 +7,7 @@
   "type": "module",
   "main": "backend.js",
   "scripts": {
+    "dev": "node ./src/backend.js",
     "lint": "npx eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
