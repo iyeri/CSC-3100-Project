@@ -52,8 +52,9 @@ const styles = StyleSheet.create({
   },
   name: {
     color: colors.ink,
+    fontFamily: "serif",
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "600",
   },
   date: {
     color: colors.softMuted,
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
   },
   body: {
     color: colors.ink,
+    fontFamily: "serif",
     fontSize: 14,
     lineHeight: 21,
     marginTop: 14,

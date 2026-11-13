@@ -8,7 +8,9 @@ export function CurrentReadCard({ book, onRemove }) {
     <View style={styles.card}>
       <View style={[styles.cover, { backgroundColor: book.cover }]}>
         <View style={[styles.coverRule, { backgroundColor: book.accent }]} />
-        <Text style={[styles.coverMark, { color: book.accent }]}>{book.mark}</Text>
+        <Text style={[styles.coverMark, { color: book.accent }]}>
+          {book.mark}
+        </Text>
       </View>
 
       <View style={styles.copy}>
@@ -76,9 +78,10 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.ink,
+    fontFamily: "serif",
     fontSize: 14,
     lineHeight: 18,
-    fontWeight: "800",
+    fontWeight: "600",
     marginTop: 3,
   },
   author: {

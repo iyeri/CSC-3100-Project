@@ -10,7 +10,11 @@ export function BookCard({ book, width, onToggleCurrentRead }) {
     <Pressable
       accessibilityHint={`View ${book.title} by ${book.author}`}
       accessibilityRole="button"
-      style={({ pressed }) => [styles.card, { width }, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.card,
+        { width },
+        pressed && styles.pressed,
+      ]}
     >
       <View style={[styles.cover, { backgroundColor: book.cover }]}>
         <View style={styles.coverTop}>
@@ -34,12 +38,20 @@ export function BookCard({ book, width, onToggleCurrentRead }) {
             </Pressable>
           ) : null}
         </View>
-        <Text style={[styles.coverMark, { color: book.accent }]}>{book.mark}</Text>
+        <Text style={[styles.coverMark, { color: book.accent }]}>
+          {book.mark}
+        </Text>
         <View style={styles.coverType}>
-          <Text style={[styles.coverTitle, { color: book.accent }]} numberOfLines={3}>
+          <Text
+            style={[styles.coverTitle, { color: book.accent }]}
+            numberOfLines={3}
+          >
             {book.title}
           </Text>
-          <Text style={[styles.coverAuthor, { color: book.accent }]} numberOfLines={1}>
+          <Text
+            style={[styles.coverAuthor, { color: book.accent }]}
+            numberOfLines={1}
+          >
             {book.author}
           </Text>
         </View>
@@ -53,8 +65,12 @@ export function BookCard({ book, width, onToggleCurrentRead }) {
           {book.author}
         </Text>
         <View style={styles.statusRow}>
-          <View style={[styles.statusDot, !isAvailable && styles.statusDotMuted]} />
-          <Text style={[styles.status, !isAvailable && styles.statusMuted]}>{book.status}</Text>
+          <View
+            style={[styles.statusDot, !isAvailable && styles.statusDotMuted]}
+          />
+          <Text style={[styles.status, !isAvailable && styles.statusMuted]}>
+            {book.status}
+          </Text>
         </View>
       </View>
     </Pressable>
@@ -123,11 +139,11 @@ const styles = StyleSheet.create({
   },
   coverTitle: {
     maxWidth: "90%",
+    fontFamily: "serif",
     fontSize: 18,
     lineHeight: 19,
-    fontWeight: "900",
+    fontWeight: "600",
     letterSpacing: -0.7,
-    textTransform: "uppercase",
   },
   coverAuthor: {
     fontSize: 9,
@@ -141,9 +157,10 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.ink,
+    fontFamily: "serif",
     fontSize: 14,
     lineHeight: 18,
-    fontWeight: "800",
+    fontWeight: "600",
   },
   author: {
     color: colors.muted,
