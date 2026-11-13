@@ -151,11 +151,7 @@ async function getUniqueGenres(
   supabase: SupabaseClient<Database>
 ) {
   const { data, error } = await supabase
-<<<<<<< HEAD
     .from("unique_genres")
-=======
-    .from("uniques_genres")
->>>>>>> 145a0c7 (Added unique_genres view to Supabase for listings page. Updated types.ts to reflect the database changes.)
     .select();
 
   if (error) {
@@ -178,8 +174,4 @@ export default {
   deleteBook,
   updateBook,
   getUniqueGenres,
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 145a0c7 (Added unique_genres view to Supabase for listings page. Updated types.ts to reflect the database changes.)
