@@ -231,17 +231,6 @@ export type Database = {
         Relationships: []
       }
     }
-<<<<<<< HEAD
-=======
-    Views: {
-      unique_genre: {
-        Row: {
-          genre: string | null
-        }
-        Relationships: []
-      }
-    }
->>>>>>> 145a0c7 (Added unique_genres view to Supabase for listings page. Updated types.ts to reflect the database changes.)
     Functions: {
       [_ in never]: never;
     };
