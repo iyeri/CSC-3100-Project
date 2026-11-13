@@ -142,6 +142,31 @@ async function updateBook(
   return data;
 }
 
+/* getUniqueGenres()
+ *
+ * Input:
+ * None.
+ *
+ * Output:
+ * An array of unique genres from the books table, accessed from the uniques_genres view.
+ *
+ * On error, returns undefined.
+ */
+async function getUniqueGenres(
+  supabase: SupabaseClient<Database>
+) {
+  const { data, error } = await supabase
+    .from("uniques_genres")
+    .select();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  return data;
+}
+
 /* Export functions as default object.
  * Import within another .js file without curly braces:
  *   import someName from "path-to-this-file/supabase.ts"
@@ -153,4 +178,5 @@ export default {
   addBook,
   deleteBook,
   updateBook,
+  getUniqueGenres,
 };

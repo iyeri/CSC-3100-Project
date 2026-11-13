@@ -224,7 +224,12 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      unique_genre: {
+        Row: {
+          genre: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
