@@ -224,8 +224,13 @@ export type Database = {
       };
     };
     Views: {
-      [_ in never]: never;
-    };
+      unique_genres: {
+        Row: {
+          genre: string | null
+        }
+        Relationships: []
+      }
+    }
     Functions: {
       [_ in never]: never;
     };
