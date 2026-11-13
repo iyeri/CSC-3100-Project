@@ -5,7 +5,7 @@
 export const colors = {
   // --- sanjana-front-end palette (OurLibrary Figma mock) ---
   darkGreen: "#748469",
-  oliveGreen: "#AB8290",
+  oliveGreen: "#ABB290",
   sageGreen: "#AAC1B1",
   cream: "#F9EAD7",
   offWhite: "#F6F6EE",
@@ -39,6 +39,16 @@ export const spacing = {
   lg: 16,
   xl: 24,
   xxl: 32,
+};
+
+// Font family names loaded via expo-font in App.js. Fall back to platform
+// serif / sans if fonts haven't finished loading yet.
+export const fonts = {
+  serif: "SourceSerif4_600SemiBold",
+  serifBold: "SourceSerif4_700Bold",
+  sans: "DMSans_400Regular",
+  sansMedium: "DMSans_500Medium",
+  sansBold: "DMSans_700Bold",
 };
 
 export const radii = {
