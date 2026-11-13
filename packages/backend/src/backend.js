@@ -1,17 +1,17 @@
 // backend.js
 import express from "express";
-import userService from "./services/users-service.ts";
-import bookService from "./services/books-service.ts";
-import listingService from "./services/listings-service.ts";
-import loanService from "./services/loans-service.ts";
+import userService from "../services/users-service.ts";
+import bookService from "../services/books-service.ts";
+import listingService from "../services/listings-service.ts";
+import loanService from "../services/loans-service.ts";
 import {
   signup,
   login,
-} from "./services/signuplogin-service.ts";
+} from "../services/signuplogin-service.ts";
 import {
   attachAuthContext,
   requireAuth,
-} from "./middlewares/authentication.js";
+} from "../middlewares/authentication.js";
 
 // Table columns (object keys) for checking post and patch requests.
 const userKeys = [
