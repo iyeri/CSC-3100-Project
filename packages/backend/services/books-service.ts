@@ -156,7 +156,7 @@ async function getUniqueGenres(
   supabase: SupabaseClient<Database>
 ) {
   const { data, error } = await supabase
-    .from("uniques_genres")
+    .from("unique_genres")
     .select();
 
   if (error) {

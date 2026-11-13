@@ -224,7 +224,7 @@ export type Database = {
       }
     }
     Views: {
-      unique_genre: {
+      unique_genres: {
         Row: {
           genre: string | null
         }
