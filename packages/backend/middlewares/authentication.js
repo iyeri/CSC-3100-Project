@@ -1,17 +1,17 @@
-import { 
-    anonymousSupabase,
-    createAuthenticatedSupabase
+import {
+  anonymousSupabase,
+  createAuthenticatedSupabase,
 } from "../services/client.ts";
 
 /* attachAuthContext()
  *
  * Description:
- * Attaches the corresponding (anon, authenticated, service/admin) 
+ * Attaches the corresponding (anon, authenticated, service/admin)
  * Supabase client to the request.
  *
  * Input:
  * req, res, next (this is automatically handled by Express)
- * 
+ *
  * Output:
  * Nothing; calls next function.
  */
@@ -33,11 +33,11 @@ export async function attachAuthContext(req, res, next) {
 
   const authToken = match[1];
   const supabase = createAuthenticatedSupabase(authToken);
-  
+
   try {
     const {
       data: { user },
-      error
+      error,
     } = await supabase.auth.getUser(accessToken);
 
     // Supplied tokens must be valid; don't fall back to anon.
@@ -61,7 +61,7 @@ export async function attachAuthContext(req, res, next) {
  *
  * Input:
  * req, res, next (this is automatically handled by Express)
- * 
+ *
  * Output:
  * Nothing; calls next function.
  */

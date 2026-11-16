@@ -1,11 +1,6 @@
 // loans-service.ts
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type {
-  Database,
-  Tables,
-  TablesInsert,
-  TablesUpdate,
-} from "./types.ts";
+import type { Database, Tables, TablesInsert, TablesUpdate } from "./types.ts";
 
 /* getLoans()
  *
@@ -74,7 +69,7 @@ async function getLoans(
  */
 async function addLoan(
   supabase: SupabaseClient<Database>,
-  loanData: TablesInsert<"loans">
+  loanData: TablesInsert<"loans">,
 ) {
   const { data, error } = await supabase
     .from("loans")
@@ -107,7 +102,7 @@ async function addLoan(
  */
 async function deleteLoan(
   supabase: SupabaseClient<Database>,
-  loan_id: Tables<"loans">["loan_id"]
+  loan_id: Tables<"loans">["loan_id"],
 ) {
   const { data, error } = await supabase
     .from("loans")
@@ -134,7 +129,7 @@ async function deleteLoan(
 async function updateLoan(
   supabase: SupabaseClient<Database>,
   loan_id: Tables<"loans">["loan_id"],
-  loanData: TablesUpdate<"loans">
+  loanData: TablesUpdate<"loans">,
 ) {
   const { data, error } = await supabase
     .from("loans")

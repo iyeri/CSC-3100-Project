@@ -1,11 +1,6 @@
 // books-service.ts
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type {
-  Database,
-  Tables,
-  TablesInsert,
-  TablesUpdate,
-} from "./types.ts";
+import type { Database, Tables, TablesInsert, TablesUpdate } from "./types.ts";
 
 /* getBooks()
  *
@@ -26,7 +21,7 @@ async function getBooks(
   book_id?: Tables<"books">["book_id"],
   title?: NonNullable<Tables<"books">["title"]>,
   author?: NonNullable<Tables<"books">["author"]>,
-  genre?: NonNullable<Tables<"books">["genre"]>
+  genre?: NonNullable<Tables<"books">["genre"]>,
 ) {
   let query = supabase.from("books").select();
 
@@ -66,7 +61,7 @@ async function getBooks(
  */
 async function addBook(
   supabase: SupabaseClient<Database>,
-  bookData: TablesInsert<"books">
+  bookData: TablesInsert<"books">,
 ) {
   const { data, error } = await supabase
     .from("books")
@@ -99,7 +94,7 @@ async function addBook(
  */
 async function deleteBook(
   supabase: SupabaseClient<Database>,
-  book_id: Tables<"books">["book_id"]
+  book_id: Tables<"books">["book_id"],
 ) {
   const { data, error } = await supabase
     .from("books")
@@ -125,10 +120,10 @@ async function deleteBook(
  */
 async function updateBook(
   supabase: SupabaseClient<Database>,
-  book_id: Tables<"books">["book_id"], 
-  bookData: TablesUpdate<"books">
+  book_id: Tables<"books">["book_id"],
+  bookData: TablesUpdate<"books">,
 ) {
-  const { data, error } = await supabase  
+  const { data, error } = await supabase
     .from("books")
     .update(bookData)
     .eq("book_id", book_id)
