@@ -6,10 +6,13 @@ import {
   View,
 } from "react-native";
 
+import { useEffect, useState } from "react";
 import CategoryChips from "../components/CategoryChips";
 import { BookCard } from "../components/BookCard";
 import TopBar from "../components/TopBar";
-import { categories, mockListings } from "../data/mockListings";
+//import { categories, mockListings } from "../data/mockListings";
+import { getGenres, getListings } from "../services/listings-client";
+import { toBookCardModel } from "../adapters/listing-adapter";
 
 // Discover / home listings screen — matches screen 01 ("Discover") from the
 // OurLibrary Figma mock. Rendered as the "Home" tab from App.js; the shared
@@ -22,6 +25,43 @@ export default function ListingsScreen({ onOpenListing }) {
   const { width } = useWindowDimensions();
   const bookWidth = (width - PAGE_PADDING * 2 - GRID_GAP) / 2;
 
+  const [categories, setCategories] = useState([]);
+  const [listings, setListings] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchData() {
+      try {
+        setError(null);
+
+        const [genreData, listingData] = await Promise.all([getGenres(), getListings()]);
+        
+        if (!cancelled) {
+          setCategories(genreData);
+          setListings(listingData.map(toBookCardModel));
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Failed to load listings:", error);
+          setError(error.message || "Unable to load listings.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <SafeAreaView className="flex-1 bg-off-white">
       <View className="flex-1">
@@ -29,13 +69,13 @@ export default function ListingsScreen({ onOpenListing }) {
         <CategoryChips categories={categories} />
 
         <FlatList
-          data={mockListings}
-          keyExtractor={(item) => item.id}
+          data={listings}
+          keyExtractor={(item) => item.listing_id}
           renderItem={({ item }) => (
             <BookCard
               book={item}
               width={bookWidth}
-              onPress={() => onOpenListing?.(item.id)}
+              onPress={() => onOpenListing?.(item.listing_id)}
             />
           )}
           numColumns={2}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Platform,
   Pressable,
@@ -14,6 +14,8 @@ import {
 import { BookCard } from "../components/BookCard";
 import { BottomNav } from "../components/BottomNav";
 import { mockListings } from "../data/mockListings";
+import { getListings } from "../services/listings-client";
+import { toBookCardModel } from "../adapters/listing-adapter";
 import { colors } from "../theme";
 
 // Used to compute card widths. Keep in sync with px-18 / gap-y-12 /
@@ -35,7 +37,22 @@ export function BrowseScreen() {
     [contentWidth],
   );
 
-  const filteredBooks = mockListings.filter((book) =>
+  const [listings, setListings] = useState([]);
+
+  useEffect(() => {
+    async function fetchListings() {
+      try {
+        const data = await getListings();
+        setListings(data.map(toBookCardModel));
+      } catch (error) {
+        console.error("Failed to load listings:", error);
+      }
+    }
+
+    fetchListings();
+  }, []);
+
+  const filteredBooks = listings.filter((book) =>
     `${book.title} ${book.author}`
       .toLowerCase()
       .includes(query.toLowerCase().trim()),
@@ -93,13 +110,13 @@ export function BrowseScreen() {
             {!query.trim() ? (
               <View className="border border-dashed border-soft-muted px-14 py-16">
                 <Text className="text-muted text-12 leading-18 text-center">
-                  Enter a book title, author, or genere to search out library
+                  Enter a book title, author, or genre to search out library
                 </Text>
               </View>
             ) : filteredBooks.length > 0 ? (
               <View className="flex-row flex-wrap justify-between pt-18 gap-y-12">
                 {filteredBooks.map((book) => (
-                  <BookCard book={book} key={book.id} width={bookWidth} />
+                  <BookCard book={book} key={book.book_id} width={bookWidth} />
                 ))}
               </View>
             ) : (

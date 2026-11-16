@@ -5,7 +5,7 @@ import type { Database, Tables, TablesInsert, TablesUpdate } from "./types.ts";
 /* getListings()
  *
  * Input:
- * listing_id, book_id, availability, condition, lender, date (these can be undefined)
+ * listing_id, book_id, availability, condition, lender_id, date (these can be undefined)
  *
  * Returns:
  * An array of listing(s) within the database that match the given parameter(s).
@@ -18,7 +18,7 @@ async function getListings(
   book_id?: Tables<"listings">["book_id"],
   availability?: Tables<"listings">["availability"],
   condition?: NonNullable<Tables<"listings">["condition"]>,
-  lender?: Tables<"listings">["lender"],
+  lender?: Tables<"listings">["lender_id"],
   date?: NonNullable<Tables<"listings">["date_posted"]>,
 ) {
   let query = supabase.from("listings").select("*, books(*)");
@@ -36,7 +36,7 @@ async function getListings(
     query.eq("condition", condition);
   }
   if (lender !== undefined) {
-    query.eq("lender", lender);
+    query.eq("lender_id", lender);
   }
   if (date !== undefined) {
     query.gte("date_posted", date);
