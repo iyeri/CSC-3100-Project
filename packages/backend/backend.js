@@ -4,10 +4,7 @@ import userService from "./services/users-service.ts";
 import bookService from "./services/books-service.ts";
 import listingService from "./services/listings-service.ts";
 import loanService from "./services/loans-service.ts";
-import {
-  signup,
-  login,
-} from "./services/signuplogin-service.ts";
+import { signup, login } from "./services/signuplogin-service.ts";
 import {
   attachAuthContext,
   requireAuth,
@@ -15,16 +12,16 @@ import {
 
 // Table columns (object keys) for checking post and patch requests.
 const userKeys = [
-    "uid",
-    "username",
-    "name",
-    "calpoly_email",
-    "bio",
-    "pfp_url",
-    "credit_balance",
-    "on_campus",
-    "date_joined",
-    "account_status",
+  "uid",
+  "username",
+  "name",
+  "calpoly_email",
+  "bio",
+  "pfp_url",
+  "credit_balance",
+  "on_campus",
+  "date_joined",
+  "account_status",
 ];
 const bookKeys = ["book_id", "title", "author", "genre", "description"];
 const listingKeys = [
@@ -241,7 +238,7 @@ app.get("/users/:uid/loans", async (req, res) => {
 // The /books path.
 app.get("/books", async (req, res) => {
   const data = await bookService.getBooks(
-    req.db_client, 
+    req.db_client,
     req.query.book_id,
     req.query.title,
     req.query.author,
@@ -287,7 +284,10 @@ app.post("/books", requireAuth, async (req, res) => {
 });
 
 app.delete("/books/:book_id", async (req, res) => {
-  const deletedBook = await bookService.deleteBook(req.db_client, req.params.book_id);
+  const deletedBook = await bookService.deleteBook(
+    req.db_client,
+    req.params.book_id,
+  );
 
   if (deletedBook === undefined) {
     res.status(500).send("Database failure (deleting book).");
@@ -487,7 +487,10 @@ app.post("/loans", requireAuth, async (req, res) => {
 });
 
 app.delete("/loans/:loan_id", requireAuth, async (req, res) => {
-  const deletedLoan = await loanService.deleteLoan(req.db_client, req.params.loan_id);
+  const deletedLoan = await loanService.deleteLoan(
+    req.db_client,
+    req.params.loan_id,
+  );
 
   if (deletedLoan === undefined) {
     res.status(500).send("Database failure (deleting loan).");
