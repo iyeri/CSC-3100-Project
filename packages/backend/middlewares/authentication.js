@@ -2,6 +2,7 @@ import {
   anonymousSupabase,
   createAuthenticatedSupabase,
 } from "../services/client.ts";
+export { requireAuth } from "./require-auth.js";
 
 /* attachAuthContext()
  *
@@ -52,23 +53,4 @@ export async function attachAuthContext(req, res, next) {
   } catch (error) {
     return next(error);
   }
-}
-
-/* requireAuth()
- *
- * Description:
- * Checks if the request is coming from an authenticated user.
- *
- * Input:
- * req, res, next (this is automatically handled by Express)
- *
- * Output:
- * Nothing; calls next function.
- */
-export async function requireAuth(req, res, next) {
-  if (!req.user) {
-    return res.status(401).send("Authentication required.");
-  }
-
-  next();
 }

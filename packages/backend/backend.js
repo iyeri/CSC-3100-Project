@@ -9,20 +9,12 @@ import {
   attachAuthContext,
   requireAuth,
 } from "./middlewares/authentication.js";
+import {
+  isValidNewUser,
+  isValidUserUpdate,
+} from "./services/request-validation.js";
 
 // Table columns (object keys) for checking post and patch requests.
-const userKeys = [
-  "uid",
-  "username",
-  "name",
-  "calpoly_email",
-  "bio",
-  "pfp_url",
-  "credit_balance",
-  "on_campus",
-  "date_joined",
-  "account_status",
-];
 const bookKeys = ["book_id", "title", "author", "genre", "description"];
 const listingKeys = [
   "listing_id",
@@ -107,14 +99,7 @@ app.get("/users", async (req, res) => {
 });
 
 app.post("/users", async (req, res) => {
-  // Validating request...
-  if (
-    req.body.uid !== undefined || // Not allowed to choose uid.
-    req.body.username === undefined || // Must have username.
-    req.body.calpoly_email === undefined || // Must have Cal Poly email.
-    // req.body.credit_balance !== undefined || // Not allowed to choose credit balance.
-    Object.keys(req.body).filter((key) => !userKeys.includes(key)).length > 0 // Extraneous keys.
-  ) {
+  if (!isValidNewUser(req.body)) {
     res.status(400).send("Bad request.");
     return;
   }
@@ -165,11 +150,7 @@ app.patch("/users/:uid", requireAuth, async (req, res) => {
     return;
   }
 
-  // Validate request body.
-  if (
-    req.body.uid !== undefined || // Not allowed to change uid.
-    Object.keys(req.body).filter((key) => !userKeys.includes(key)).length > 0 // Extraneous keys.
-  ) {
+  if (!isValidUserUpdate(req.body)) {
     res.status(409).send("Bad request.");
     return;
   }

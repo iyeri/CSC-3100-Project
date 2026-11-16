@@ -8,7 +8,7 @@
   "main": "backend.js",
   "scripts": {
     "lint": "npx eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "devDependencies": {
     "@eslint/compat": "^2.1.1",
