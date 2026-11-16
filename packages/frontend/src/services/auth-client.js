@@ -47,6 +47,6 @@ export async function restoreSession() {
       user,
     );
   }
-  
+
   return { user };
 }

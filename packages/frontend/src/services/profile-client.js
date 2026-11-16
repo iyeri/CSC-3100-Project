@@ -6,10 +6,9 @@ export async function getProfile(userId) {
     throw new Error("A user ID is required.");
   }
 
-  const users = await apiRequest(
-    `/users?uid=${encodeURIComponent(userId)}`,
-    { method: "GET" },
-  );
+  const users = await apiRequest(`/users?uid=${encodeURIComponent(userId)}`, {
+    method: "GET",
+  });
 
   if (!users[0]) {
     throw new ApiError("Profile not found.", 404);
@@ -19,14 +18,13 @@ export async function getProfile(userId) {
 }
 
 export async function getBooks(userId) {
-    if (!userId) {
-        throw new Error("User ID is required to fetch books.");
-    }
+  if (!userId) {
+    throw new Error("User ID is required to fetch books.");
+  }
 
-    return apiRequest(
-        `/listings?lender=${encodeURIComponent(userId)}`,
-        { method: "GET" }
-    );
+  return apiRequest(`/listings?lender=${encodeURIComponent(userId)}`, {
+    method: "GET",
+  });
 }
 
 export async function getReviews(userId) {
@@ -34,8 +32,7 @@ export async function getReviews(userId) {
     throw new Error("A user ID is required.");
   }
 
-  return apiRequest(
-    `/users/${encodeURIComponent(userId)}/reviews`, 
-    { method: "GET" }
-  );
+  return apiRequest(`/users/${encodeURIComponent(userId)}/reviews`, {
+    method: "GET",
+  });
 }

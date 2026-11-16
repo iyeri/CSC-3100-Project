@@ -37,8 +37,11 @@ export default function ListingsScreen({ onOpenListing }) {
       try {
         setError(null);
 
-        const [genreData, listingData] = await Promise.all([getGenres(), getListings()]);
-        
+        const [genreData, listingData] = await Promise.all([
+          getGenres(),
+          getListings(),
+        ]);
+
         if (!cancelled) {
           setCategories(genreData);
           setListings(listingData.map(toBookCardModel));

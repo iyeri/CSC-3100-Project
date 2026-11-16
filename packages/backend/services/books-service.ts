@@ -231,5 +231,5 @@ export default {
   updateBook,
   getBookGenres,
   addBookGenres,
-  deleteBookGenres
+  deleteBookGenres,
 };

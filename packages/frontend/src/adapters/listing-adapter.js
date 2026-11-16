@@ -1,7 +1,7 @@
 // listing-adapter.js
 import { coverThemes } from "../data/coverThemes";
 
-// Helper function to hash a string into a number. 
+// Helper function to hash a string into a number.
 // Used to assign a cover theme to a listing based on its book_id.
 function hashString(value) {
   return [...value].reduce(
@@ -13,8 +13,7 @@ function hashString(value) {
 // Convert the listing data from the backend into the format expected by the BookCard component.
 export function toBookCardModel(listing) {
   const book = listing.books;
-  const theme =
-    coverThemes[hashString(listing.book_id) % coverThemes.length];
+  const theme = coverThemes[hashString(listing.book_id) % coverThemes.length];
   const title = book?.title ?? "Untitled";
 
   return {

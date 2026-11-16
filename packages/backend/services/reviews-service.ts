@@ -15,7 +15,7 @@ async function getReviews(
   if (review_id !== undefined) {
     query = query.eq("review_id", review_id);
   }
-  if (loan_id !== undefined) {  
+  if (loan_id !== undefined) {
     query = query.eq("loan_id", loan_id);
   }
   if (reviewer_id !== undefined) {
@@ -92,9 +92,9 @@ async function deleteReview(
   return data;
 }
 
-export default { 
-    getReviews, 
-    addReview,
-    updateReview,
-    deleteReview
+export default {
+  getReviews,
+  addReview,
+  updateReview,
+  deleteReview,
 };

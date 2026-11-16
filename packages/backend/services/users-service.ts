@@ -218,7 +218,7 @@ async function addUserPreferences(
 async function deleteUserPreferences(
   supabase: SupabaseClient<Database>,
   uid: Tables<"users">["uid"],
-  preferences: Array<TablesInsert<"user_preferences">["genre_id"]>
+  preferences: Array<TablesInsert<"user_preferences">["genre_id"]>,
 ) {
   if (preferences.length === 0) {
     return [];
@@ -228,7 +228,7 @@ async function deleteUserPreferences(
     .from("user_preferences")
     .delete()
     .eq("user_id", uid)
-    .in('genre_id', preferences);
+    .in("genre_id", preferences);
 
   if (error) {
     console.error(error);
@@ -269,5 +269,5 @@ export default {
   getUserPreferences,
   addUserPreferences,
   deleteUserPreferences,
-  getUserReviews
+  getUserReviews,
 };

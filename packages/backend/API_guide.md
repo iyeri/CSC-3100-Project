@@ -34,20 +34,20 @@ GET **[JSON data]** **[backend host]**/users
 
 POST **[JSON data]** **[backend host]**/users
 
-> Requires authorization header containing authentication token obtained from */auth/signup*.
+> Requires authorization header containing authentication token obtained from _/auth/signup_.
 > Requires username and Cal Poly email, provided in request body (with JSON format).
 > Cannot define uid (this is handled by the database).
 > Returns new JSON data of created user.
 
 REMOVE **[backend host]**/users/**[uid]**
 
-> Requires authorization header containing authentication token obtained from */auth/login*.
+> Requires authorization header containing authentication token obtained from _/auth/login_.
 > Requires uid, provided in path.
 > Returns JSON data of the deleted user.
 
 PATCH **[JSON data]** **[backend host]**/users/**[uid]**
 
-> Requires authorization header containing authentication token obtained from */auth/login*.
+> Requires authorization header containing authentication token obtained from _/auth/login_.
 > Requires uid, provided in path.
 > May pass any user key (to update those specific keys), provided in request body (with JSON format).
 > Cannot change uid.
@@ -63,18 +63,18 @@ GET **[JSON data]** **[backend host]**/users/**[uid]**/loans?=**[role]**
 
 GET **[backend host]**/users/**[uid]**/preferences
 
-> Requires authorization header containing authentication token obtained from */auth/login*.
+> Requires authorization header containing authentication token obtained from _/auth/login_.
 > Requires uid, provided in path.
 
 POST **[JSON data]** **[backend host]**/users/**[uid]**/preferences
 
-> Requires authorization header containing authentication token obtained from */auth/login*.
+> Requires authorization header containing authentication token obtained from _/auth/login_.
 > Requires uid, provided in path.
 > Pass genres as JSON data. {"genre" : [genre_id_1, genre_id_2, ..., genre_id_n]}
 
 DELETE **[backend host]**/users/**[uid]**/preferences?genre=**[genre_id_1]**&genre=**[genre_id_2]**...&genre=**[genre_id_n]**
 
-> Requires authorization header containing authentication token obtained from */auth/login*.
+> Requires authorization header containing authentication token obtained from _/auth/login_.
 > Requires uid, provided in path.
 > Pass genres as query parameters (seperated as seen in the path).
 

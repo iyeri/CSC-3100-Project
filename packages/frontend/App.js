@@ -147,7 +147,9 @@ export default function App() {
       case "Add":
         return <AddScreen />;
       case "Profile":
-        return <ProfileScreen userId={session.user.id} onLogout={handleLogout} />;
+        return (
+          <ProfileScreen userId={session.user.id} onLogout={handleLogout} />
+        );
       default:
         return <ListingsScreen onOpenListing={setSelectedListingId} />;
     }
