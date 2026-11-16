@@ -3,26 +3,8 @@ import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
 
 import { colors, radii, spacing } from "../theme";
 
-// Horizontal chips row for filtering listings by genre.
-//
-// Works in two modes:
-//   - Controlled: pass `activeId` and `onChange(id)`. The parent owns the
-//     active state (used by ListingsScreen to filter the grid).
-//   - Uncontrolled: omit both; the component tracks its own active chip
-//     (legacy behavior for screens that just want the visual).
-export default function CategoryChips({
-  categories,
-  activeId,
-  onChange,
-}) {
-  const [internalActive, setInternalActive] = useState(categories[0]?.id);
-  const isControlled = activeId !== undefined;
-  const active = isControlled ? activeId : internalActive;
-
-  const handlePress = (id) => {
-    if (!isControlled) setInternalActive(id);
-    onChange?.(id);
-  };
+export default function CategoryChips({ categories }) {
+  const [active, setActive] = useState(categories[0]?.id);
 
   return (
     <ScrollView
@@ -36,10 +18,7 @@ export default function CategoryChips({
         return (
           <Pressable
             key={cat.id}
-            onPress={() => handlePress(cat.id)}
-            accessibilityRole="button"
-            accessibilityLabel={`Filter by ${cat.label}`}
-            accessibilityState={{ selected: isActive }}
+            onPress={() => setActive(cat.id)}
             style={[styles.chip, isActive && styles.chipActive]}
           >
             <Text style={[styles.label, isActive && styles.labelActive]}>

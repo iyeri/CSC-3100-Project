@@ -57,7 +57,7 @@ export default function ListingCard({ listing, onPress }) {
         {listing.title}
       </Text>
       <Text style={styles.meta} numberOfLines={1}>
-        {[listing.condition, listing.format].filter(Boolean).join(" · ")}
+        {listing.condition} · {listing.format}
       </Text>
     </Pressable>
   );

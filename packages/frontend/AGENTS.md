@@ -58,17 +58,10 @@ These rules define how to translate Figma inputs into code for this Expo/React N
   - Emphasized body / inline notices → `fonts.sansMedium`
   - Form labels, button text, CTAs, links-as-text → `fonts.sansBold`
 
-## Styling: NativeWind Going Forward
-
-- IMPORTANT: New components use **NativeWind** (Tailwind classes via the `className` prop). Do not write new components with `StyleSheet.create`.
-- IMPORTANT: Do not convert existing `StyleSheet`-based components to NativeWind. They continue to work as-is. The two systems coexist safely — just don't mix them inside a single file.
-- Before the first NativeWind component lands, install `nativewind` + `tailwindcss@^3.4`, add `tailwind.config.js` (extending the OurLibrary palette, fonts, radii, and spacing from `src/theme.js` so the same tokens are reachable from class names), register the babel/metro plugins per the NativeWind v4 Expo guide, and import the global `global.css` from `App.js`.
-- Prefer utility classes for layout, color, spacing, and typography. Drop to inline `style={{}}` only for dynamic values a class can't express (computed dimensions, animated values, per-item colors from data).
-- Tailwind class names should resolve to the same tokens defined in `src/theme.js` (e.g. `bg-offWhite`, `text-textPrimary`, `font-serifBold`, `rounded-pill`). Extend `tailwind.config.js` rather than inlining raw hex/px in classes.
-
 ## Figma → React Native Translation
 
-- Treat the Figma MCP output (React + Tailwind) as close to final for new files — map its Tailwind utilities to NativeWind utilities on React Native primitives rather than rewriting to `StyleSheet`.
+- Treat the Figma MCP output (React + Tailwind) as a representation of layout and behavior, not final code.
+- Replace Tailwind utility classes with `StyleSheet.create` entries. Do not install `tailwind`, `nativewind`, or any other CSS-in-JS library.
 - Replace `<div>`/`<span>` with `<View>`/`<Text>`. Every string must live inside `<Text>` — bare strings inside `<View>` will crash.
 - Replace `<button>` with `<Pressable>`, add `accessibilityRole="button"` and a meaningful `accessibilityLabel`.
 - Replace `<img>` with `<Image>` from `react-native` and provide an explicit `width`/`height` via `style` (RN does not auto-size images).
