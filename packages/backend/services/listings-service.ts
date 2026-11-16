@@ -1,11 +1,6 @@
 // listings-service.ts
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type {
-  Database,
-  Tables,
-  TablesInsert,
-  TablesUpdate,
-} from "./types.ts";
+import type { Database, Tables, TablesInsert, TablesUpdate } from "./types.ts";
 
 /* getListings()
  *
@@ -70,7 +65,7 @@ async function getListings(
  */
 async function addListing(
   supabase: SupabaseClient<Database>,
-  listingData: TablesInsert<"listings">
+  listingData: TablesInsert<"listings">,
 ) {
   const { data, error } = await supabase
     .from("listings")
@@ -103,7 +98,7 @@ async function addListing(
  */
 async function deleteListing(
   supabase: SupabaseClient<Database>,
-  listing_id: Tables<"listings">["listing_id"]
+  listing_id: Tables<"listings">["listing_id"],
 ) {
   const { data, error } = await supabase
     .from("listings")
@@ -130,7 +125,7 @@ async function deleteListing(
 async function updateListing(
   supabase: SupabaseClient<Database>,
   listing_id: Tables<"listings">["listing_id"],
-  listingData: TablesUpdate<"listings">
+  listingData: TablesUpdate<"listings">,
 ) {
   const { data, error } = await supabase
     .from("listings")
