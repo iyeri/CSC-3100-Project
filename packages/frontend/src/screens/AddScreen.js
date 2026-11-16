@@ -15,8 +15,8 @@ import {
 import { BookCard } from "../components/BookCard";
 import { colors } from "../theme";
 
-const conditions=["New","Slightly Used","Used"];
-const status=["Available","Lent","Current Read"];
+//const conditions=["New","Slightly Used","Used"];
+//const status=["Available","Lent","Current Read"];
 
 const PAGE_PADDING = 18;
 const GRID_GAP = 12;
@@ -26,26 +26,53 @@ export function AddScreen({onAddListing}){
     const[title,setTitle]=useState("");
     const[author,setAuthor]=useState("");
     const[genre,setGenre]=useState("");
-    const[condition,setCondition]=useState("");
-    const[status,setStatus]=useState("");
-
-    const handleAdd=()=>{
-        const newListing={ 
-        id:Date.now().toString(), 
+    const[description,setDescription]=useState("");
+    const [error, setError] = useState(null);
+    
+    const handleAdd= async()=>{
+      if(!title.trim()|| !author.trim()){
+        setError("Enter title or author");
+        return;
+      }
+      setError(null);
+        const newBook={ 
+        book_id:Date.now().toString(), 
         title:title.trim(), 
         author:author.trim(), 
         genre:genre.trim(),
-        status:status.trim(),
-        condition};
+        description:description.trim()};
         
-        if(onAddListing){
-            onAddListing(newListing);
+        try{
+          const response = await fetch("http://localhost:8000/books", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newBook),
+          });
+          if (!response.ok){
+            const message= await response.text();
+            setError(message || "Failed to add");
+            return;
+          }
+
+          const addedBook = await response.json();
+
+          if (onAddListing) {
+            onAddListing(addedBook);
+          }
+
+          setTitle("");
+          setAuthor("");
+          setGenre("");
+          setDescription("");
+  
+
+        } catch (error){
+          console.error(error);
+          setError("Something went wrong");
         }
-        setTitle("");
-        setAuthor("");
-        setGenre("");
-        setStatus("");
-        setCondition("");
+       
     };
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -94,21 +121,25 @@ export function AddScreen({onAddListing}){
                         style={styles.input}/>
                     </View>
                     <View style={styles.inputBar}>
-                        <Text style={styles.inputLabel}>STATUS</Text>
+                        <Text style={styles.inputLabel}>DESCRIPTION</Text>
                         <TextInput 
-                        value={status} 
-                        onChangeText={setStatus} 
-                        placeholder="ex. Available, Current Read, Lent" 
+                        value={description} 
+                        onChangeText={setDescription} 
+                        placeholder="Tell us about this book" 
                         placeholderTextColor={colors.muted} 
-                        style={styles.input}/>
+                        style={styles.input}
+                        multiline/>
                     </View>
 
-                    <View styles={styles.section}>
-                        <Text styles={styles.sectionTitle}>Your Listing</Text>
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Your Listing</Text>
                         <Text>
                             {title.trim()} <br/>{author.trim()}<br/>{genre.trim()}<br/>{status.trim()}
                         </Text>
                     </View>
+                    {error && (
+                      <Text>{error}</Text>
+                    )}
                     <Pressable style={styles.button} 
                     onPress={handleAdd}>
                         <Text style={styles.buttonText}>Submit Book</Text>

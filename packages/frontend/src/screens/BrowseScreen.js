@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Platform,
   Pressable,
@@ -13,8 +13,6 @@ import {
 } from "react-native";
 
 import { BookCard } from "../components/BookCard";
-import { BottomNav } from "../components/BottomNav";
-import { books as initialBooks } from "../data/profile";
 import { colors } from "../theme";
 
 const PAGE_PADDING = 18;
@@ -24,14 +22,42 @@ const MAX_CONTENT_WIDTH = 560;
 export function BrowseScreen() {
   const { width } = useWindowDimensions();
   const [query, setQuery] = useState("");
+  const [books, setBooks]= useState([]);
+  const [loading, setLoading] = useState(true);
+  const [ error, setError]= useState(null);
+  
   const contentWidth = Math.min(width, MAX_CONTENT_WIDTH);
   const bookWidth = useMemo(
     () => (contentWidth - PAGE_PADDING * 2 - GRID_GAP) / 2,
     [contentWidth],
   );
 
-  const filteredBooks = initialBooks.filter((book) =>
-    `${book.title} ${book.author}`
+  useEffect(() => {
+    const fetchBooks = async() => {
+      try {
+        const response = await fetch ("http://localhost:8000/books");
+        if (!response.ok){
+          if (response.status === 404){
+            setBooks([]);
+            return;
+          }
+          throw new Error ("Failed to fetch books");
+        }
+        
+        const fetchedBooks= await response.json();
+        setBooks(fetchedBooks);
+      } catch (error){
+        console.error(error);
+        setError("Could not load books");
+      } finally{
+        setLoading(false);
+      }
+    };
+    fetchBooks();
+  }, []);
+
+  const filteredBooks = books.filter((book) =>
+    `${book.title} ${book.author} ${book.genre}`
       .toLowerCase()
       .includes(query.toLowerCase().trim()),
   );
@@ -85,23 +111,31 @@ export function BrowseScreen() {
               )}
             </View>
 
-            {!query.trim() ? (
+            {loading ? (
+              <View style={styles.emptyState}>
+                <Text style={styles.emptyText}>Loading Books</Text>
+              </View>
+            ) : error ? (
+              <View style={styles.emptyState}>
+                <Text style={styles.emptyText}>{error}</Text>
+              </View>
+            ) : !query.trim() ? (
               <View style={styles.emptyState}>
                 <Text style={styles.emptyText}>
-                  Enter a book title, author, or genere to search out library
+                  Enter a book title, author, or genere to search our library
                 </Text>
               </View>
             ) : filteredBooks.length > 0 ? (
               <View style={styles.grid}>
                 {filteredBooks.map((book) => (
-                  <BookCard book={book} key={book.id} width={bookWidth} />
+                  <BookCard book={book} key={book.book_id} width={bookWidth} />
                 ))}
               </View>
             ) : (
               <View style={styles.emptyState}>
                 <Text style={styles.emptyText}>No Books Found</Text>
                 <Text style={styles.emptyText}>
-                  Try a differnt title or author!
+                  Try a differnt title, author, or genre!
                 </Text>
               </View>
             )}
