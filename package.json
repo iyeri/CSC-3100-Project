@@ -8,7 +8,8 @@
     "format:check": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "lint": "npm --workspace backend run lint",
     "typecheck": "tsc --project packages/backend/tsconfig.json --noEmit",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm --workspace frontend run export:web"
+    "test": "npm --workspace backend run test",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm --workspace frontend run export:web"
   },
   "author": "",
   "workspaces": [
