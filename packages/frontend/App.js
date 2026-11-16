@@ -25,6 +25,8 @@ import SignupScreen from "./src/screens/SignupScreen";
 import GenrePreferencesScreen from "./src/screens/GenrePreferencesScreen";
 import { mockListings } from "./src/data/mockListings";
 
+import { restoreSession, logout } from "./src/services/auth-client";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -41,8 +43,8 @@ export default function App() {
   // When set, overlays the active tab with the listing detail screen. Null
   // means no listing is open. Reset to null to "go back" to the tab.
   const [selectedListingId, setSelectedListingId] = useState(null);
-  // Frontend-only auth gate. Swap for the real Supabase session later.
   const [session, setSession] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [authScreen, setAuthScreen] = useState("login");
   // Onboarding flag — true only for fresh signups so returning users (and
   // eventually anyone with saved preferences in Supabase) skip the genre
@@ -55,7 +57,41 @@ export default function App() {
     }
   }, [fontsLoaded, fontError]);
 
-  if (!fontsLoaded && !fontError) {
+  useEffect(() => {
+    let active = true;
+
+    async function initializeAuth() {
+      try {
+        const restoredSession = await restoreSession();
+
+        if (active) {
+          setSession(restoredSession);
+        }
+      } catch (error) {
+        console.error("Session restoration failed:", error);
+
+        if (error?.status === 401) {
+          await logout();
+        }
+
+        if (active) {
+          setSession(null);
+        }
+      } finally {
+        if (active) {
+          setAuthLoading(false);
+        }
+      }
+    }
+
+    initializeAuth();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if ((!fontsLoaded && !fontError) || authLoading) {
     return null;
   }
 
@@ -72,13 +108,7 @@ export default function App() {
             onSwitchToSignup={() => setAuthScreen("signup")}
           />
         ) : (
-          <SignupScreen
-            onAuthed={(info) => {
-              setNeedsGenrePrefs(true);
-              setSession(info);
-            }}
-            onSwitchToLogin={() => setAuthScreen("login")}
-          />
+          <SignupScreen onSwitchToLogin={() => setAuthScreen("login")} />
         )}
       </View>
     );
@@ -99,6 +129,15 @@ export default function App() {
     );
   }
 
+  const handleLogout = async () => {
+    await logout();
+    setSession(null);
+    setAuthScreen("login");
+    setNeedsGenrePrefs(false);
+    setActiveTab("Home");
+    setSelectedListingId(null);
+  };
+
   const screen = () => {
     switch (activeTab) {
       case "Home":
@@ -108,7 +147,9 @@ export default function App() {
       case "Add":
         return <AddScreen />;
       case "Profile":
-        return <ProfileScreen />;
+        return (
+          <ProfileScreen userId={session.user.id} onLogout={handleLogout} />
+        );
       default:
         return <ListingsScreen onOpenListing={setSelectedListingId} />;
     }

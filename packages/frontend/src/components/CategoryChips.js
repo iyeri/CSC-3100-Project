@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Pressable, ScrollView, Text } from "react-native";
 
 export default function CategoryChips({ categories }) {
-  const [active, setActive] = useState(categories[0]?.id);
+  const [active, setActive] = useState(categories[0]?.genre_id);
 
   return (
     // Pin the row to its content height (grow-0 shrink-0) so the parent flex
@@ -15,11 +15,11 @@ export default function CategoryChips({ categories }) {
       contentContainerClassName="px-20 py-sm gap-sm items-center"
     >
       {categories.map((cat) => {
-        const isActive = cat.id === active;
+        const isActive = cat.genre_id === active;
         return (
           <Pressable
-            key={cat.id}
-            onPress={() => setActive(cat.id)}
+            key={cat.genre_id}
+            onPress={() => setActive(cat.genre_id)}
             className={`px-lg py-10 rounded-pill ${
               isActive ? "bg-chip-active" : "bg-chip-bg"
             }`}
@@ -29,7 +29,7 @@ export default function CategoryChips({ categories }) {
                 isActive ? "text-white" : "text-text-primary"
               }`}
             >
-              {cat.label}
+              {cat.name}
             </Text>
           </Pressable>
         );

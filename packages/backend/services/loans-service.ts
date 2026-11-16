@@ -5,7 +5,7 @@ import type { Database, Tables, TablesInsert, TablesUpdate } from "./types.ts";
 /* getLoans()
  *
  * Input:
- * loan_id, listing_id, lender, borrower, date_lended, due_date, is_overdue (these can be undefined)
+ * loan_id, listing_id, lender_id, borrower_id, date_lended, due_date, is_overdue (these can be undefined)
  *
  * Returns:
  * An array of loan(s) within the database that match the given parameter(s).
@@ -16,8 +16,8 @@ async function getLoans(
   supabase: SupabaseClient<Database>,
   loan_id?: Tables<"loans">["loan_id"],
   listing_id?: Tables<"loans">["listing_id"],
-  lender?: Tables<"loans">["lender"],
-  borrower?: Tables<"loans">["borrower"],
+  lender_id?: Tables<"loans">["lender_id"],
+  borrower_id?: Tables<"loans">["borrower_id"],
   date_lended?: NonNullable<Tables<"loans">["date_lended"]>,
   due_date?: NonNullable<Tables<"loans">["due_date"]>,
   is_overdue?: NonNullable<Tables<"loans">["is_overdue"]>,
@@ -30,11 +30,11 @@ async function getLoans(
   if (listing_id !== undefined) {
     query.eq("listing_id", listing_id);
   }
-  if (lender !== undefined) {
-    query.eq("lender", lender);
+  if (lender_id !== undefined) {
+    query.eq("lender_id", lender_id);
   }
-  if (borrower !== undefined) {
-    query.eq("borrower", borrower);
+  if (borrower_id !== undefined) {
+    query.eq("borrower_id", borrower_id);
   }
   if (date_lended !== undefined) {
     query.gte("date_lended", date_lended);

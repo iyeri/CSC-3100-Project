@@ -7,6 +7,7 @@
   "type": "module",
   "main": "backend.js",
   "scripts": {
+    "dev": "node ./src/backend.js",
     "lint": "npx eslint .",
     "test": "node --test"
   },
@@ -20,6 +21,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2",
+    "cors": "^2.8.6",
     "dotenv": "^18.0.4",
     "express": "^5.2.1"
   }

@@ -17,11 +17,11 @@ export { requireAuth } from "./require-auth.js";
  * Nothing; calls next function.
  */
 export async function attachAuthContext(req, res, next) {
-  const authorization = req.get("authorization");
+  const authorization = req.get("Authorization");
 
   // No token: continue as anon.
   if (!authorization) {
-    req.supabase = anonymousSupabase;
+    req.db_client = anonymousSupabase;
     req.user = null;
     return next();
   }
@@ -39,14 +39,14 @@ export async function attachAuthContext(req, res, next) {
     const {
       data: { user },
       error,
-    } = await supabase.auth.getUser(accessToken);
+    } = await supabase.auth.getUser(authToken);
 
     // Supplied tokens must be valid; don't fall back to anon.
     if (error || !user) {
       return res.status(401).send("Invalid or expired auth token.");
     }
 
-    req.supabase = supabase; // Attach supabase client to request.
+    req.db_client = supabase; // Attach supabase client to request.
     req.user = user; // Attach user to request.
 
     return next();

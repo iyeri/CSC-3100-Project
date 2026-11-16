@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Platform,
   Pressable,
@@ -14,7 +14,10 @@ import { BookCard } from "../components/BookCard";
 import { BottomNav } from "../components/BottomNav";
 import { CurrentReadCard } from "../components/CurrentReadCard";
 import { ReviewCard } from "../components/ReviewCard";
-import { books as initialBooks, profile, reviews } from "../data/profile";
+//import { books as initialBooks, profile, reviews } from "../data/profile";
+import { getProfile, getBooks, getReviews } from "../services/profile-client";
+import { toBookCardModel } from "../adapters/listing-adapter";
+import { toProfileModel } from "../adapters/profile-adapter";
 
 // Used to compute card widths. Keep in sync with px-18 / max-w-[560px] in the
 // classNames below.
@@ -38,12 +41,23 @@ function tabTextClass(active) {
   }`;
 }
 
-function HeaderButton({ accessibilityLabel, children }) {
+function HeaderButton({
+  accessibilityExpanded,
+  accessibilityLabel,
+  children,
+  onPress,
+}) {
   return (
     <Pressable
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
+      accessibilityState={
+        accessibilityExpanded === undefined
+          ? undefined
+          : { expanded: accessibilityExpanded }
+      }
       hitSlop={10}
+      onPress={onPress}
       className="w-34 h-34 rounded-17 border border-divider bg-white items-center justify-center active:opacity-[0.58]"
     >
       <Text className="text-text-primary text-16 leading-19 font-semibold">
@@ -53,9 +67,15 @@ function HeaderButton({ accessibilityLabel, children }) {
   );
 }
 
-export function ProfileScreen() {
+export function ProfileScreen({ userId, onLogout }) {
   const [activeTab, setActiveTab] = useState("library");
-  const [books, setBooks] = useState(initialBooks);
+  const [profile, setProfile] = useState(null);
+  const [books, setBooks] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loadError, setLoadError] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState(null);
   const currentReads = useMemo(
     () => books.filter((book) => book.isCurrentRead),
     [books],
@@ -71,12 +91,76 @@ export function ProfileScreen() {
       ),
     );
   };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProfileData() {
+      try {
+        setLoadError(null);
+
+        const [profileData, booksData, reviewsData] = await Promise.all([
+          getProfile(userId),
+          getBooks(userId),
+          getReviews(userId),
+        ]);
+
+        if (!cancelled) {
+          setProfile(toProfileModel(profileData, booksData, reviewsData));
+          setBooks(booksData.map(toBookCardModel));
+          setReviews(reviewsData);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Failed to load profile data:", error);
+          setLoadError(error.message || "Unable to load profile data.");
+        }
+      }
+    }
+
+    loadProfileData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
   const { width } = useWindowDimensions();
   const contentWidth = Math.min(width, MAX_CONTENT_WIDTH);
   const bookWidth = useMemo(
     () => (contentWidth - PAGE_PADDING * 2 - GRID_GAP) / 2,
     [contentWidth],
   );
+
+  const handleLogout = async () => {
+    setLogoutError(null);
+    setIsLoggingOut(true);
+
+    try {
+      await onLogout?.();
+    } catch (error) {
+      console.error("Logout failed:", error);
+      setLogoutError("Unable to log out. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
+  if (loadError) {
+    return (
+      <SafeAreaView className="flex-1 bg-off-white items-center justify-center px-20">
+        <Text className="text-coral text-center">{loadError}</Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <SafeAreaView className="flex-1 bg-off-white items-center justify-center">
+        <Text className="text-text-muted">Loading profile…</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -89,7 +173,7 @@ export function ProfileScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View className="w-full max-w-[560px] self-center bg-off-white px-18">
-            <View className="h-62 flex-row items-center justify-between border-b border-divider">
+            <View className="relative z-50 h-62 flex-row items-center justify-between border-b border-divider">
               <Text className="text-dark-green font-serif text-19">
                 OurLibrary
               </Text>
@@ -97,9 +181,42 @@ export function ProfileScreen() {
                 <HeaderButton accessibilityLabel="Share profile">
                   ↗
                 </HeaderButton>
-                <HeaderButton accessibilityLabel="Profile settings">
-                  •••
-                </HeaderButton>
+                <View className="relative z-50">
+                  <HeaderButton
+                    accessibilityExpanded={isMenuOpen}
+                    accessibilityLabel="Profile menu"
+                    onPress={() => {
+                      setLogoutError(null);
+                      setIsMenuOpen((open) => !open);
+                    }}
+                  >
+                    •••
+                  </HeaderButton>
+
+                  {isMenuOpen ? (
+                    <View className="absolute right-0 top-42 z-50 w-[180px] rounded-14 border border-divider bg-white p-8 shadow-sm">
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityState={{ disabled: isLoggingOut }}
+                        disabled={isLoggingOut}
+                        onPress={handleLogout}
+                        className={`h-40 rounded-10 bg-coral items-center justify-center ${
+                          isLoggingOut ? "opacity-50" : "active:opacity-[0.7]"
+                        }`}
+                      >
+                        <Text className="text-white text-12 font-semibold tracking-[0.5px]">
+                          {isLoggingOut ? "LOGGING OUT..." : "LOG OUT"}
+                        </Text>
+                      </Pressable>
+
+                      {logoutError ? (
+                        <Text className="text-coral text-11 leading-15 text-center mt-7">
+                          {logoutError}
+                        </Text>
+                      ) : null}
+                    </View>
+                  ) : null}
+                </View>
               </View>
             </View>
 
@@ -265,7 +382,7 @@ export function ProfileScreen() {
             ) : (
               <View className="pb-18">
                 {reviews.map((review) => (
-                  <ReviewCard key={review.id} review={review} />
+                  <ReviewCard key={review.review_id} review={review} />
                 ))}
               </View>
             )}

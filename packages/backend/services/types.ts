@@ -39,27 +39,69 @@ export type Database = {
   };
   public: {
     Tables: {
+      book_genres: {
+        Row: {
+          book_id: string;
+          genre_id: string;
+        };
+        Insert: {
+          book_id: string;
+          genre_id: string;
+        };
+        Update: {
+          book_id?: string;
+          genre_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "book_genres_book_id_fkey";
+            columns: ["book_id"];
+            isOneToOne: false;
+            referencedRelation: "books";
+            referencedColumns: ["book_id"];
+          },
+          {
+            foreignKeyName: "book_genres_genre_id_fkey";
+            columns: ["genre_id"];
+            isOneToOne: false;
+            referencedRelation: "genres";
+            referencedColumns: ["genre_id"];
+          },
+        ];
+      };
       books: {
         Row: {
           author: string | null;
           book_id: string;
           description: string | null;
-          genre: string | null;
           title: string | null;
         };
         Insert: {
           author?: string | null;
           book_id?: string;
           description?: string | null;
-          genre?: string | null;
           title?: string | null;
         };
         Update: {
           author?: string | null;
           book_id?: string;
           description?: string | null;
-          genre?: string | null;
           title?: string | null;
+        };
+        Relationships: [];
+      };
+      genres: {
+        Row: {
+          genre_id: string;
+          name: string;
+        };
+        Insert: {
+          genre_id?: string;
+          name: string;
+        };
+        Update: {
+          genre_id?: string;
+          name?: string;
         };
         Relationships: [];
       };
@@ -95,7 +137,7 @@ export type Database = {
           book_id: string;
           condition: string | null;
           date_posted: string | null;
-          lender: string;
+          lender_id: string;
           listing_id: string;
         };
         Insert: {
@@ -103,7 +145,7 @@ export type Database = {
           book_id: string;
           condition?: string | null;
           date_posted?: string | null;
-          lender: string;
+          lender_id: string;
           listing_id?: string;
         };
         Update: {
@@ -111,13 +153,13 @@ export type Database = {
           book_id?: string;
           condition?: string | null;
           date_posted?: string | null;
-          lender?: string;
+          lender_id?: string;
           listing_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: "Book Listing_lender_fkey";
-            columns: ["lender"];
+            columns: ["lender_id"];
             isOneToOne: false;
             referencedRelation: "users";
             referencedColumns: ["uid"];
@@ -133,43 +175,43 @@ export type Database = {
       };
       loans: {
         Row: {
-          borrower: string;
+          borrower_id: string;
           date_lended: string | null;
           due_date: string | null;
           is_overdue: boolean | null;
-          lender: string;
+          lender_id: string;
           listing_id: string;
           loan_id: string;
         };
         Insert: {
-          borrower: string;
+          borrower_id: string;
           date_lended?: string | null;
           due_date?: string | null;
           is_overdue?: boolean | null;
-          lender: string;
+          lender_id: string;
           listing_id: string;
           loan_id?: string;
         };
         Update: {
-          borrower?: string;
+          borrower_id?: string;
           date_lended?: string | null;
           due_date?: string | null;
           is_overdue?: boolean | null;
-          lender?: string;
+          lender_id?: string;
           listing_id?: string;
           loan_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: "Book Loan_borrower_fkey";
-            columns: ["borrower"];
+            columns: ["borrower_id"];
             isOneToOne: false;
             referencedRelation: "users";
             referencedColumns: ["uid"];
           },
           {
             foreignKeyName: "Book Loan_lender_fkey";
-            columns: ["lender"];
+            columns: ["lender_id"];
             isOneToOne: false;
             referencedRelation: "users";
             referencedColumns: ["uid"];
@@ -180,6 +222,67 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "listings";
             referencedColumns: ["listing_id"];
+          },
+        ];
+      };
+      reviews: {
+        Row: {
+          loan_id: string;
+          message: string;
+          rating: number;
+          review_id: string;
+          reviewee_id: string;
+          reviewer_id: string;
+          time: string;
+        };
+        Insert: {
+          loan_id: string;
+          message: string;
+          rating: number;
+          review_id?: string;
+          reviewee_id: string;
+          reviewer_id: string;
+          time?: string;
+        };
+        Update: {
+          loan_id?: string;
+          message?: string;
+          rating?: number;
+          review_id?: string;
+          reviewee_id?: string;
+          reviewer_id?: string;
+          time?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "reviews_loan_id_fkey";
+            columns: ["loan_id"];
+            isOneToOne: true;
+            referencedRelation: "loans";
+            referencedColumns: ["loan_id"];
+          },
+        ];
+      };
+      user_preferences: {
+        Row: {
+          genre_id: string;
+          user_id: string;
+        };
+        Insert: {
+          genre_id: string;
+          user_id?: string;
+        };
+        Update: {
+          genre_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_interests_genre_id_fkey";
+            columns: ["genre_id"];
+            isOneToOne: false;
+            referencedRelation: "genres";
+            referencedColumns: ["genre_id"];
           },
         ];
       };
