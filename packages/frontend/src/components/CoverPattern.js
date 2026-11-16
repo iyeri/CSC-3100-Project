@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 // Eight interchangeable cover decorations used by BookCard. The idea is to
 // keep the "color-blocked abstract" vibe of the Figma mock but avoid every
@@ -38,7 +38,8 @@ function Circle({ color }) {
   return (
     <View
       pointerEvents="none"
-      style={[styles.circle, { backgroundColor: color }]}
+      className="absolute w-[70%] aspect-square rounded-full -bottom-20 left-[15%] opacity-[0.55]"
+      style={{ backgroundColor: color }}
     />
   );
 }
@@ -46,14 +47,15 @@ function Circle({ color }) {
 // 1 — three thick horizontal bars across the bottom.
 function HorizontalStripes({ color }) {
   return (
-    <View pointerEvents="none" style={styles.hStripes}>
+    <View
+      pointerEvents="none"
+      className="absolute left-0 right-0 bottom-0 h-[45%] justify-end gap-6 pb-10"
+    >
       {[0, 1, 2].map((i) => (
         <View
           key={i}
-          style={[
-            styles.hStripe,
-            { backgroundColor: color, opacity: 0.35 + i * 0.2 },
-          ]}
+          className="h-10 mx-14 rounded-2"
+          style={{ backgroundColor: color, opacity: 0.35 + i * 0.2 }}
         />
       ))}
     </View>
@@ -63,14 +65,15 @@ function HorizontalStripes({ color }) {
 // 2 — three vertical bars down the right side.
 function VerticalStripes({ color }) {
   return (
-    <View pointerEvents="none" style={styles.vStripes}>
+    <View
+      pointerEvents="none"
+      className="absolute top-0 bottom-0 right-0 w-[45%] flex-row justify-end items-stretch gap-6 pr-14 py-14"
+    >
       {[0, 1, 2].map((i) => (
         <View
           key={i}
-          style={[
-            styles.vStripe,
-            { backgroundColor: color, opacity: 0.35 + i * 0.2 },
-          ]}
+          className="w-10 rounded-2"
+          style={{ backgroundColor: color, opacity: 0.35 + i * 0.2 }}
         />
       ))}
     </View>
@@ -82,7 +85,8 @@ function DiagonalStripe({ color }) {
   return (
     <View
       pointerEvents="none"
-      style={[styles.diagonal, { backgroundColor: color }]}
+      className="absolute w-[160%] h-28 bottom-[30%] -left-[30%] -rotate-[28deg] opacity-60 rounded-4"
+      style={{ backgroundColor: color }}
     />
   );
 }
@@ -90,9 +94,16 @@ function DiagonalStripe({ color }) {
 // 4 — 3x3 grid of small dots.
 function DotGrid({ color }) {
   return (
-    <View pointerEvents="none" style={styles.dotGrid}>
+    <View
+      pointerEvents="none"
+      className="absolute bottom-14 left-14 right-14 flex-row flex-wrap gap-8 max-w-[72px]"
+    >
       {Array.from({ length: 9 }).map((_, i) => (
-        <View key={i} style={[styles.dot, { backgroundColor: color }]} />
+        <View
+          key={i}
+          className="w-10 h-10 rounded-full opacity-[0.65]"
+          style={{ backgroundColor: color }}
+        />
       ))}
     </View>
   );
@@ -103,7 +114,8 @@ function HalfArch({ color }) {
   return (
     <View
       pointerEvents="none"
-      style={[styles.arch, { backgroundColor: color }]}
+      className="absolute w-[140%] aspect-square rounded-full -bottom-[85%] -left-[20%] opacity-[0.55]"
+      style={{ backgroundColor: color }}
     />
   );
 }
@@ -111,10 +123,19 @@ function HalfArch({ color }) {
 // 6 — three nested squares in the bottom-left corner.
 function NestedSquares({ color }) {
   return (
-    <View pointerEvents="none" style={styles.squaresWrap}>
-      <View style={[styles.sq, styles.sqOuter, { borderColor: color }]} />
-      <View style={[styles.sq, styles.sqMid, { borderColor: color }]} />
-      <View style={[styles.sq, styles.sqInner, { backgroundColor: color }]} />
+    <View pointerEvents="none" className="absolute bottom-14 left-14 w-56 h-56">
+      <View
+        className="absolute bottom-0 left-0 w-56 h-56 border-2 opacity-50"
+        style={{ borderColor: color }}
+      />
+      <View
+        className="absolute bottom-0 left-0 w-36 h-36 border-2 opacity-75"
+        style={{ borderColor: color }}
+      />
+      <View
+        className="absolute bottom-0 left-0 w-16 h-16"
+        style={{ backgroundColor: color }}
+      />
     </View>
   );
 }
@@ -122,137 +143,14 @@ function NestedSquares({ color }) {
 // 7 — rotated square masked by the cover edge to feel like a triangle.
 function Triangle({ color }) {
   return (
-    <View pointerEvents="none" style={styles.triangleWrap}>
-      <View style={[styles.triangle, { backgroundColor: color }]} />
+    <View
+      pointerEvents="none"
+      className="absolute -right-20 -bottom-20 w-110 h-110 overflow-hidden"
+    >
+      <View
+        className="w-110 h-110 rotate-45 opacity-60"
+        style={{ backgroundColor: color }}
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  // Shared: full-bleed layer sitting under the cover text.
-  circle: {
-    position: "absolute",
-    width: "70%",
-    aspectRatio: 1,
-    borderRadius: 999,
-    bottom: -20,
-    left: "15%",
-    opacity: 0.55,
-  },
-
-  hStripes: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: "45%",
-    justifyContent: "flex-end",
-    gap: 6,
-    paddingBottom: 10,
-  },
-  hStripe: {
-    height: 10,
-    marginHorizontal: 14,
-    borderRadius: 2,
-  },
-
-  vStripes: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    right: 0,
-    width: "45%",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "stretch",
-    gap: 6,
-    paddingRight: 14,
-    paddingVertical: 14,
-  },
-  vStripe: {
-    width: 10,
-    borderRadius: 2,
-  },
-
-  diagonal: {
-    position: "absolute",
-    width: "160%",
-    height: 28,
-    bottom: "30%",
-    left: "-30%",
-    transform: [{ rotate: "-28deg" }],
-    opacity: 0.6,
-    borderRadius: 4,
-  },
-
-  dotGrid: {
-    position: "absolute",
-    bottom: 14,
-    left: 14,
-    right: 14,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-    maxWidth: 72,
-  },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 999,
-    opacity: 0.65,
-  },
-
-  arch: {
-    position: "absolute",
-    width: "140%",
-    aspectRatio: 1,
-    borderRadius: 999,
-    bottom: "-85%",
-    left: "-20%",
-    opacity: 0.55,
-  },
-
-  squaresWrap: {
-    position: "absolute",
-    bottom: 14,
-    left: 14,
-    width: 56,
-    height: 56,
-  },
-  sq: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-  },
-  sqOuter: {
-    width: 56,
-    height: 56,
-    borderWidth: 2,
-    opacity: 0.5,
-  },
-  sqMid: {
-    width: 36,
-    height: 36,
-    borderWidth: 2,
-    opacity: 0.75,
-  },
-  sqInner: {
-    width: 16,
-    height: 16,
-  },
-
-  triangleWrap: {
-    position: "absolute",
-    right: -20,
-    bottom: -20,
-    width: 110,
-    height: 110,
-    overflow: "hidden",
-  },
-  triangle: {
-    width: 110,
-    height: 110,
-    transform: [{ rotate: "45deg" }],
-    opacity: 0.6,
-  },
-});

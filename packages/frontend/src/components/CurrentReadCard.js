@@ -1,22 +1,33 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-import { colors } from "../theme";
+import { Pressable, Text, View } from "react-native";
 
 // Compact horizontal card used in the "Currently reading" section.
 export function CurrentReadCard({ book, onRemove }) {
   return (
-    <View style={styles.card}>
-      <View style={[styles.cover, { backgroundColor: book.cover }]}>
-        <View style={[styles.coverRule, { backgroundColor: book.accent }]} />
-        <Text style={[styles.coverMark, { color: book.accent }]}>{book.mark}</Text>
+    <View className="w-[248px] flex-row items-center border border-ink p-10 bg-paper">
+      <View
+        className="w-52 aspect-[0.78] rounded-3 p-6 overflow-hidden"
+        style={{ backgroundColor: book.cover }}
+      >
+        <View className="h-3 w-18" style={{ backgroundColor: book.accent }} />
+        <Text
+          className="absolute -right-4 -bottom-8 text-46 leading-52 font-black opacity-25"
+          style={{ color: book.accent }}
+        >
+          {book.mark}
+        </Text>
       </View>
 
-      <View style={styles.copy}>
-        <Text style={styles.eyebrow}>NOW READING</Text>
-        <Text style={styles.title} numberOfLines={2}>
+      <View className="flex-1 ml-12">
+        <Text className="text-forest text-9 font-black tracking-[0.8px]">
+          NOW READING
+        </Text>
+        <Text
+          className="text-ink font-serif text-14 leading-18 mt-3"
+          numberOfLines={2}
+        >
           {book.title}
         </Text>
-        <Text style={styles.author} numberOfLines={1}>
+        <Text className="text-muted text-12 leading-16 mt-1" numberOfLines={1}>
           {book.author}
         </Text>
       </View>
@@ -26,84 +37,10 @@ export function CurrentReadCard({ book, onRemove }) {
         accessibilityRole="button"
         hitSlop={10}
         onPress={onRemove}
-        style={({ pressed }) => [styles.remove, pressed && styles.pressed]}
+        className="w-26 h-26 rounded-13 border border-line items-center justify-center ml-8 self-start active:opacity-[0.58]"
       >
-        <Text style={styles.removeText}>✕</Text>
+        <Text className="text-muted text-11 font-black">✕</Text>
       </Pressable>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    width: 248,
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: colors.ink,
-    padding: 10,
-    backgroundColor: colors.paper,
-  },
-  cover: {
-    width: 52,
-    aspectRatio: 0.78,
-    borderRadius: 3,
-    padding: 6,
-    overflow: "hidden",
-  },
-  coverRule: {
-    height: 3,
-    width: 18,
-  },
-  coverMark: {
-    position: "absolute",
-    right: -4,
-    bottom: -8,
-    fontSize: 46,
-    lineHeight: 52,
-    fontWeight: "900",
-    opacity: 0.25,
-  },
-  copy: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  eyebrow: {
-    color: colors.forest,
-    fontSize: 9,
-    fontWeight: "900",
-    letterSpacing: 0.8,
-  },
-  title: {
-    color: colors.ink,
-    fontSize: 14,
-    lineHeight: 18,
-    fontWeight: "800",
-    marginTop: 3,
-  },
-  author: {
-    color: colors.muted,
-    fontSize: 12,
-    lineHeight: 16,
-    marginTop: 1,
-  },
-  remove: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    borderWidth: 1,
-    borderColor: colors.line,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 8,
-    alignSelf: "flex-start",
-  },
-  removeText: {
-    color: colors.muted,
-    fontSize: 11,
-    fontWeight: "900",
-  },
-  pressed: {
-    opacity: 0.58,
-  },
-});

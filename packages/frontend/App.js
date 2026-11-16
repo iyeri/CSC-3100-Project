@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import {
+  SourceSerif4_400Regular,
   SourceSerif4_600SemiBold,
   SourceSerif4_700Bold,
 } from "@expo-google-fonts/source-serif-4";
@@ -21,12 +22,12 @@ import { ProfileScreen } from "./src/screens/ProfileScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import GenrePreferencesScreen from "./src/screens/GenrePreferencesScreen";
-import { colors } from "./src/theme";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
+    SourceSerif4_400Regular,
     SourceSerif4_600SemiBold,
     SourceSerif4_700Bold,
     DMSans_400Regular,
@@ -55,7 +56,7 @@ export default function App() {
 
   if (!session) {
     return (
-      <View style={styles.app}>
+      <View className="flex-1 bg-canvas">
         <StatusBar style="dark" />
         {authScreen === "login" ? (
           <LoginScreen
@@ -80,7 +81,7 @@ export default function App() {
 
   if (needsGenrePrefs) {
     return (
-      <View style={styles.app}>
+      <View className="flex-1 bg-canvas">
         <StatusBar style="dark" />
         <GenrePreferencesScreen
           onComplete={(genres) => {
@@ -109,18 +110,10 @@ export default function App() {
   };
 
   return (
-    <View style={styles.app}>
+    <View className="flex-1 bg-canvas">
       <StatusBar style="dark" />
-      <View style={styles.content}>{screen()}</View>
+      <View className="flex-1">{screen()}</View>
       <BottomNav activeTab={activeTab} onNavigate={setActiveTab} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  app: {
-    flex: 1,
-    backgroundColor: colors.canvas,
-  },
-  content: { flex: 1 },
-});

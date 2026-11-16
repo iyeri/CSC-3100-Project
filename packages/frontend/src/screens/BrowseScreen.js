@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar as NativeStatusBar,
-  StyleSheet,
   Text,
   useWindowDimensions,
   View,
@@ -14,12 +13,18 @@ import {
 
 import { BookCard } from "../components/BookCard";
 import { BottomNav } from "../components/BottomNav";
-import { books as initialBooks } from "../data/profile";
+import { mockListings } from "../data/mockListings";
 import { colors } from "../theme";
 
+// Used to compute card widths. Keep in sync with px-18 / gap-y-12 /
+// max-w-[560px] in the classNames below.
 const PAGE_PADDING = 18;
 const GRID_GAP = 12;
 const MAX_CONTENT_WIDTH = 560;
+
+const androidStatusBarPadding = {
+  paddingTop: Platform.OS === "android" ? NativeStatusBar.currentHeight : 0,
+};
 
 export function BrowseScreen() {
   const { width } = useWindowDimensions();
@@ -30,37 +35,41 @@ export function BrowseScreen() {
     [contentWidth],
   );
 
-  const filteredBooks = initialBooks.filter((book) =>
+  const filteredBooks = mockListings.filter((book) =>
     `${book.title} ${book.author}`
       .toLowerCase()
       .includes(query.toLowerCase().trim()),
   );
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.screen}>
+    <SafeAreaView className="flex-1 bg-paper" style={androidStatusBarPadding}>
+      <View className="flex-1 bg-canvas">
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerClassName="pb-16"
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.content}>
-            <View style={styles.topBar}>
-              <Text style={styles.wordmark}>OUR/LIBRARY</Text>
-              <Text style={styles.calloutEyebrow}>Find Your Next Read</Text>
+          <View className="w-full max-w-[560px] self-center bg-paper px-18">
+            <View className="h-62 flex-row items-center justify-between border-b border-line">
+              <Text className="text-ink text-16 font-black tracking-[-0.6px]">
+                OUR/LIBRARY
+              </Text>
+              <Text>Find Your Next Read</Text>
             </View>
-            <View style={styles.intro}>
-              <Text style={styles.heading}>FIND YOUR NEXT READ HERE!</Text>
-              <Text style={styles.sub}>
+            <View className="pt-28 pb-22">
+              <Text className="text-ink text-28 leading-34 font-black tracking-[-0.8px]">
+                FIND YOUR NEXT READ HERE!
+              </Text>
+              <Text className="text-muted">
                 Search for Books, Authors, and Genres
               </Text>
             </View>
-            <View style={styles.searchbar}>
-              <Text style={styles.searchIcon}>⌕</Text>
+            <View className="min-h-48 flex-row items-center bg-canvas px-12 gap-10">
+              <Text className="text-ink text-24">⌕</Text>
               <TextInput
                 value={query}
                 onChangeText={setQuery}
                 placeholder="Search by title/author/genre"
                 placeholderTextColor={colors.muted}
-                style={styles.searchInput}
+                className="flex-1 min-w-0 text-ink text-13 py-12"
                 returnKeyType="search"
               />
 
@@ -70,37 +79,35 @@ export function BrowseScreen() {
                   accessibilityRole="button"
                   accessibilityLabel="Clear"
                 >
-                  <Text style={styles.clear}>X</Text>
+                  <Text className="text-ink text-22 font-semibold px-4">X</Text>
                 </Pressable>
               )}
             </View>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>
+            <View className="flex-row items-center justify-between mb-12">
+              <Text className="text-ink text-11 font-black tracking-[0.8px]">
                 {query.trim() ? "SEARCH RESULTS" : "START YOUR SEARCH"}
               </Text>
-              {query.trim() !== "" && (
-                <Text style={styles.sectionCOunt}>
-                  {filteredBooks.length} FOUND
-                </Text>
-              )}
+              {query.trim() !== "" && <Text>{filteredBooks.length} FOUND</Text>}
             </View>
 
             {!query.trim() ? (
-              <View style={styles.emptyState}>
-                <Text style={styles.emptyText}>
+              <View className="border border-dashed border-soft-muted px-14 py-16">
+                <Text className="text-muted text-12 leading-18 text-center">
                   Enter a book title, author, or genere to search out library
                 </Text>
               </View>
             ) : filteredBooks.length > 0 ? (
-              <View style={styles.grid}>
+              <View className="flex-row flex-wrap justify-between pt-18 gap-y-12">
                 {filteredBooks.map((book) => (
                   <BookCard book={book} key={book.id} width={bookWidth} />
                 ))}
               </View>
             ) : (
-              <View style={styles.emptyState}>
-                <Text style={styles.emptyText}>No Books Found</Text>
-                <Text style={styles.emptyText}>
+              <View className="border border-dashed border-soft-muted px-14 py-16">
+                <Text className="text-muted text-12 leading-18 text-center">
+                  No Books Found
+                </Text>
+                <Text className="text-muted text-12 leading-18 text-center">
                   Try a differnt title or author!
                 </Text>
               </View>
@@ -111,144 +118,3 @@ export function BrowseScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.paper,
-    paddingTop: Platform.OS === "android" ? NativeStatusBar.currentHeight : 0,
-  },
-  screen: {
-    flex: 1,
-    backgroundColor: colors.canvas,
-  },
-  scrollContent: {
-    paddingBottom: 16,
-  },
-  content: {
-    width: "100%",
-    maxWidth: MAX_CONTENT_WIDTH,
-    alignSelf: "center",
-    backgroundColor: colors.paper,
-    paddingHorizontal: PAGE_PADDING,
-  },
-  topBar: {
-    height: 62,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: colors.line,
-  },
-  wordmark: {
-    color: colors.ink,
-    fontSize: 16,
-    fontWeight: "900",
-    letterSpacing: -0.6,
-  },
-  headerActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  pressed: {
-    opacity: 0.58,
-  },
-
-  actions: {
-    flexDirection: "row",
-    gap: 9,
-    marginTop: 22,
-  },
-
-  callout: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.acid,
-    marginTop: 18,
-    paddingHorizontal: 14,
-    paddingVertical: 13,
-  },
-
-  chevron: {
-    color: colors.ink,
-    fontSize: 26,
-    fontWeight: "400",
-  },
-  section: {
-    marginTop: 26,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 12,
-  },
-  sectionTitle: {
-    color: colors.ink,
-    fontSize: 11,
-    fontWeight: "900",
-    letterSpacing: 0.8,
-  },
-
-  emptyState: {
-    borderWidth: 1,
-    borderStyle: "dashed",
-    borderColor: colors.softMuted,
-    paddingHorizontal: 14,
-    paddingVertical: 16,
-  },
-  emptyText: {
-    color: colors.muted,
-    fontSize: 12,
-    lineHeight: 18,
-    textAlign: "center",
-  },
-
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    paddingTop: 18,
-    rowGap: GRID_GAP,
-  },
-  intro: {
-    paddingTop: 28,
-    paddingBottom: 22,
-  },
-  heading: {
-    color: colors.ink,
-    fontSize: 28,
-    lineHeight: 34,
-    fontWeight: "900",
-    letterSpacing: -0.8,
-  },
-  sub: {
-    color: colors.muted,
-  },
-  searchbar: {
-    minHeight: 48,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.canvas,
-    paddingHorizontal: 12,
-    gap: 10,
-  },
-  searchIcon: {
-    color: colors.ink,
-    fontSize: 24,
-  },
-  searchInput: {
-    flex: 1,
-    minWidth: 0,
-    color: colors.ink,
-    fontSize: 13,
-    paddingVertical: 12,
-  },
-  clear: {
-    color: colors.ink,
-    fontSize: 22,
-    fontWeight: "600",
-    paddingHorizontal: 4,
-  },
-});
