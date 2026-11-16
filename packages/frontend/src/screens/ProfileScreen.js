@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar as NativeStatusBar,
-  StyleSheet,
   Text,
   useWindowDimensions,
   View,
@@ -16,11 +15,28 @@ import { BottomNav } from "../components/BottomNav";
 import { CurrentReadCard } from "../components/CurrentReadCard";
 import { ReviewCard } from "../components/ReviewCard";
 import { books as initialBooks, profile, reviews } from "../data/profile";
-import { colors } from "../theme";
 
+// Used to compute card widths. Keep in sync with px-18 / max-w-[560px] in the
+// classNames below.
 const PAGE_PADDING = 18;
 const GRID_GAP = 12;
 const MAX_CONTENT_WIDTH = 560;
+
+const androidStatusBarPadding = {
+  paddingTop: Platform.OS === "android" ? NativeStatusBar.currentHeight : 0,
+};
+
+function tabClass(active) {
+  return `flex-1 py-12 items-center rounded-full ${
+    active ? "bg-dark-green" : "bg-chip-bg"
+  }`;
+}
+
+function tabTextClass(active) {
+  return `text-11 font-semibold tracking-[0.4px] ${
+    active ? "text-white" : "text-text-muted"
+  }`;
+}
 
 function HeaderButton({ accessibilityLabel, children }) {
   return (
@@ -28,9 +44,11 @@ function HeaderButton({ accessibilityLabel, children }) {
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
       hitSlop={10}
-      style={({ pressed }) => [styles.headerButton, pressed && styles.pressed]}
+      className="w-34 h-34 rounded-17 border border-divider bg-white items-center justify-center active:opacity-[0.58]"
     >
-      <Text style={styles.headerButtonText}>{children}</Text>
+      <Text className="text-text-primary text-16 leading-19 font-semibold">
+        {children}
+      </Text>
     </Pressable>
   );
 }
@@ -61,16 +79,21 @@ export function ProfileScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.screen}>
+    <SafeAreaView
+      className="flex-1 bg-off-white"
+      style={androidStatusBarPadding}
+    >
+      <View className="flex-1 bg-off-white">
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerClassName="pb-16"
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.content}>
-            <View style={styles.topBar}>
-              <Text style={styles.wordmark}>OurLibrary</Text>
-              <View style={styles.headerActions}>
+          <View className="w-full max-w-[560px] self-center bg-off-white px-18">
+            <View className="h-62 flex-row items-center justify-between border-b border-divider">
+              <Text className="text-dark-green font-serif text-19">
+                OurLibrary
+              </Text>
+              <View className="flex-row items-center gap-8">
                 <HeaderButton accessibilityLabel="Share profile">
                   ↗
                 </HeaderButton>
@@ -80,90 +103,112 @@ export function ProfileScreen() {
               </View>
             </View>
 
-            <View style={styles.profileHeader}>
-              <View style={styles.avatarWrap}>
-                <View style={styles.avatar}>
-                  <Text style={styles.avatarInitials}>{profile.initials}</Text>
+            <View className="items-center pt-30">
+              <View className="relative">
+                <View className="w-104 h-104 rounded-52 bg-sage-green items-center justify-center">
+                  <Text className="text-text-primary font-serif text-30 leading-36 tracking-[-0.6px]">
+                    {profile.initials}
+                  </Text>
                 </View>
-                <View style={styles.onlineDot} />
+                <View className="absolute right-2 bottom-8 w-19 h-19 rounded-10 bg-dark-green border-[3px] border-off-white" />
               </View>
 
-              <Text style={styles.name}>{profile.name}</Text>
-              <Text style={styles.handle}>{profile.handle}</Text>
-              <View style={styles.communityPill}>
-                <Text style={styles.pin}>◆</Text>
-                <Text style={styles.community}>{profile.community}</Text>
+              <Text className="text-text-primary font-serif text-29 leading-35 tracking-[-0.4px] mt-15">
+                {profile.name}
+              </Text>
+              <Text className="text-text-muted text-14 mt-2">
+                {profile.handle}
+              </Text>
+              <View className="flex-row items-center gap-6 mt-10">
+                <Text className="text-dark-green text-9">◆</Text>
+                <Text className="text-text-primary text-12 font-medium">
+                  {profile.community}
+                </Text>
               </View>
             </View>
 
-            <View style={styles.statsRow}>
+            <View className="flex-row items-stretch mt-24 py-16 bg-white rounded-22 border border-divider">
               {profile.stats.map((stat, index) => (
                 <View
                   key={stat.label}
-                  style={[
-                    styles.stat,
-                    index < profile.stats.length - 1 && styles.statDivider,
-                  ]}
+                  className={`flex-1 items-center justify-center ${
+                    index < profile.stats.length - 1
+                      ? "border-r border-divider"
+                      : ""
+                  }`}
                 >
-                  <Text style={styles.statValue}>{stat.value}</Text>
-                  <Text style={styles.statLabel}>{stat.label}</Text>
+                  <Text className="text-text-primary font-serif text-19">
+                    {stat.value}
+                  </Text>
+                  <Text className="text-text-muted text-11 mt-2 font-medium">
+                    {stat.label}
+                  </Text>
                 </View>
               ))}
             </View>
 
-            <Text style={styles.bio}>{profile.bio}</Text>
+            <Text className="text-text-primary font-serif-regular text-14 leading-21 text-center px-10 mt-20">
+              {profile.bio}
+            </Text>
 
-            <View style={styles.interests}>
+            <View className="flex-row flex-wrap justify-center gap-7 mt-15">
               {profile.interests.map((interest) => (
-                <View key={interest} style={styles.interestPill}>
-                  <Text style={styles.interestText}>{interest}</Text>
+                <View
+                  key={interest}
+                  className="bg-chip-bg rounded-full px-11 py-6"
+                >
+                  <Text className="text-text-primary text-10 font-medium">
+                    {interest}
+                  </Text>
                 </View>
               ))}
             </View>
 
-            <View style={styles.actions}>
+            <View className="flex-row gap-9 mt-22">
               <Pressable
                 accessibilityRole="button"
-                style={({ pressed }) => [
-                  styles.primaryAction,
-                  pressed && styles.pressed,
-                ]}
+                className="flex-1 h-47 bg-dark-green rounded-full items-center justify-center active:opacity-[0.58]"
               >
-                <Text style={styles.primaryActionText}>EDIT PROFILE</Text>
+                <Text className="text-white text-12 font-semibold tracking-[0.5px]">
+                  EDIT PROFILE
+                </Text>
               </Pressable>
               <Pressable
                 accessibilityLabel="Share profile"
                 accessibilityRole="button"
-                style={({ pressed }) => [
-                  styles.secondaryAction,
-                  pressed && styles.pressed,
-                ]}
+                className="w-50 h-47 border border-divider rounded-full bg-white items-center justify-center active:opacity-[0.58]"
               >
-                <Text style={styles.secondaryActionText}>↗</Text>
+                <Text className="text-text-primary text-20 font-semibold">
+                  ↗
+                </Text>
               </Pressable>
             </View>
 
-            {/* <View style={styles.callout}>
-              <View style={styles.calloutIcon}>
-                <Text style={styles.calloutIconText}>↺</Text>
+            {/* <View className="flex-row items-center bg-acid mt-18 px-14 py-13">
+              <View className="w-34 h-34 rounded-17 bg-ink items-center justify-center">
+                <Text className="text-acid text-18 font-black">↺</Text>
               </View>
-              <View style={styles.calloutCopy}>
-                <Text style={styles.calloutEyebrow}>COMMUNITY READER</Text>
-                <Text style={styles.calloutText}>12 successful local handoffs</Text>
+              <View className="flex-1 ml-11">
+                <Text className="text-ink text-10 font-black tracking-[0.9px]">COMMUNITY READER</Text>
+                <Text className="text-ink text-12 mt-2">12 successful local handoffs</Text>
               </View>
-              <Text style={styles.chevron}>›</Text>
+              <Text className="text-ink text-26 font-normal">›</Text>
             </View> */}
 
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>CURRENTLY READING</Text>
-                <Text style={styles.sectionCount}>{currentReads.length}</Text>
+            <View className="mt-26">
+              <View className="flex-row items-center justify-between mb-12">
+                <Text className="text-text-primary font-serif text-20">
+                  CURRENTLY READING
+                </Text>
+                <Text className="text-text-muted text-13 font-medium">
+                  {currentReads.length}
+                </Text>
               </View>
               {currentReads.length > 0 ? (
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={styles.currentReadList}
+                  contentContainerClassName="gap-10"
                 >
                   {currentReads.map((book) => (
                     <CurrentReadCard
@@ -174,8 +219,8 @@ export function ProfileScreen() {
                   ))}
                 </ScrollView>
               ) : (
-                <View style={styles.emptyState}>
-                  <Text style={styles.emptyText}>
+                <View className="border border-divider rounded-18 bg-white px-14 py-16">
+                  <Text className="text-muted text-12 leading-18 text-center">
                     Nothing on the nightstand. Tap “+ READING” on a book in your
                     library to add it here.
                   </Text>
@@ -183,22 +228,14 @@ export function ProfileScreen() {
               )}
             </View>
 
-            <View style={styles.tabs}>
+            <View className="flex-row mt-30 gap-8">
               <Pressable
                 accessibilityRole="tab"
                 accessibilityState={{ selected: activeTab === "library" }}
                 onPress={() => setActiveTab("library")}
-                style={[
-                  styles.tab,
-                  activeTab === "library" && styles.activeTab,
-                ]}
+                className={tabClass(activeTab === "library")}
               >
-                <Text
-                  style={[
-                    styles.tabText,
-                    activeTab === "library" && styles.activeTabText,
-                  ]}
-                >
+                <Text className={tabTextClass(activeTab === "library")}>
                   LIBRARY · {books.length}
                 </Text>
               </Pressable>
@@ -206,24 +243,16 @@ export function ProfileScreen() {
                 accessibilityRole="tab"
                 accessibilityState={{ selected: activeTab === "reviews" }}
                 onPress={() => setActiveTab("reviews")}
-                style={[
-                  styles.tab,
-                  activeTab === "reviews" && styles.activeTab,
-                ]}
+                className={tabClass(activeTab === "reviews")}
               >
-                <Text
-                  style={[
-                    styles.tabText,
-                    activeTab === "reviews" && styles.activeTabText,
-                  ]}
-                >
+                <Text className={tabTextClass(activeTab === "reviews")}>
                   REVIEWS · {reviews.length}
                 </Text>
               </Pressable>
             </View>
 
             {activeTab === "library" ? (
-              <View style={styles.grid}>
+              <View className="flex-row flex-wrap justify-between pt-18">
                 {books.map((book) => (
                   <BookCard
                     book={book}
@@ -234,7 +263,7 @@ export function ProfileScreen() {
                 ))}
               </View>
             ) : (
-              <View style={styles.reviewList}>
+              <View className="pb-18">
                 {reviews.map((review) => (
                   <ReviewCard key={review.id} review={review} />
                 ))}
@@ -246,329 +275,3 @@ export function ProfileScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.offWhite,
-    paddingTop: Platform.OS === "android" ? NativeStatusBar.currentHeight : 0,
-  },
-  screen: {
-    flex: 1,
-    backgroundColor: colors.offWhite,
-  },
-  scrollContent: {
-    paddingBottom: 16,
-  },
-  content: {
-    width: "100%",
-    maxWidth: MAX_CONTENT_WIDTH,
-    alignSelf: "center",
-    backgroundColor: colors.offWhite,
-    paddingHorizontal: PAGE_PADDING,
-  },
-  topBar: {
-    height: 62,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: colors.divider,
-  },
-  wordmark: {
-    color: colors.darkGreen,
-    fontFamily: "serif",
-    fontSize: 19,
-    fontWeight: "600",
-  },
-  headerActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  headerButton: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    borderWidth: 1,
-    borderColor: colors.divider,
-    backgroundColor: colors.white,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  headerButtonText: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    lineHeight: 19,
-    fontWeight: "600",
-  },
-  pressed: {
-    opacity: 0.58,
-  },
-  profileHeader: {
-    alignItems: "center",
-    paddingTop: 30,
-  },
-  avatarWrap: {
-    position: "relative",
-  },
-  avatar: {
-    width: 104,
-    height: 104,
-    borderRadius: 52,
-    backgroundColor: colors.sageGreen,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  avatarInitials: {
-    color: colors.textPrimary,
-    fontFamily: "serif",
-    fontSize: 30,
-    lineHeight: 36,
-    fontWeight: "600",
-    letterSpacing: -0.6,
-  },
-  onlineDot: {
-    position: "absolute",
-    right: 2,
-    bottom: 8,
-    width: 19,
-    height: 19,
-    borderRadius: 10,
-    backgroundColor: colors.darkGreen,
-    borderWidth: 3,
-    borderColor: colors.offWhite,
-  },
-  name: {
-    color: colors.textPrimary,
-    fontFamily: "serif",
-    fontSize: 29,
-    lineHeight: 35,
-    fontWeight: "600",
-    letterSpacing: -0.4,
-    marginTop: 15,
-  },
-  handle: {
-    color: colors.textMuted,
-    fontSize: 14,
-    marginTop: 2,
-  },
-  communityPill: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    marginTop: 10,
-  },
-  pin: {
-    color: colors.darkGreen,
-    fontSize: 9,
-  },
-  community: {
-    color: colors.textPrimary,
-    fontSize: 12,
-    fontWeight: "500",
-  },
-  statsRow: {
-    flexDirection: "row",
-    alignItems: "stretch",
-    marginTop: 24,
-    paddingVertical: 16,
-    backgroundColor: colors.white,
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: colors.divider,
-  },
-  stat: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  statDivider: {
-    borderRightWidth: 1,
-    borderRightColor: colors.divider,
-  },
-  statValue: {
-    color: colors.textPrimary,
-    fontFamily: "serif",
-    fontSize: 19,
-    fontWeight: "600",
-  },
-  statLabel: {
-    color: colors.textMuted,
-    fontSize: 11,
-    marginTop: 2,
-    fontWeight: "500",
-  },
-  bio: {
-    color: colors.textPrimary,
-    fontFamily: "serif",
-    fontSize: 14,
-    lineHeight: 21,
-    textAlign: "center",
-    paddingHorizontal: 10,
-    marginTop: 20,
-  },
-  interests: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    gap: 7,
-    marginTop: 15,
-  },
-  interestPill: {
-    backgroundColor: colors.chipBg,
-    borderRadius: 999,
-    paddingHorizontal: 11,
-    paddingVertical: 6,
-  },
-  interestText: {
-    color: colors.textPrimary,
-    fontSize: 10,
-    fontWeight: "500",
-  },
-  actions: {
-    flexDirection: "row",
-    gap: 9,
-    marginTop: 22,
-  },
-  primaryAction: {
-    flex: 1,
-    height: 47,
-    backgroundColor: colors.darkGreen,
-    borderRadius: 999,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  primaryActionText: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: "600",
-    letterSpacing: 0.5,
-  },
-  secondaryAction: {
-    width: 50,
-    height: 47,
-    borderWidth: 1,
-    borderColor: colors.divider,
-    borderRadius: 999,
-    backgroundColor: colors.white,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  secondaryActionText: {
-    color: colors.textPrimary,
-    fontSize: 20,
-    fontWeight: "600",
-  },
-  callout: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.acid,
-    marginTop: 18,
-    paddingHorizontal: 14,
-    paddingVertical: 13,
-  },
-  calloutIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: colors.ink,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  calloutIconText: {
-    color: colors.acid,
-    fontSize: 18,
-    fontWeight: "900",
-  },
-  calloutCopy: {
-    flex: 1,
-    marginLeft: 11,
-  },
-  calloutEyebrow: {
-    color: colors.ink,
-    fontSize: 10,
-    fontWeight: "900",
-    letterSpacing: 0.9,
-  },
-  calloutText: {
-    color: colors.ink,
-    fontSize: 12,
-    marginTop: 2,
-  },
-  chevron: {
-    color: colors.ink,
-    fontSize: 26,
-    fontWeight: "400",
-  },
-  section: {
-    marginTop: 26,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 12,
-  },
-  sectionTitle: {
-    color: colors.textPrimary,
-    fontFamily: "serif",
-    fontSize: 20,
-    fontWeight: "600",
-  },
-  sectionCount: {
-    color: colors.textMuted,
-    fontSize: 13,
-    fontWeight: "500",
-  },
-  currentReadList: {
-    gap: 10,
-  },
-  emptyState: {
-    borderWidth: 1,
-    borderColor: colors.divider,
-    borderRadius: 18,
-    backgroundColor: colors.white,
-    paddingHorizontal: 14,
-    paddingVertical: 16,
-  },
-  emptyText: {
-    color: colors.muted,
-    fontSize: 12,
-    lineHeight: 18,
-    textAlign: "center",
-  },
-  tabs: {
-    flexDirection: "row",
-    marginTop: 30,
-    gap: 8,
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 12,
-    alignItems: "center",
-    borderRadius: 999,
-    backgroundColor: colors.chipBg,
-  },
-  activeTab: {
-    backgroundColor: colors.darkGreen,
-  },
-  tabText: {
-    color: colors.textMuted,
-    fontSize: 11,
-    fontWeight: "600",
-    letterSpacing: 0.4,
-  },
-  activeTabText: {
-    color: colors.white,
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    paddingTop: 18,
-  },
-  reviewList: {
-    paddingBottom: 18,
-  },
-});

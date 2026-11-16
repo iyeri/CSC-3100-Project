@@ -5,13 +5,15 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
 
-import { colors, fonts, radii, spacing } from "../theme";
+import { colors } from "../theme";
+
+const INPUT_CLASS =
+  "bg-white border border-divider rounded-md px-lg py-14 font-sans text-14 text-text-primary";
 
 // Login screen — matches the OurLibrary mock. Frontend-only for now; the
 // onAuthed / onSwitchToSignup callbacks are the seams Supabase auth will plug
@@ -40,20 +42,26 @@ export default function LoginScreen({ onAuthed, onSwitchToSignup }) {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView className="flex-1 bg-off-white">
       <KeyboardAvoidingView
-        style={styles.flex}
+        className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
-          contentContainerStyle={styles.scroll}
+          contentContainerClassName="px-28 pt-80 pb-xxl"
           keyboardShouldPersistTaps="handled"
         >
-          <Text style={styles.brand}>OurLibrary</Text>
-          <Text style={styles.heading}>Login</Text>
+          <Text className="font-serif-bold text-36 text-dark-green text-center mb-xl">
+            OurLibrary
+          </Text>
+          <Text className="font-serif-bold text-24 text-text-primary text-center mb-xl">
+            Login
+          </Text>
 
-          <View style={styles.field}>
-            <Text style={styles.label}>Email</Text>
+          <View className="mb-lg">
+            <Text className="font-sans-bold text-13 text-text-primary mb-sm">
+              Email
+            </Text>
             <TextInput
               value={email}
               onChangeText={(value) => {
@@ -65,12 +73,14 @@ export default function LoginScreen({ onAuthed, onSwitchToSignup }) {
               autoCapitalize="none"
               autoComplete="email"
               keyboardType="email-address"
-              style={styles.input}
+              className={INPUT_CLASS}
             />
           </View>
 
-          <View style={styles.field}>
-            <Text style={styles.label}>Password</Text>
+          <View className="mb-lg">
+            <Text className="font-sans-bold text-13 text-text-primary mb-sm">
+              Password
+            </Text>
             <TextInput
               value={password}
               onChangeText={(value) => {
@@ -82,110 +92,34 @@ export default function LoginScreen({ onAuthed, onSwitchToSignup }) {
               secureTextEntry
               autoCapitalize="none"
               autoComplete="password"
-              style={styles.input}
+              className={INPUT_CLASS}
             />
           </View>
 
           {error ? (
-            <Text style={styles.error}>{error}</Text>
+            <Text className="font-sans-medium text-13 text-coral text-center mt-sm mb-xl">
+              {error}
+            </Text>
           ) : (
-            <Text style={styles.switchRow}>
+            <Text className="font-sans text-13 text-text-muted text-center mt-sm mb-xl">
               New to OurLibrary?{" "}
-              <Text style={styles.switchLink} onPress={onSwitchToSignup}>
+              <Text
+                className="font-sans-bold text-text-primary"
+                onPress={onSwitchToSignup}
+              >
                 Create account
               </Text>
             </Text>
           )}
 
           <Pressable
-            style={({ pressed }) => [
-              styles.cta,
-              pressed && styles.ctaPressed,
-            ]}
+            className="bg-dark-green rounded-lg py-16 items-center active:opacity-85"
             onPress={handleSignIn}
           >
-            <Text style={styles.ctaText}>Sign in</Text>
+            <Text className="font-sans-bold text-16 text-white">Sign in</Text>
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.offWhite },
-  flex: { flex: 1 },
-  scroll: {
-    paddingHorizontal: 28,
-    paddingTop: 80,
-    paddingBottom: spacing.xxl,
-  },
-  brand: {
-    fontFamily: fonts.serifBold,
-    fontSize: 36,
-    color: colors.darkGreen,
-    textAlign: "center",
-    marginBottom: spacing.xl,
-  },
-  heading: {
-    fontFamily: fonts.serifBold,
-    fontSize: 24,
-    color: colors.textPrimary,
-    textAlign: "center",
-    marginBottom: spacing.xl,
-  },
-  field: {
-    marginBottom: spacing.lg,
-  },
-  label: {
-    fontFamily: fonts.sansBold,
-    fontSize: 13,
-    color: colors.textPrimary,
-    marginBottom: spacing.sm,
-  },
-  input: {
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.divider,
-    borderRadius: radii.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: 14,
-    fontFamily: fonts.sans,
-    fontSize: 14,
-    color: colors.textPrimary,
-  },
-  switchRow: {
-    fontFamily: fonts.sans,
-    fontSize: 13,
-    color: colors.textMuted,
-    textAlign: "center",
-    marginTop: spacing.sm,
-    marginBottom: spacing.xl,
-  },
-  switchLink: {
-    fontFamily: fonts.sansBold,
-    color: colors.textPrimary,
-  },
-  error: {
-    fontFamily: fonts.sansMedium,
-    fontSize: 13,
-    color: colors.coral,
-    textAlign: "center",
-    marginTop: spacing.sm,
-    marginBottom: spacing.xl,
-  },
-  cta: {
-    backgroundColor: colors.darkGreen,
-    borderRadius: radii.lg,
-    paddingVertical: 16,
-    alignItems: "center",
-  },
-  ctaPressed: {
-    opacity: 0.85,
-  },
-  ctaText: {
-    fontFamily: fonts.sansBold,
-    fontSize: 16,
-    color: colors.white,
-  },
-});

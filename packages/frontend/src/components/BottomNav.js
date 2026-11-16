@@ -1,9 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-import { colors } from "../theme";
+import { Pressable, Text, View } from "react-native";
 
 import { BrowseScreen } from "../screens/BrowseScreen";
-import { ProfileScreen} from "../screens/ProfileScreen";
+import { ProfileScreen } from "../screens/ProfileScreen";
 
 const items = [
   { label: "Home", icon: "⌂" },
@@ -13,105 +11,52 @@ const items = [
   { label: "Profile", icon: "●", active: true },
 ];
 
-export function BottomNav({activeTab, onNavigate}) {
+// Tailwind resolves conflicting classes by stylesheet order, not className
+// order, so each state gets its own complete set of text classes.
+function iconTextClass(primary, active) {
+  if (primary) return "text-paper text-30 leading-31 font-light";
+  if (active) return "text-ink text-18 leading-27 font-semibold";
+  return "text-soft-muted text-24 leading-27 font-semibold";
+}
+
+export function BottomNav({ activeTab, onNavigate }) {
   return (
-    <View style={styles.shell}>
-      <View style={styles.nav}>
+    <View className="bg-paper border-t border-line pb-18">
+      <View className="h-62 flex-row items-center justify-around max-w-[560px] w-full self-center">
         {items.map((item) => {
-          const active= activeTab === item.label;
-          return(
-          <Pressable
-            accessibilityLabel={item.label}
-            accessibilityRole="button"
-            key={item.label}
-            onPress={()=> onNavigate(item.label)}
-            style={({ pressed }) => [styles.item, pressed && styles.pressed]}
-          >
-            <View style={item.primary ? styles.primaryIcon : styles.iconBox}>
-              <Text
-                style={[
-                  styles.icon,
-                  active && styles.activeIcon,
-                  item.primary && styles.primaryIconText,
-                ]}
+          const active = activeTab === item.label;
+          return (
+            <Pressable
+              accessibilityLabel={item.label}
+              accessibilityRole="button"
+              key={item.label}
+              onPress={() => onNavigate(item.label)}
+              className="flex-1 items-center justify-center gap-2 active:opacity-[0.55]"
+            >
+              <View
+                className={
+                  item.primary
+                    ? "w-48 h-48 -mt-12 rounded-24 bg-ink border-4 border-paper items-center justify-center"
+                    : "h-28 items-center justify-center"
+                }
               >
-                {item.icon}
-              </Text>
-            </View>
-            {!item.primary && (
-              <Text style={[styles.label, active && styles.activeLabel]}>{item.label}</Text>
-            )}
-          </Pressable>
+                <Text className={iconTextClass(item.primary, active)}>
+                  {item.icon}
+                </Text>
+              </View>
+              {!item.primary && (
+                <Text
+                  className={`text-9 font-bold ${
+                    active ? "text-ink" : "text-soft-muted"
+                  }`}
+                >
+                  {item.label}
+                </Text>
+              )}
+            </Pressable>
           );
         })}
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  shell: {
-    backgroundColor: colors.paper,
-    borderTopWidth: 1,
-    borderTopColor: colors.line,
-    paddingBottom: 18,
-  },
-  nav: {
-    height: 62,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    maxWidth: 560,
-    width: "100%",
-    alignSelf: "center",
-  },
-  item: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 2,
-  },
-  pressed: {
-    opacity: 0.55,
-  },
-  iconBox: {
-    height: 28,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  icon: {
-    color: colors.softMuted,
-    fontSize: 24,
-    lineHeight: 27,
-    fontWeight: "600",
-  },
-  activeIcon: {
-    color: colors.ink,
-    fontSize: 18,
-  },
-  label: {
-    color: colors.softMuted,
-    fontSize: 9,
-    fontWeight: "700",
-  },
-  activeLabel: {
-    color: colors.ink,
-  },
-  primaryIcon: {
-    width: 48,
-    height: 48,
-    marginTop: -12,
-    borderRadius: 24,
-    backgroundColor: colors.ink,
-    borderWidth: 4,
-    borderColor: colors.paper,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  primaryIconText: {
-    color: colors.paper,
-    fontSize: 30,
-    lineHeight: 31,
-    fontWeight: "300",
-  },
-});

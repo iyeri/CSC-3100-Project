@@ -1,7 +1,7 @@
-import { colors } from "../theme";
-
 // Hardcoded listings for the UI pass. Swap for API data once the backend
-// listings route is wired up.
+// listings route is wired up. Same shape as `books` in ./profile so both
+// render with BookCard: `cover` is the cover color, `accent` the type/rule
+// color, `mark` the big decorative letter.
 export const mockListings = [
   {
     id: "1",
@@ -9,8 +9,10 @@ export const mockListings = [
     author: "Donna Tartt",
     condition: "Good",
     format: "Paperback",
-    coverBg: colors.cream,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#F5D96B",
+    accent: "#C74231",
+    mark: "G",
   },
   {
     id: "2",
@@ -18,8 +20,10 @@ export const mockListings = [
     author: "Emily St. John Mandel",
     condition: "Like new",
     format: "Hardcover",
-    coverBg: colors.sageGreen,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#A7D8F2",
+    accent: "#213568",
+    mark: "S",
   },
   {
     id: "3",
@@ -27,8 +31,10 @@ export const mockListings = [
     author: "Donna Tartt",
     condition: "Fair",
     format: "Paperback",
-    coverBg: colors.offWhite,
-    accent: colors.sageGreen,
+    status: "AVAILABLE",
+    cover: "#241D1B",
+    accent: "#EF593F",
+    mark: "S",
   },
   {
     id: "4",
@@ -36,8 +42,10 @@ export const mockListings = [
     author: "Robin Wall Kimmerer",
     condition: "Good",
     format: "Paperback",
-    coverBg: colors.cream,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#173F36",
+    accent: "#DFFF00",
+    mark: "B",
   },
   {
     id: "5",
@@ -45,8 +53,10 @@ export const mockListings = [
     author: "Sylvia Plath",
     condition: "Like new",
     format: "Paperback",
-    coverBg: colors.sageGreen,
-    accent: colors.offWhite,
+    status: "AVAILABLE",
+    cover: "#F1A6B9",
+    accent: "#8C1A38",
+    mark: "B",
   },
   {
     id: "6",
@@ -54,8 +64,10 @@ export const mockListings = [
     author: "Ocean Vuong",
     condition: "Good",
     format: "Hardcover",
-    coverBg: colors.cream,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#C8BCFF",
+    accent: "#432C75",
+    mark: "O",
   },
   {
     id: "7",
@@ -63,8 +75,10 @@ export const mockListings = [
     author: "Min Jin Lee",
     condition: "Fair",
     format: "Paperback",
-    coverBg: colors.offWhite,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#EF593F",
+    accent: "#241D1B",
+    mark: "P",
   },
   {
     id: "8",
@@ -72,8 +86,10 @@ export const mockListings = [
     author: "Sally Rooney",
     condition: "Like new",
     format: "Paperback",
-    coverBg: colors.sageGreen,
-    accent: colors.cream,
+    status: "AVAILABLE",
+    cover: "#DFFF00",
+    accent: "#171717",
+    mark: "N",
   },
   {
     id: "9",
@@ -81,8 +97,10 @@ export const mockListings = [
     author: "Madeline Miller",
     condition: "Good",
     format: "Hardcover",
-    coverBg: colors.cream,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#174C3C",
+    accent: "#F5D96B",
+    mark: "C",
   },
   {
     id: "10",
@@ -90,8 +108,10 @@ export const mockListings = [
     author: "Kazuo Ishiguro",
     condition: "Like new",
     format: "Hardcover",
-    coverBg: colors.offWhite,
-    accent: colors.sageGreen,
+    status: "AVAILABLE",
+    cover: "#A7D8F2",
+    accent: "#C74231",
+    mark: "K",
   },
 ];
 

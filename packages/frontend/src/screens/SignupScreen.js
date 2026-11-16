@@ -5,13 +5,16 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
 
-import { colors, fonts, radii, spacing } from "../theme";
+import { colors } from "../theme";
+
+const INPUT_CLASS =
+  "bg-white border border-divider rounded-md px-lg py-14 font-sans text-14 text-text-primary";
+const LABEL_CLASS = "font-sans-bold text-13 text-text-primary mb-sm";
 
 // Create account screen — mirrors the login mock. Frontend-only for now;
 // swap handleCreate for supabase.auth.signUp when auth is wired.
@@ -57,20 +60,24 @@ export default function SignupScreen({ onAuthed, onSwitchToLogin }) {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView className="flex-1 bg-off-white">
       <KeyboardAvoidingView
-        style={styles.flex}
+        className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
-          contentContainerStyle={styles.scroll}
+          contentContainerClassName="px-28 pt-64 pb-xxl"
           keyboardShouldPersistTaps="handled"
         >
-          <Text style={styles.brand}>OurLibrary</Text>
-          <Text style={styles.heading}>Create account</Text>
+          <Text className="font-serif-bold text-36 text-dark-green text-center mb-lg">
+            OurLibrary
+          </Text>
+          <Text className="font-serif-bold text-24 text-text-primary text-center mb-xl">
+            Create account
+          </Text>
 
-          <View style={styles.field}>
-            <Text style={styles.label}>Full name</Text>
+          <View className="mb-lg">
+            <Text className={LABEL_CLASS}>Full name</Text>
             <TextInput
               value={fullName}
               onChangeText={(value) => {
@@ -81,12 +88,12 @@ export default function SignupScreen({ onAuthed, onSwitchToLogin }) {
               placeholderTextColor={colors.textMuted}
               autoCapitalize="words"
               autoComplete="name"
-              style={styles.input}
+              className={INPUT_CLASS}
             />
           </View>
 
-          <View style={styles.field}>
-            <Text style={styles.label}>Email</Text>
+          <View className="mb-lg">
+            <Text className={LABEL_CLASS}>Email</Text>
             <TextInput
               value={email}
               onChangeText={(value) => {
@@ -98,12 +105,12 @@ export default function SignupScreen({ onAuthed, onSwitchToLogin }) {
               autoCapitalize="none"
               autoComplete="email"
               keyboardType="email-address"
-              style={styles.input}
+              className={INPUT_CLASS}
             />
           </View>
 
-          <View style={styles.field}>
-            <Text style={styles.label}>Password</Text>
+          <View className="mb-lg">
+            <Text className={LABEL_CLASS}>Password</Text>
             <TextInput
               value={password}
               onChangeText={(value) => {
@@ -115,12 +122,12 @@ export default function SignupScreen({ onAuthed, onSwitchToLogin }) {
               secureTextEntry
               autoCapitalize="none"
               autoComplete="password-new"
-              style={styles.input}
+              className={INPUT_CLASS}
             />
           </View>
 
-          <View style={styles.field}>
-            <Text style={styles.label}>Confirm password</Text>
+          <View className="mb-lg">
+            <Text className={LABEL_CLASS}>Confirm password</Text>
             <TextInput
               value={confirmPassword}
               onChangeText={(value) => {
@@ -132,110 +139,36 @@ export default function SignupScreen({ onAuthed, onSwitchToLogin }) {
               secureTextEntry
               autoCapitalize="none"
               autoComplete="password-new"
-              style={styles.input}
+              className={INPUT_CLASS}
             />
           </View>
 
           {error ? (
-            <Text style={styles.error}>{error}</Text>
+            <Text className="font-sans-medium text-13 text-coral text-center mt-sm mb-xl">
+              {error}
+            </Text>
           ) : (
-            <Text style={styles.switchRow}>
+            <Text className="font-sans text-13 text-text-muted text-center mt-sm mb-xl">
               Already have an account?{" "}
-              <Text style={styles.switchLink} onPress={onSwitchToLogin}>
+              <Text
+                className="font-sans-bold text-text-primary"
+                onPress={onSwitchToLogin}
+              >
                 Sign in
               </Text>
             </Text>
           )}
 
           <Pressable
-            style={({ pressed }) => [
-              styles.cta,
-              pressed && styles.ctaPressed,
-            ]}
+            className="bg-dark-green rounded-lg py-16 items-center active:opacity-85"
             onPress={handleCreate}
           >
-            <Text style={styles.ctaText}>Create account</Text>
+            <Text className="font-sans-bold text-16 text-white">
+              Create account
+            </Text>
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.offWhite },
-  flex: { flex: 1 },
-  scroll: {
-    paddingHorizontal: 28,
-    paddingTop: 64,
-    paddingBottom: spacing.xxl,
-  },
-  brand: {
-    fontFamily: fonts.serifBold,
-    fontSize: 36,
-    color: colors.darkGreen,
-    textAlign: "center",
-    marginBottom: spacing.lg,
-  },
-  heading: {
-    fontFamily: fonts.serifBold,
-    fontSize: 24,
-    color: colors.textPrimary,
-    textAlign: "center",
-    marginBottom: spacing.xl,
-  },
-  field: {
-    marginBottom: spacing.lg,
-  },
-  label: {
-    fontFamily: fonts.sansBold,
-    fontSize: 13,
-    color: colors.textPrimary,
-    marginBottom: spacing.sm,
-  },
-  input: {
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.divider,
-    borderRadius: radii.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: 14,
-    fontFamily: fonts.sans,
-    fontSize: 14,
-    color: colors.textPrimary,
-  },
-  switchRow: {
-    fontFamily: fonts.sans,
-    fontSize: 13,
-    color: colors.textMuted,
-    textAlign: "center",
-    marginTop: spacing.sm,
-    marginBottom: spacing.xl,
-  },
-  switchLink: {
-    fontFamily: fonts.sansBold,
-    color: colors.textPrimary,
-  },
-  error: {
-    fontFamily: fonts.sansMedium,
-    fontSize: 13,
-    color: colors.coral,
-    textAlign: "center",
-    marginTop: spacing.sm,
-    marginBottom: spacing.xl,
-  },
-  cta: {
-    backgroundColor: colors.darkGreen,
-    borderRadius: radii.lg,
-    paddingVertical: 16,
-    alignItems: "center",
-  },
-  ctaPressed: {
-    opacity: 0.85,
-  },
-  ctaText: {
-    fontFamily: fonts.sansBold,
-    fontSize: 16,
-    color: colors.white,
-  },
-});
