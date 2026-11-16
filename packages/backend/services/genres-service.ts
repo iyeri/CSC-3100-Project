@@ -78,8 +78,8 @@ async function deleteGenre(
   return data;
 }
 
-export default { 
-    getGenres, 
-    addGenre,
-    deleteGenre
+export default {
+  getGenres,
+  addGenre,
+  deleteGenre,
 };

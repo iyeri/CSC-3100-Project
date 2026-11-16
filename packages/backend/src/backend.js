@@ -44,7 +44,14 @@ const loanKeys = [
   "due_date",
   "is_overdue",
 ];
-const reviewKeys = ["review_id", "loan_id", "reviewer_id", "reviewee_id", "rating", "comment"];
+const reviewKeys = [
+  "review_id",
+  "loan_id",
+  "reviewer_id",
+  "reviewee_id",
+  "rating",
+  "comment",
+];
 
 // Initialize express web application.
 const app = express();
@@ -293,7 +300,7 @@ app.delete("/users/:uid/preferences", requireAuth, async (req, res) => {
   const data = await userService.deleteUserPreferences(
     req.db_client,
     req.params.uid,
-    req.query.genre
+    req.query.genre,
   );
 
   if (data === undefined) {
@@ -414,7 +421,10 @@ app.patch("/books/:book_id", requireAuth, async (req, res) => {
 });
 
 app.get("/books/:book_id/genres", async (req, res) => {
-  const data = await bookService.getBookGenres(req.db_client, req.params.book_id);
+  const data = await bookService.getBookGenres(
+    req.db_client,
+    req.params.book_id,
+  );
 
   if (data === undefined) {
     res.status(500).send("Database failure (getting book genres).");
@@ -448,7 +458,7 @@ app.delete("/books/:book_id/genres", requireAuth, async (req, res) => {
   const data = await bookService.deleteBookGenres(
     req.db_client,
     req.params.book_id,
-    req.query.genre
+    req.query.genre,
   );
 
   if (data === undefined) {
@@ -725,7 +735,17 @@ app.post("/loans/:loan_id/reviews", requireAuth, async (req, res) => {
     req.body.reviewer_id === undefined || // Must have reviewer_id.
     req.body.reviewee_id === undefined || // Must have reviewee_id.
     req.body.rating === undefined || // Must have rating.
-    Object.keys(req.body).filter((key) => !["review_id", "loan_id", "reviewer_id", "reviewee_id", "rating", "comment"].includes(key)).length > 0 // Extraneous keys.
+    Object.keys(req.body).filter(
+      (key) =>
+        ![
+          "review_id",
+          "loan_id",
+          "reviewer_id",
+          "reviewee_id",
+          "rating",
+          "comment",
+        ].includes(key),
+    ).length > 0 // Extraneous keys.
   ) {
     res.status(400).send("Bad request.");
     return;
@@ -755,7 +775,7 @@ app.get("/reviews", requireAuth, async (req, res) => {
     req.query.loan_id,
     req.query.reviewer_id,
     req.query.reviewee_id,
-    req.query.rating
+    req.query.rating,
   );
 
   if (data === undefined) {
@@ -775,7 +795,8 @@ app.patch("/reviews/:review_id", requireAuth, async (req, res) => {
   // Validate request body.
   if (
     req.body.review_id !== undefined || // Not allowed to change review_id.
-    Object.keys(req.body).filter((key) => !["rating", "comment"].includes(key)).length > 0 // Extraneous keys.
+    Object.keys(req.body).filter((key) => !["rating", "comment"].includes(key))
+      .length > 0 // Extraneous keys.
   ) {
     res.status(409).send("Bad request.");
     return;
