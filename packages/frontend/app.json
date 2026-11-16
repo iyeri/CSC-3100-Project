@@ -18,11 +18,9 @@
       }
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-font",
-      "expo-splash-screen"
-    ]
+    "plugins": ["expo-font", "expo-splash-screen", "expo-status-bar"]
   }
 }

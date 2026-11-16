@@ -1,13 +1,6 @@
 import { useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { Pressable, Text, View, useWindowDimensions } from "react-native";
 
-import { colors, radii, spacing } from "../theme";
 import CoverPattern, { PATTERN_COUNT } from "./CoverPattern";
 
 // Mirrors the "Fresh finds" grid cell from the Figma mock:
@@ -30,33 +23,50 @@ export default function ListingCard({ listing, onPress }) {
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${listing.title} by ${listing.author}`}
-      style={[styles.card, { width: cardWidth }]}
+      className="mb-xl"
+      style={{ width: cardWidth }}
       onPress={() => onPress?.(listing.id)}
     >
-      <View style={[styles.cover, { backgroundColor: listing.coverBg }]}>
+      <View
+        className="aspect-[0.78] rounded-lg p-md overflow-hidden justify-start"
+        style={{ backgroundColor: listing.cover ?? listing.coverBg }}
+      >
         <CoverPattern index={patternIndex} color={listing.accent} />
-        <Text style={styles.coverTitle} numberOfLines={3}>
+        <Text
+          className="font-serif-regular text-18 leading-22 text-text-primary"
+          numberOfLines={3}
+        >
           {listing.title}
         </Text>
-        <Text style={styles.coverAuthor} numberOfLines={1}>
+        <Text
+          className="absolute bottom-md left-md right-md text-10 tracking-[1.2px] text-text-primary font-semibold"
+          numberOfLines={1}
+        >
           {listing.author.toUpperCase()}
         </Text>
 
         <Pressable
           hitSlop={8}
-          style={styles.heartBtn}
+          className="absolute top-sm right-sm w-28 h-28 rounded-full bg-white items-center justify-center"
           onPress={() => setLiked((v) => !v)}
         >
-          <Text style={[styles.heart, liked && styles.heartActive]}>
+          <Text
+            className={`text-16 -mt-2 ${
+              liked ? "text-heart-active" : "text-heart-idle"
+            }`}
+          >
             {liked ? "♥" : "♡"}
           </Text>
         </Pressable>
       </View>
 
-      <Text style={styles.title} numberOfLines={1}>
+      <Text
+        className="mt-sm text-15 font-semibold text-text-primary"
+        numberOfLines={1}
+      >
         {listing.title}
       </Text>
-      <Text style={styles.meta} numberOfLines={1}>
+      <Text className="mt-2 text-12 text-text-muted" numberOfLines={1}>
         {listing.condition} · {listing.format}
       </Text>
     </Pressable>
@@ -72,63 +82,3 @@ function hashId(id) {
   }
   return h;
 }
-
-const styles = StyleSheet.create({
-  card: {
-    marginBottom: spacing.xl,
-  },
-  cover: {
-    aspectRatio: 0.78,
-    borderRadius: radii.lg,
-    padding: spacing.md,
-    overflow: "hidden",
-    justifyContent: "flex-start",
-  },
-  coverTitle: {
-    fontFamily: "serif",
-    fontSize: 18,
-    lineHeight: 22,
-    color: colors.textPrimary,
-    fontWeight: "500",
-  },
-  coverAuthor: {
-    position: "absolute",
-    bottom: spacing.md,
-    left: spacing.md,
-    right: spacing.md,
-    fontSize: 10,
-    letterSpacing: 1.2,
-    color: colors.textPrimary,
-    fontWeight: "600",
-  },
-  heartBtn: {
-    position: "absolute",
-    top: spacing.sm,
-    right: spacing.sm,
-    width: 28,
-    height: 28,
-    borderRadius: 999,
-    backgroundColor: colors.white,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  heart: {
-    fontSize: 16,
-    color: colors.heartIdle,
-    marginTop: -2,
-  },
-  heartActive: {
-    color: "#B5533B",
-  },
-  title: {
-    marginTop: spacing.sm,
-    fontSize: 15,
-    fontWeight: "600",
-    color: colors.textPrimary,
-  },
-  meta: {
-    marginTop: 2,
-    fontSize: 12,
-    color: colors.textMuted,
-  },
-});

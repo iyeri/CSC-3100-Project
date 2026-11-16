@@ -1,17 +1,18 @@
 import { colors } from "../theme";
 
 // Hardcoded listings for the UI pass. Swap for API data once the backend
-// listings route is wired up.
+// listings route is wired up. Same shape as `books` in ./profile so both
+// render with BookCard: `cover` is the cover color, `accent` the type/rule
+// color, `mark` the big decorative letter.
 //
-// Each listing carries enough metadata to render both the grid card
-// (`ListingCard`) and the detail screen (`ListingDetailScreen`):
-//   - genre        display-friendly single genre; intentionally omits
-//                  "Fiction" / "Non-fiction" since the Figma detail header
-//                  only shows the specific subgenre (e.g. "LITERARY").
+// Extra fields used by ListingDetailScreen:
+//   - genre        single subgenre; intentionally omits "Fiction" /
+//                  "Non-fiction" since the detail header only shows the
+//                  specific subgenre (e.g. "LITERARY").
 //   - tokens       borrow cost in OurLibrary tokens.
 //   - postedAt     ISO date string; dummy for now.
-//   - postedBy     { name, email, initial, avatarBg } for the detail poster
-//                  row + mail button.
+//   - postedBy     { name, email, initial, avatarBg } for the poster row and
+//                  mail button.
 export const mockListings = [
   {
     id: "1",
@@ -20,8 +21,10 @@ export const mockListings = [
     genre: "Literary",
     condition: "Good",
     format: "Paperback",
-    coverBg: colors.cream,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#F5D96B",
+    accent: "#C74231",
+    mark: "G",
     tokens: 2,
     postedAt: "2026-10-28",
     postedBy: {
@@ -38,8 +41,10 @@ export const mockListings = [
     genre: "Literary",
     condition: "Like new",
     format: "Hardcover",
-    coverBg: colors.sageGreen,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#A7D8F2",
+    accent: "#213568",
+    mark: "S",
     tokens: 1,
     postedAt: "2026-11-02",
     postedBy: {
@@ -56,8 +61,10 @@ export const mockListings = [
     genre: "Mystery",
     condition: "Fair",
     format: "Paperback",
-    coverBg: colors.offWhite,
-    accent: colors.sageGreen,
+    status: "AVAILABLE",
+    cover: "#241D1B",
+    accent: "#EF593F",
+    mark: "S",
     tokens: 1,
     postedAt: "2026-10-18",
     postedBy: {
@@ -74,8 +81,10 @@ export const mockListings = [
     genre: "Essays",
     condition: "Good",
     format: "Paperback",
-    coverBg: colors.cream,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#173F36",
+    accent: "#DFFF00",
+    mark: "B",
     tokens: 2,
     postedAt: "2026-11-05",
     postedBy: {
@@ -92,8 +101,10 @@ export const mockListings = [
     genre: "Literary",
     condition: "Like new",
     format: "Paperback",
-    coverBg: colors.sageGreen,
-    accent: colors.offWhite,
+    status: "AVAILABLE",
+    cover: "#F1A6B9",
+    accent: "#8C1A38",
+    mark: "B",
     tokens: 1,
     postedAt: "2026-09-30",
     postedBy: {
@@ -110,8 +121,10 @@ export const mockListings = [
     genre: "Literary",
     condition: "Good",
     format: "Hardcover",
-    coverBg: colors.cream,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#C8BCFF",
+    accent: "#432C75",
+    mark: "O",
     tokens: 2,
     postedAt: "2026-10-12",
     postedBy: {
@@ -128,8 +141,10 @@ export const mockListings = [
     genre: "Historical",
     condition: "Fair",
     format: "Paperback",
-    coverBg: colors.offWhite,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#EF593F",
+    accent: "#241D1B",
+    mark: "P",
     tokens: 1,
     postedAt: "2026-09-21",
     postedBy: {
@@ -146,8 +161,10 @@ export const mockListings = [
     genre: "Romance",
     condition: "Like new",
     format: "Paperback",
-    coverBg: colors.sageGreen,
-    accent: colors.cream,
+    status: "AVAILABLE",
+    cover: "#DFFF00",
+    accent: "#171717",
+    mark: "N",
     tokens: 1,
     postedAt: "2026-11-08",
     postedBy: {
@@ -164,8 +181,10 @@ export const mockListings = [
     genre: "Fantasy",
     condition: "Good",
     format: "Hardcover",
-    coverBg: colors.cream,
-    accent: colors.darkGreen,
+    status: "AVAILABLE",
+    cover: "#174C3C",
+    accent: "#F5D96B",
+    mark: "C",
     tokens: 2,
     postedAt: "2026-10-04",
     postedBy: {
@@ -182,8 +201,10 @@ export const mockListings = [
     genre: "Sci-Fi",
     condition: "Like new",
     format: "Hardcover",
-    coverBg: colors.offWhite,
-    accent: colors.sageGreen,
+    status: "AVAILABLE",
+    cover: "#A7D8F2",
+    accent: "#C74231",
+    mark: "K",
     tokens: 2,
     postedAt: "2026-10-25",
     postedBy: {

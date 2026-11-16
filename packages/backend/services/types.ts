@@ -42,66 +42,92 @@ export type Database = {
       books: {
         Row: {
           author: string | null;
+          book_id: string;
           description: string | null;
           genre: string | null;
-          isbn: string;
           title: string | null;
         };
         Insert: {
           author?: string | null;
+          book_id?: string;
           description?: string | null;
           genre?: string | null;
-          isbn: string;
           title?: string | null;
         };
         Update: {
           author?: string | null;
+          book_id?: string;
           description?: string | null;
           genre?: string | null;
-          isbn?: string;
           title?: string | null;
         };
         Relationships: [];
       };
+      isbns: {
+        Row: {
+          book_id: string;
+          description: string | null;
+          isbn: string;
+        };
+        Insert: {
+          book_id: string;
+          description?: string | null;
+          isbn: string;
+        };
+        Update: {
+          book_id?: string;
+          description?: string | null;
+          isbn?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "isbns_book_id_fkey";
+            columns: ["book_id"];
+            isOneToOne: true;
+            referencedRelation: "books";
+            referencedColumns: ["book_id"];
+          },
+        ];
+      };
       listings: {
         Row: {
           availability: string;
+          book_id: string;
           condition: string | null;
           date_posted: string | null;
-          isbn: string;
           lender: string;
           listing_id: string;
         };
         Insert: {
           availability: string;
+          book_id: string;
           condition?: string | null;
           date_posted?: string | null;
-          isbn?: string;
           lender: string;
           listing_id?: string;
         };
         Update: {
           availability?: string;
+          book_id?: string;
           condition?: string | null;
           date_posted?: string | null;
-          isbn?: string;
           lender?: string;
           listing_id?: string;
         };
         Relationships: [
-          {
-            foreignKeyName: "Book Listing_isbn_fkey";
-            columns: ["isbn"];
-            isOneToOne: false;
-            referencedRelation: "books";
-            referencedColumns: ["isbn"];
-          },
           {
             foreignKeyName: "Book Listing_lender_fkey";
             columns: ["lender"];
             isOneToOne: false;
             referencedRelation: "users";
             referencedColumns: ["uid"];
+          },
+          {
+            foreignKeyName: "listings_book_id_fkey";
+            columns: ["book_id"];
+            isOneToOne: true;
+            referencedRelation: "books";
+            referencedColumns: ["book_id"];
           },
         ];
       };
@@ -111,7 +137,6 @@ export type Database = {
           date_lended: string | null;
           due_date: string | null;
           is_overdue: boolean | null;
-          isbn: string;
           lender: string;
           listing_id: string;
           loan_id: string;
@@ -121,7 +146,6 @@ export type Database = {
           date_lended?: string | null;
           due_date?: string | null;
           is_overdue?: boolean | null;
-          isbn?: string;
           lender: string;
           listing_id: string;
           loan_id?: string;
@@ -131,7 +155,6 @@ export type Database = {
           date_lended?: string | null;
           due_date?: string | null;
           is_overdue?: boolean | null;
-          isbn?: string;
           lender?: string;
           listing_id?: string;
           loan_id?: string;
@@ -143,13 +166,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "users";
             referencedColumns: ["uid"];
-          },
-          {
-            foreignKeyName: "Book Loan_isbn_fkey";
-            columns: ["isbn"];
-            isOneToOne: false;
-            referencedRelation: "books";
-            referencedColumns: ["isbn"];
           },
           {
             foreignKeyName: "Book Loan_lender_fkey";

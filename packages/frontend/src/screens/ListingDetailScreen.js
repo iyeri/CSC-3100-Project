@@ -16,7 +16,7 @@ import { colors, fonts, radii, spacing } from "../theme";
 //
 // Props:
 //   - listing: a row from mockListings (title, author, genre, condition,
-//     format, tokens, postedAt, postedBy, coverBg, accent).
+//     format, tokens, postedAt, postedBy, cover, accent).
 //   - onBack: called when the user taps the back chevron.
 //
 // All actions are stubbed: the mail button pops an Alert with the poster's
@@ -67,12 +67,23 @@ export default function ListingDetailScreen({ listing, onBack }) {
             <Text style={styles.avatarTopRightText}>11</Text>
           </View>
 
-          <View style={[styles.cover, { backgroundColor: listing.coverBg }]}>
+          <View
+            style={[
+              styles.cover,
+              { backgroundColor: listing.cover ?? listing.coverBg },
+            ]}
+          >
             <CoverPattern index={patternIndex} color={listing.accent} />
-            <Text style={styles.coverTitle} numberOfLines={3}>
+            <Text
+              style={[styles.coverTitle, { color: listing.accent }]}
+              numberOfLines={3}
+            >
               {listing.title}
             </Text>
-            <Text style={styles.coverAuthor} numberOfLines={1}>
+            <Text
+              style={[styles.coverAuthor, { color: listing.accent }]}
+              numberOfLines={1}
+            >
               {listing.author.toUpperCase()}
             </Text>
           </View>
@@ -96,15 +107,22 @@ export default function ListingDetailScreen({ listing, onBack }) {
             <Tag label={listing.format} />
           </View>
 
-          <Text style={styles.postedAt}>Posted {formatDate(listing.postedAt)}</Text>
+          <Text style={styles.postedAt}>
+            Posted {formatDate(listing.postedAt)}
+          </Text>
 
           <View style={styles.divider} />
 
           <View style={styles.posterRow}>
             <View
-              style={[styles.posterAvatar, { backgroundColor: listing.postedBy.avatarBg }]}
+              style={[
+                styles.posterAvatar,
+                { backgroundColor: listing.postedBy.avatarBg },
+              ]}
             >
-              <Text style={styles.posterInitial}>{listing.postedBy.initial}</Text>
+              <Text style={styles.posterInitial}>
+                {listing.postedBy.initial}
+              </Text>
             </View>
             <Text style={styles.posterName}>{listing.postedBy.name}</Text>
             <Text style={styles.posterChevron}>›</Text>
@@ -159,8 +177,18 @@ function formatDate(iso) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 }

@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
-
-import { colors, radii, spacing } from "../theme";
+import { Pressable, ScrollView, Text } from "react-native";
 
 export default function CategoryChips({ categories }) {
   const [active, setActive] = useState(categories[0]?.id);
 
   return (
+    // Pin the row to its content height (grow-0 shrink-0) so the parent flex
+    // column can't squish or stretch it — that was clipping the chips
+    // vertically.
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      style={styles.scroll}
-      contentContainerStyle={styles.row}
+      className="grow-0 shrink-0"
+      contentContainerClassName="px-20 py-sm gap-sm items-center"
     >
       {categories.map((cat) => {
         const isActive = cat.id === active;
@@ -19,9 +20,15 @@ export default function CategoryChips({ categories }) {
           <Pressable
             key={cat.id}
             onPress={() => setActive(cat.id)}
-            style={[styles.chip, isActive && styles.chipActive]}
+            className={`px-lg py-10 rounded-pill ${
+              isActive ? "bg-chip-active" : "bg-chip-bg"
+            }`}
           >
-            <Text style={[styles.label, isActive && styles.labelActive]}>
+            <Text
+              className={`text-13 font-medium ${
+                isActive ? "text-white" : "text-text-primary"
+              }`}
+            >
               {cat.label}
             </Text>
           </Pressable>
@@ -30,35 +37,3 @@ export default function CategoryChips({ categories }) {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  // Pin the row to its content height so the parent flex column can't squish
-  // or stretch it — that was clipping the chips vertically.
-  scroll: {
-    flexGrow: 0,
-    flexShrink: 0,
-  },
-  row: {
-    paddingHorizontal: 20,
-    paddingVertical: spacing.sm,
-    gap: spacing.sm,
-    alignItems: "center",
-  },
-  chip: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm + 2,
-    borderRadius: radii.pill,
-    backgroundColor: colors.chipBg,
-  },
-  chipActive: {
-    backgroundColor: colors.chipActive,
-  },
-  label: {
-    fontSize: 13,
-    color: colors.textPrimary,
-    fontWeight: "500",
-  },
-  labelActive: {
-    color: colors.white,
-  },
-});

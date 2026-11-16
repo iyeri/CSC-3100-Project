@@ -1,2 +1,8 @@
 node_modules
+packages/frontend/dist/
+
+# Local environment files and credentials. Commit templates only.
 .env
+.env.*
+!.env.example
+!.env.*.example
