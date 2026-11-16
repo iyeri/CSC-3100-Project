@@ -5,7 +5,7 @@ import type { Database, Tables, TablesInsert, TablesUpdate } from "./types.ts";
 /* getBooks()
  *
  * Input:
- * isbn, title, author, genre (these can be undefined)
+ * book_id, title, author, genre (these can be undefined)
  *
  * Returns:
  * An array of books(s) within the database that match the given parameter(s).
@@ -21,7 +21,6 @@ async function getBooks(
   book_id?: Tables<"books">["book_id"],
   title?: NonNullable<Tables<"books">["title"]>,
   author?: NonNullable<Tables<"books">["author"]>,
-  genre?: NonNullable<Tables<"books">["genre"]>,
 ) {
   let query = supabase.from("books").select();
 
@@ -33,9 +32,6 @@ async function getBooks(
   }
   if (author !== undefined) {
     query.eq("author", author);
-  }
-  if (genre !== undefined) {
-    query.eq("genre", genre);
   }
 
   const { data, error } = await query;
@@ -137,18 +133,82 @@ async function updateBook(
   return data;
 }
 
-/* getUniqueGenres()
+/* getBookGenres()
  *
  * Input:
- * None.
+ * book_id
  *
  * Output:
- * An array of unique genres from the books table, accessed from the uniques_genres view.
+ * An array of genres ('genre_id' and 'genre' name) associated with the given book_id.
  *
  * On error, returns undefined.
  */
-async function getUniqueGenres(supabase: SupabaseClient<Database>) {
-  const { data, error } = await supabase.from("unique_genres").select();
+async function getBookGenres(
+  supabase: SupabaseClient<Database>,
+  book_id: Tables<"books">["book_id"],
+) {
+  const { data, error } = await supabase
+    .from("book_genres")
+    .select("book_id, genres(genre_id, genre)")
+    .eq("book_id", book_id);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  return data;
+}
+
+/* addBookGenres()
+ *
+ * Input:
+ * book_id, genre_ids (array of genre_id)
+ *
+ * Output:
+ * An array of the newly created book_genres entries.
+ *
+ * On error, returns undefined.
+ */
+async function addBookGenres(
+  supabase: SupabaseClient<Database>,
+  book_id: Tables<"books">["book_id"],
+  genre_ids: Array<Tables<"genres">["genre_id"]>,
+) {
+  const { data, error } = await supabase
+    .from("book_genres")
+    .insert(genre_ids.map((genre_id) => ({ book_id, genre_id })))
+    .select();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  return data;
+}
+
+/* deleteBookGenres()
+ *
+ * Input:
+ * book_id, genre_ids (array of genre_id)
+ *
+ * Output:
+ * An array of the deleted book_genres entries.
+ *
+ * On error, returns undefined.
+ */
+async function deleteBookGenres(
+  supabase: SupabaseClient<Database>,
+  book_id: Tables<"books">["book_id"],
+  genre_ids: Array<Tables<"genres">["genre_id"]>,
+) {
+  const { data, error } = await supabase
+    .from("book_genres")
+    .delete()
+    .eq("book_id", book_id)
+    .in("genre_id", genre_ids)
+    .select();
 
   if (error) {
     console.error(error);
@@ -169,5 +229,7 @@ export default {
   addBook,
   deleteBook,
   updateBook,
-  getUniqueGenres,
+  getBookGenres,
+  addBookGenres,
+  deleteBookGenres
 };

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Platform,
   Pressable,
@@ -14,7 +14,10 @@ import { BookCard } from "../components/BookCard";
 import { BottomNav } from "../components/BottomNav";
 import { CurrentReadCard } from "../components/CurrentReadCard";
 import { ReviewCard } from "../components/ReviewCard";
-import { books as initialBooks, profile, reviews } from "../data/profile";
+//import { books as initialBooks, profile, reviews } from "../data/profile";
+import { getProfile, getBooks, getReviews } from "../services/profile-client";
+import { toBookCardModel } from "../adapters/listing-adapter";
+import { toProfileModel } from "../adapters/profile-adapter";
 
 // Used to compute card widths. Keep in sync with px-18 / max-w-[560px] in the
 // classNames below.
@@ -64,9 +67,12 @@ function HeaderButton({
   );
 }
 
-export function ProfileScreen({ onLogout }) {
+export function ProfileScreen({ userId, onLogout }) {
   const [activeTab, setActiveTab] = useState("library");
-  const [books, setBooks] = useState(initialBooks);
+  const [profile, setProfile] = useState(null);
+  const [books, setBooks] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loadError, setLoadError] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState(null);
@@ -85,6 +91,40 @@ export function ProfileScreen({ onLogout }) {
       ),
     );
   };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProfileData() {
+      try {
+        setLoadError(null);
+
+        const [profileData, booksData, reviewsData] = await Promise.all([
+          getProfile(userId),
+          getBooks(userId),
+          getReviews(userId),
+        ]);
+
+        if (!cancelled) {
+          setProfile(toProfileModel(profileData, booksData, reviewsData));
+          setBooks(booksData.map(toBookCardModel));
+          setReviews(reviewsData);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Failed to load profile data:", error);
+          setLoadError(error.message || "Unable to load profile data.");
+        }
+      }
+    }
+
+    loadProfileData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
   const { width } = useWindowDimensions();
   const contentWidth = Math.min(width, MAX_CONTENT_WIDTH);
   const bookWidth = useMemo(
@@ -105,6 +145,22 @@ export function ProfileScreen({ onLogout }) {
       setIsLoggingOut(false);
     }
   };
+
+  if (loadError) {
+    return (
+      <SafeAreaView className="flex-1 bg-off-white items-center justify-center px-20">
+        <Text className="text-coral text-center">{loadError}</Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <SafeAreaView className="flex-1 bg-off-white items-center justify-center">
+        <Text className="text-text-muted">Loading profile…</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -326,7 +382,7 @@ export function ProfileScreen({ onLogout }) {
             ) : (
               <View className="pb-18">
                 {reviews.map((review) => (
-                  <ReviewCard key={review.id} review={review} />
+                  <ReviewCard key={review.review_id} review={review} />
                 ))}
               </View>
             )}

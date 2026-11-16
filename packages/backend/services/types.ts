@@ -4,268 +4,363 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.18";
-  };
+    PostgrestVersion: "14.18"
+  }
   graphql_public: {
     Tables: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
       graphql: {
         Args: {
-          extensions?: Json;
-          operationName?: string;
-          query?: string;
-          variables?: Json;
-        };
-        Returns: Json;
-      };
-    };
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
     Enums: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
+      book_genres: {
+        Row: {
+          book_id: string
+          genre_id: string
+        }
+        Insert: {
+          book_id: string
+          genre_id: string
+        }
+        Update: {
+          book_id?: string
+          genre_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_genres_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["book_id"]
+          },
+          {
+            foreignKeyName: "book_genres_genre_id_fkey"
+            columns: ["genre_id"]
+            isOneToOne: false
+            referencedRelation: "genres"
+            referencedColumns: ["genre_id"]
+          },
+        ]
+      }
       books: {
         Row: {
-          author: string | null;
-          book_id: string;
-          description: string | null;
-          genre: string | null;
-          title: string | null;
-        };
+          author: string | null
+          book_id: string
+          description: string | null
+          title: string | null
+        }
         Insert: {
-          author?: string | null;
-          book_id?: string;
-          description?: string | null;
-          genre?: string | null;
-          title?: string | null;
-        };
+          author?: string | null
+          book_id?: string
+          description?: string | null
+          title?: string | null
+        }
         Update: {
-          author?: string | null;
-          book_id?: string;
-          description?: string | null;
-          genre?: string | null;
-          title?: string | null;
-        };
-        Relationships: [];
-      };
+          author?: string | null
+          book_id?: string
+          description?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
+      genres: {
+        Row: {
+          genre_id: string
+          name: string
+        }
+        Insert: {
+          genre_id?: string
+          name: string
+        }
+        Update: {
+          genre_id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       isbns: {
         Row: {
-          book_id: string;
-          description: string | null;
-          isbn: string;
-        };
+          book_id: string
+          description: string | null
+          isbn: string
+        }
         Insert: {
-          book_id: string;
-          description?: string | null;
-          isbn: string;
-        };
+          book_id: string
+          description?: string | null
+          isbn: string
+        }
         Update: {
-          book_id?: string;
-          description?: string | null;
-          isbn?: string;
-        };
+          book_id?: string
+          description?: string | null
+          isbn?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "isbns_book_id_fkey";
-            columns: ["book_id"];
-            isOneToOne: true;
-            referencedRelation: "books";
-            referencedColumns: ["book_id"];
+            foreignKeyName: "isbns_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: true
+            referencedRelation: "books"
+            referencedColumns: ["book_id"]
           },
-        ];
-      };
+        ]
+      }
       listings: {
         Row: {
-          availability: string;
-          book_id: string;
-          condition: string | null;
-          date_posted: string | null;
-          lender: string;
-          listing_id: string;
-        };
+          availability: string
+          book_id: string
+          condition: string | null
+          date_posted: string | null
+          lender_id: string
+          listing_id: string
+        }
         Insert: {
-          availability: string;
-          book_id: string;
-          condition?: string | null;
-          date_posted?: string | null;
-          lender: string;
-          listing_id?: string;
-        };
+          availability: string
+          book_id: string
+          condition?: string | null
+          date_posted?: string | null
+          lender_id: string
+          listing_id?: string
+        }
         Update: {
-          availability?: string;
-          book_id?: string;
-          condition?: string | null;
-          date_posted?: string | null;
-          lender?: string;
-          listing_id?: string;
-        };
+          availability?: string
+          book_id?: string
+          condition?: string | null
+          date_posted?: string | null
+          lender_id?: string
+          listing_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "Book Listing_lender_fkey";
-            columns: ["lender"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["uid"];
+            foreignKeyName: "Book Listing_lender_fkey"
+            columns: ["lender_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["uid"]
           },
           {
-            foreignKeyName: "listings_book_id_fkey";
-            columns: ["book_id"];
-            isOneToOne: true;
-            referencedRelation: "books";
-            referencedColumns: ["book_id"];
+            foreignKeyName: "listings_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: true
+            referencedRelation: "books"
+            referencedColumns: ["book_id"]
           },
-        ];
-      };
+        ]
+      }
       loans: {
         Row: {
-          borrower: string;
-          date_lended: string | null;
-          due_date: string | null;
-          is_overdue: boolean | null;
-          lender: string;
-          listing_id: string;
-          loan_id: string;
-        };
+          borrower_id: string
+          date_lended: string | null
+          due_date: string | null
+          is_overdue: boolean | null
+          lender_id: string
+          listing_id: string
+          loan_id: string
+        }
         Insert: {
-          borrower: string;
-          date_lended?: string | null;
-          due_date?: string | null;
-          is_overdue?: boolean | null;
-          lender: string;
-          listing_id: string;
-          loan_id?: string;
-        };
+          borrower_id: string
+          date_lended?: string | null
+          due_date?: string | null
+          is_overdue?: boolean | null
+          lender_id: string
+          listing_id: string
+          loan_id?: string
+        }
         Update: {
-          borrower?: string;
-          date_lended?: string | null;
-          due_date?: string | null;
-          is_overdue?: boolean | null;
-          lender?: string;
-          listing_id?: string;
-          loan_id?: string;
-        };
+          borrower_id?: string
+          date_lended?: string | null
+          due_date?: string | null
+          is_overdue?: boolean | null
+          lender_id?: string
+          listing_id?: string
+          loan_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "Book Loan_borrower_fkey";
-            columns: ["borrower"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["uid"];
+            foreignKeyName: "Book Loan_borrower_fkey"
+            columns: ["borrower_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["uid"]
           },
           {
-            foreignKeyName: "Book Loan_lender_fkey";
-            columns: ["lender"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["uid"];
+            foreignKeyName: "Book Loan_lender_fkey"
+            columns: ["lender_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["uid"]
           },
           {
-            foreignKeyName: "Book Loan_listing_id_fkey";
-            columns: ["listing_id"];
-            isOneToOne: false;
-            referencedRelation: "listings";
-            referencedColumns: ["listing_id"];
+            foreignKeyName: "Book Loan_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["listing_id"]
           },
-        ];
-      };
+        ]
+      }
+      reviews: {
+        Row: {
+          loan_id: string
+          message: string
+          rating: number
+          review_id: string
+          reviewee_id: string
+          reviewer_id: string
+          time: string
+        }
+        Insert: {
+          loan_id: string
+          message: string
+          rating: number
+          review_id?: string
+          reviewee_id: string
+          reviewer_id: string
+          time?: string
+        }
+        Update: {
+          loan_id?: string
+          message?: string
+          rating?: number
+          review_id?: string
+          reviewee_id?: string
+          reviewer_id?: string
+          time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_loan_id_fkey"
+            columns: ["loan_id"]
+            isOneToOne: true
+            referencedRelation: "loans"
+            referencedColumns: ["loan_id"]
+          },
+        ]
+      }
+      user_preferences: {
+        Row: {
+          genre_id: string
+          user_id: string
+        }
+        Insert: {
+          genre_id: string
+          user_id?: string
+        }
+        Update: {
+          genre_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_interests_genre_id_fkey"
+            columns: ["genre_id"]
+            isOneToOne: false
+            referencedRelation: "genres"
+            referencedColumns: ["genre_id"]
+          },
+        ]
+      }
       users: {
         Row: {
-          account_status: string | null;
-          bio: string | null;
-          calpoly_email: string;
-          credit_balance: number;
-          date_joined: string | null;
-          name: string | null;
-          on_campus: boolean | null;
-          pfp_url: string | null;
-          uid: string;
-          username: string;
-        };
+          account_status: string | null
+          bio: string | null
+          calpoly_email: string
+          credit_balance: number
+          date_joined: string | null
+          name: string | null
+          on_campus: boolean | null
+          pfp_url: string | null
+          uid: string
+          username: string
+        }
         Insert: {
-          account_status?: string | null;
-          bio?: string | null;
-          calpoly_email: string;
-          credit_balance?: number;
-          date_joined?: string | null;
-          name?: string | null;
-          on_campus?: boolean | null;
-          pfp_url?: string | null;
-          uid?: string;
-          username?: string;
-        };
+          account_status?: string | null
+          bio?: string | null
+          calpoly_email: string
+          credit_balance?: number
+          date_joined?: string | null
+          name?: string | null
+          on_campus?: boolean | null
+          pfp_url?: string | null
+          uid?: string
+          username?: string
+        }
         Update: {
-          account_status?: string | null;
-          bio?: string | null;
-          calpoly_email?: string;
-          credit_balance?: number;
-          date_joined?: string | null;
-          name?: string | null;
-          on_campus?: boolean | null;
-          pfp_url?: string | null;
-          uid?: string;
-          username?: string;
-        };
-        Relationships: [];
-      };
-    };
+          account_status?: string | null
+          bio?: string | null
+          calpoly_email?: string
+          credit_balance?: number
+          date_joined?: string | null
+          name?: string | null
+          on_campus?: boolean | null
+          pfp_url?: string | null
+          uid?: string
+          username?: string
+        }
+        Relationships: []
+      }
+    }
     Views: {
-      unique_genres: {
-        Row: {
-          genre: string | null;
-        };
-        Relationships: [];
-      };
-    };
+      [_ in never]: never
+    }
     Functions: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Enums: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
-};
+      [_ in never]: never
+    }
+  }
+}
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<
-  keyof Database,
-  "public"
->];
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
   ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
       DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
@@ -273,92 +368,95 @@ export type Tables<
         DefaultSchema["Views"])
     ? (DefaultSchema["Tables"] &
         DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R;
+        Row: infer R
       }
       ? R
       : never
-    : never;
+    : never
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I;
+        Insert: infer I
       }
       ? I
       : never
-    : never;
+    : never
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U;
+        Update: infer U
       }
       ? U
       : never
-    : never;
+    : never
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends (DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never;
+    : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals;
+    schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals;
+  schema: keyof DatabaseWithoutInternals
 }
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never;
+    : never
 
 export const Constants = {
   graphql_public: {
@@ -367,4 +465,4 @@ export const Constants = {
   public: {
     Enums: {},
   },
-} as const;
+} as const

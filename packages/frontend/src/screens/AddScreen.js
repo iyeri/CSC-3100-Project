@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   Platform,
   Pressable,
@@ -6,16 +6,12 @@ import {
   ScrollView,
   StatusBar as NativeStatusBar,
   Text,
-  useWindowDimensions,
   View,
   TextInput,
 } from "react-native";
 
-import { BookCard } from "../components/BookCard";
+import { addBookListing } from "../services/add-client";
 import { colors } from "../theme";
-
-const conditions = ["New", "Slightly Used", "Used"];
-const status = ["Available", "Lent", "Current Read"];
 
 const androidStatusBarPadding = {
   paddingTop: Platform.OS === "android" ? NativeStatusBar.currentHeight : 0,
@@ -30,25 +26,41 @@ export function AddScreen({ onAddListing }) {
   const [genre, setGenre] = useState("");
   const [condition, setCondition] = useState("");
   const [status, setStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [submitMessage, setSubmitMessage] = useState(null);
 
-  const handleAdd = () => {
-    const newListing = {
-      id: Date.now().toString(),
-      title: title.trim(),
-      author: author.trim(),
-      genre: genre.trim(),
-      status: status.trim(),
-      condition,
-    };
-
-    if (onAddListing) {
-      onAddListing(newListing);
+  const handleAdd = async () => {
+    if (isSubmitting) {
+      return;
     }
-    setTitle("");
-    setAuthor("");
-    setGenre("");
-    setStatus("");
-    setCondition("");
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setSubmitMessage(null);
+
+    try {
+      const listing = await addBookListing({
+        title,
+        author,
+        genre,
+        status,
+        condition,
+      });
+
+      await onAddListing?.(listing);
+      setTitle("");
+      setAuthor("");
+      setGenre("");
+      setStatus("");
+      setCondition("");
+      setSubmitMessage("Your listing was added.");
+    } catch (error) {
+      console.error("Failed to add listing:", error);
+      setSubmitError(error.message || "Unable to add the listing.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <SafeAreaView className="flex-1 bg-paper" style={androidStatusBarPadding}>
@@ -113,26 +125,47 @@ export function AddScreen({ onAddListing }) {
                   className={INPUT_CLASS}
                 />
               </View>
+              <View className={INPUT_ROW_CLASS}>
+                <Text>CONDITION</Text>
+                <TextInput
+                  value={condition}
+                  onChangeText={setCondition}
+                  placeholder="ex. Like New, Good, Fair"
+                  placeholderTextColor={colors.muted}
+                  className={INPUT_CLASS}
+                />
+              </View>
 
               <View>
                 <Text>Your Listing</Text>
                 <Text>
-                  {title.trim()} <br />
-                  {author.trim()}
-                  <br />
-                  {genre.trim()}
-                  <br />
-                  {status.trim()}
+                  {[title, author, genre, status, condition]
+                    .map((value) => value.trim())
+                    .filter(Boolean)
+                    .join("\n")}
                 </Text>
               </View>
               <Pressable
-                className="bg-ink mt-20 flex-row items-center"
+                accessibilityRole="button"
+                accessibilityState={{ disabled: isSubmitting }}
+                disabled={isSubmitting}
+                className={`bg-ink mt-20 flex-row items-center ${
+                  isSubmitting ? "opacity-50" : ""
+                }`}
                 onPress={handleAdd}
               >
                 <Text className="text-soft-muted text-12 font-black">
-                  Submit Book
+                  {isSubmitting ? "Submitting..." : "Submit Book"}
                 </Text>
               </Pressable>
+              {submitError ? (
+                <Text className="text-coral text-12 mt-10">{submitError}</Text>
+              ) : null}
+              {submitMessage ? (
+                <Text className="text-dark-green text-12 mt-10">
+                  {submitMessage}
+                </Text>
+              ) : null}
             </View>
           </View>
         </ScrollView>

@@ -25,7 +25,7 @@ import SignupScreen from "./src/screens/SignupScreen";
 import GenrePreferencesScreen from "./src/screens/GenrePreferencesScreen";
 import { mockListings } from "./src/data/mockListings";
 
-import { restoreSession, logout } from "./src/services/signuplogin-service";
+import { restoreSession, logout } from "./src/services/auth-client";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -43,7 +43,6 @@ export default function App() {
   // When set, overlays the active tab with the listing detail screen. Null
   // means no listing is open. Reset to null to "go back" to the tab.
   const [selectedListingId, setSelectedListingId] = useState(null);
-  // Frontend-only auth gate. Swap for the real Supabase session later.
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authScreen, setAuthScreen] = useState("login");
@@ -148,7 +147,7 @@ export default function App() {
       case "Add":
         return <AddScreen />;
       case "Profile":
-        return <ProfileScreen onLogout={handleLogout} />;
+        return <ProfileScreen userId={session.user.id} onLogout={handleLogout} />;
       default:
         return <ListingsScreen onOpenListing={setSelectedListingId} />;
     }

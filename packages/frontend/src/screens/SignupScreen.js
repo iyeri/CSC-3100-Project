@@ -9,7 +9,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { signup } from "../services/signuplogin-service";
+import { signup } from "../services/auth-client";
 
 import { colors } from "../theme";
 

@@ -139,6 +139,122 @@ async function updateUser(
   return data;
 }
 
+/* getUserPreferences()
+ *
+ * Input:
+ * uid
+ *
+ * Output:
+ * An array of user preferences for the given user.
+ *
+ * On error, returns undefined.
+ */
+async function getUserPreferences(
+  supabase: SupabaseClient<Database>,
+  uid: Tables<"users">["uid"],
+) {
+  const { data, error } = await supabase
+    .from("user_preferences")
+    .select()
+    .eq("user_id", uid);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  return data;
+}
+
+/* addUserPreferences()
+ *
+ * Input:
+ * uid, array of genre_ids
+ *
+ * Output:
+ * An array of user preferences for the given user.
+ *
+ * On error, returns undefined.
+ */
+async function addUserPreferences(
+  supabase: SupabaseClient<Database>,
+  uid: Tables<"users">["uid"],
+  preferences: Array<TablesInsert<"user_preferences">["genre_id"]>,
+) {
+  if (preferences.length === 0) {
+    return [];
+  }
+
+  const rows: TablesInsert<"user_preferences">[] = preferences.map(
+    (genre_id) => ({
+      user_id: uid,
+      genre_id,
+    }),
+  );
+
+  const { data, error } = await supabase
+    .from("user_preferences")
+    .insert(rows)
+    .select();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  return data;
+}
+
+/* deleteUserPreferences()
+ *
+ * Input:
+ * uid, array of genre_ids
+ *
+ * Output:
+ * An array of user preferences deleted for the given user.
+ *
+ * On error, returns undefined.
+ */
+async function deleteUserPreferences(
+  supabase: SupabaseClient<Database>,
+  uid: Tables<"users">["uid"],
+  preferences: Array<TablesInsert<"user_preferences">["genre_id"]>
+) {
+  if (preferences.length === 0) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("user_preferences")
+    .delete()
+    .eq("user_id", uid)
+    .in('genre_id', preferences);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  return data;
+}
+
+async function getUserReviews(
+  supabase: SupabaseClient<Database>,
+  uid: Tables<"users">["uid"],
+) {
+  const { data, error } = await supabase
+    .from("reviews")
+    .select()
+    .eq("reviewee_id", uid);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  return data;
+}
+
 /* Export functions as default object.
  * Import within another .js file without curly braces:
  *   import someName from "path-to-this-file/supabase.ts"
@@ -150,4 +266,8 @@ export default {
   addUser,
   deleteUser,
   updateUser,
+  getUserPreferences,
+  addUserPreferences,
+  deleteUserPreferences,
+  getUserReviews
 };
