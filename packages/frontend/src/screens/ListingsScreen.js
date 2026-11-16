@@ -18,7 +18,7 @@ import { categories, mockListings } from "../data/mockListings";
 const PAGE_PADDING = 20;
 const GRID_GAP = 16;
 
-export default function ListingsScreen() {
+export default function ListingsScreen({ onOpenListing }) {
   const { width } = useWindowDimensions();
   const bookWidth = (width - PAGE_PADDING * 2 - GRID_GAP) / 2;
 
@@ -31,7 +31,13 @@ export default function ListingsScreen() {
         <FlatList
           data={mockListings}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <BookCard book={item} width={bookWidth} />}
+          renderItem={({ item }) => (
+            <BookCard
+              book={item}
+              width={bookWidth}
+              onPress={() => onOpenListing?.(item.id)}
+            />
+          )}
           numColumns={2}
           columnWrapperClassName="justify-between"
           contentContainerClassName="px-20 pt-md pb-xl"

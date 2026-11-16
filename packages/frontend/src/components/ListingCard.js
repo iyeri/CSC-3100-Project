@@ -6,7 +6,7 @@ import CoverPattern, { PATTERN_COUNT } from "./CoverPattern";
 // Mirrors the "Fresh finds" grid cell from the Figma mock:
 // a tall color-blocked cover with a heart in the top-right, title + meta below.
 // Renamed from BookCard to avoid colliding with the profile BookCard.
-export default function ListingCard({ listing }) {
+export default function ListingCard({ listing, onPress }) {
   const [liked, setLiked] = useState(false);
   const { width } = useWindowDimensions();
   // 2-up grid: 20px horizontal screen padding + 16px gutter between cards.
@@ -21,15 +21,15 @@ export default function ListingCard({ listing }) {
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${listing.title} by ${listing.author}`}
       className="mb-xl"
       style={{ width: cardWidth }}
-      onPress={() => {
-        /* no-op — detail screen not wired up yet */
-      }}
+      onPress={() => onPress?.(listing.id)}
     >
       <View
         className="aspect-[0.78] rounded-lg p-md overflow-hidden justify-start"
-        style={{ backgroundColor: listing.coverBg }}
+        style={{ backgroundColor: listing.cover ?? listing.coverBg }}
       >
         <CoverPattern index={patternIndex} color={listing.accent} />
         <Text

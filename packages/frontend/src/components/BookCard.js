@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 
-export function BookCard({ book, width, onToggleCurrentRead }) {
+export function BookCard({ book, width, onPress, onToggleCurrentRead }) {
   const isAvailable = book.status === "AVAILABLE";
   const isReading = Boolean(book.isCurrentRead);
 
@@ -8,6 +8,7 @@ export function BookCard({ book, width, onToggleCurrentRead }) {
     <Pressable
       accessibilityHint={`View ${book.title} by ${book.author}`}
       accessibilityRole="button"
+      onPress={onPress}
       className="mb-24 active:opacity-[0.72] active:scale-[0.985]"
       style={{ width }}
     >

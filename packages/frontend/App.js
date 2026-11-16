@@ -18,10 +18,12 @@ import { BottomNav } from "./src/components/BottomNav";
 import { AddScreen } from "./src/screens/AddScreen";
 import { BrowseScreen } from "./src/screens/BrowseScreen";
 import ListingsScreen from "./src/screens/ListingsScreen";
+import ListingDetailScreen from "./src/screens/ListingDetailScreen";
 import { ProfileScreen } from "./src/screens/ProfileScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import GenrePreferencesScreen from "./src/screens/GenrePreferencesScreen";
+import { mockListings } from "./src/data/mockListings";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,6 +38,9 @@ export default function App() {
   });
 
   const [activeTab, setActiveTab] = useState("Home");
+  // When set, overlays the active tab with the listing detail screen. Null
+  // means no listing is open. Reset to null to "go back" to the tab.
+  const [selectedListingId, setSelectedListingId] = useState(null);
   // Frontend-only auth gate. Swap for the real Supabase session later.
   const [session, setSession] = useState(null);
   const [authScreen, setAuthScreen] = useState("login");
@@ -97,7 +102,7 @@ export default function App() {
   const screen = () => {
     switch (activeTab) {
       case "Home":
-        return <ListingsScreen />;
+        return <ListingsScreen onOpenListing={setSelectedListingId} />;
       case "Browse":
         return <BrowseScreen />;
       case "Add":
@@ -105,9 +110,29 @@ export default function App() {
       case "Profile":
         return <ProfileScreen />;
       default:
-        return <ListingsScreen />;
+        return <ListingsScreen onOpenListing={setSelectedListingId} />;
     }
   };
+
+  // When a listing is selected, present its detail screen full-bleed over
+  // the tabs. No bottom nav on the detail screen to match the Figma mock.
+  // If the id doesn't resolve (stale state after a data refresh) we silently
+  // fall through to the tab view; the next card tap will overwrite the id.
+  const selectedListing = selectedListingId
+    ? mockListings.find((l) => l.id === selectedListingId)
+    : null;
+
+  if (selectedListing) {
+    return (
+      <View className="flex-1 bg-canvas">
+        <StatusBar style="dark" />
+        <ListingDetailScreen
+          listing={selectedListing}
+          onBack={() => setSelectedListingId(null)}
+        />
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-canvas">
