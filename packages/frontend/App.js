@@ -17,6 +17,7 @@ import { BottomNav } from "./src/components/BottomNav";
 import { AddScreen } from "./src/screens/AddScreen";
 import { BrowseScreen } from "./src/screens/BrowseScreen";
 import ListingsScreen from "./src/screens/ListingsScreen";
+import ListingDetailScreen from "./src/screens/ListingDetailScreen";
 import { ProfileScreen } from "./src/screens/ProfileScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
@@ -35,6 +36,11 @@ export default function App() {
   });
 
   const [activeTab, setActiveTab] = useState("Home");
+  // When set, overlays the active tab with the listing detail screen. Null
+  // means no listing is open. Reset to null to "go back" to the tab. We hold
+  // the whole listing object (not just an id) so the detail screen doesn't
+  // need to re-fetch or know about the data source.
+  const [selectedListing, setSelectedListing] = useState(null);
   // Frontend-only auth gate. Swap for the real Supabase session later.
   const [session, setSession] = useState(null);
   const [authScreen, setAuthScreen] = useState("login");
@@ -96,7 +102,7 @@ export default function App() {
   const screen = () => {
     switch (activeTab) {
       case "Home":
-        return <ListingsScreen />;
+        return <ListingsScreen onOpenListing={setSelectedListing} />;
       case "Browse":
         return <BrowseScreen />;
       case "Add":
@@ -104,9 +110,23 @@ export default function App() {
       case "Profile":
         return <ProfileScreen />;
       default:
-        return <ListingsScreen />;
+        return <ListingsScreen onOpenListing={setSelectedListing} />;
     }
   };
+
+  // When a listing is selected, present its detail screen full-bleed over
+  // the tabs. No bottom nav on the detail screen to match the Figma mock.
+  if (selectedListing) {
+    return (
+      <View style={styles.app}>
+        <StatusBar style="dark" />
+        <ListingDetailScreen
+          listing={selectedListing}
+          onBack={() => setSelectedListing(null)}
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.app}>
