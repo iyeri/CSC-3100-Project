@@ -16,7 +16,7 @@ import {
  * Nothing; calls next function.
  */
 export async function attachAuthContext(req, res, next) {
-  const authorization = req.get("authorization");
+  const authorization = req.get("Authorization");
 
   // No token: continue as anon.
   if (!authorization) {
@@ -37,7 +37,7 @@ export async function attachAuthContext(req, res, next) {
   try {
     const {
       data: { user },
-      error
+      error,
     } = await supabase.auth.getUser(authToken);
 
     // Supplied tokens must be valid; don't fall back to anon.

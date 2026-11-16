@@ -226,11 +226,11 @@ export type Database = {
     Views: {
       unique_genres: {
         Row: {
-          genre: string | null
-        }
-        Relationships: []
-      }
-    }
+          genre: string | null;
+        };
+        Relationships: [];
+      };
+    };
     Functions: {
       [_ in never]: never;
     };
@@ -367,4 +367,4 @@ export const Constants = {
   public: {
     Enums: {},
   },
-} as const
+} as const;

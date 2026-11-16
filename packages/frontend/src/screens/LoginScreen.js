@@ -9,6 +9,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { login } from "../services/signuplogin-service";
 
 import { colors } from "../theme";
 
@@ -23,22 +24,32 @@ export default function LoginScreen({ onAuthed, onSwitchToSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSignIn = () => {
+  const handleLogin = async () => {
     const trimmed = email.trim().toLowerCase();
 
     if (!trimmed || !password) {
       setError("Enter your email and password.");
       return;
     }
-    if (!trimmed.endsWith("@calpoly.edu")) {
+    /*if (!trimmed.endsWith("@calpoly.edu")) {
       setError("Use your @calpoly.edu email to sign in.");
       return;
-    }
+    }*/
 
     setError(null);
-    // TODO(auth): replace with supabase.auth.signInWithPassword.
-    onAuthed?.({ email: trimmed });
+    setIsSubmitting(true);
+
+    try {
+      const session = await login(trimmed, password);
+      onAuthed?.(session);
+    } catch (err) {
+      console.error("Login failed:", err);
+      setError("Login failed. Check your credentials and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -114,9 +125,12 @@ export default function LoginScreen({ onAuthed, onSwitchToSignup }) {
 
           <Pressable
             className="bg-dark-green rounded-lg py-16 items-center active:opacity-85"
-            onPress={handleSignIn}
+            onPress={handleLogin}
+            disabled={isSubmitting}
           >
-            <Text className="font-sans-bold text-16 text-white">Sign in</Text>
+            <Text className="font-sans-bold text-16 text-white">
+              {isSubmitting ? "Signing in..." : "Sign in"}
+            </Text>
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>

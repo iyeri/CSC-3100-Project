@@ -4,10 +4,7 @@ import userService from "../services/users-service.ts";
 import bookService from "../services/books-service.ts";
 import listingService from "../services/listings-service.ts";
 import loanService from "../services/loans-service.ts";
-import {
-  signup,
-  login,
-} from "../services/signuplogin-service.ts";
+import { signup, login } from "../services/signuplogin-service.ts";
 import {
   attachAuthContext,
   requireAuth,
@@ -58,7 +55,7 @@ app.get("/", (req, res) => {
   res.send("This is the root path/endpoint.");
 });
 
-// The /auth (signup and login) path.
+// The /auth (signup, login, refresh token) path.
 app.post("/auth/signup", async (req, res) => {
   const db_client = req.db_client;
   const email = req.body.email;
@@ -71,7 +68,7 @@ app.post("/auth/signup", async (req, res) => {
     return;
   }
 
-  res.status(200).send(user);
+  res.status(200).json(user);
 });
 
 app.post("/auth/login", async (req, res) => {
@@ -86,7 +83,25 @@ app.post("/auth/login", async (req, res) => {
     return;
   }
 
-  res.status(200).send(session);
+  res.status(200).json(session);
+});
+
+app.post("/auth/logout", requireAuth, async (req, res) => {
+  // For now, just clear the access token on the client side. No server-side actions.
+  // Supabase docs says:
+  // There is no way to revoke a user's access token jwt until it expires.
+  // It is recommended to set a shorter expiry on the jwt for this reason.
+  res.status(200).send("Logged out successfully.");
+});
+
+app.get("/auth/me", requireAuth, async (req, res) => {
+  // Return the authenticated user's information.
+  res.status(200).json(req.user);
+});
+
+app.get("/auth/refresh", requireAuth, async (req, res) => {
+  // TODO
+  res.status(501).send("Not implemented.");
 });
 
 // The /users path.
@@ -108,7 +123,7 @@ app.get("/users", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(data);
+  res.status(200).json(data);
 });
 
 app.post("/users", requireAuth, async (req, res) => {
@@ -136,7 +151,7 @@ app.post("/users", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(newUser);
+  res.status(200).json(newUser);
 });
 
 app.delete("/users/:uid", requireAuth, async (req, res) => {
@@ -195,7 +210,7 @@ app.patch("/users/:uid", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(updatedUser);
+  res.status(200).json(updatedUser);
 });
 
 app.get("/users/:uid/loans", requireAuth, async (req, res) => {
@@ -237,7 +252,7 @@ app.get("/users/:uid/loans", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(data);
+  res.status(200).json(data);
 });
 
 // The /books path.
@@ -260,7 +275,7 @@ app.get("/books", async (req, res) => {
     return;
   }
 
-  res.status(200).send(data);
+  res.status(200).json(data);
 });
 
 app.post("/books", requireAuth, async (req, res) => {
@@ -285,11 +300,14 @@ app.post("/books", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(newBook);
+  res.status(200).json(newBook);
 });
 
 app.delete("/books/:book_id", requireAuth, async (req, res) => {
-  const deletedBook = await bookService.deleteBook(req.db_client, req.params.book_id);
+  const deletedBook = await bookService.deleteBook(
+    req.db_client,
+    req.params.book_id,
+  );
 
   if (deletedBook === undefined) {
     res.status(500).send("Database failure (deleting book).");
@@ -330,7 +348,7 @@ app.patch("/books/:book_id", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(updatedBook);
+  res.status(200).json(updatedBook);
 });
 
 // The /listings path.
@@ -354,7 +372,7 @@ app.get("/listings", async (req, res) => {
     return;
   }
 
-  res.status(200).send(data);
+  res.status(200).json(data);
 });
 
 app.post("/listings", requireAuth, async (req, res) => {
@@ -382,7 +400,7 @@ app.post("/listings", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(newListing);
+  res.status(200).json(newListing);
 });
 
 app.delete("/listings/:listing_id", requireAuth, async (req, res) => {
@@ -430,7 +448,7 @@ app.patch("/listings/:listing_id", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(updatedListing);
+  res.status(200).json(updatedListing);
 });
 
 // The /loans path.
@@ -456,7 +474,7 @@ app.get("/loans", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(data);
+  res.status(200).json(data);
 });
 
 app.post("/loans", requireAuth, async (req, res) => {
@@ -485,7 +503,7 @@ app.post("/loans", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(newLoan);
+  res.status(200).json(newLoan);
 });
 
 app.delete("/loans/:loan_id", requireAuth, async (req, res) => {
@@ -504,7 +522,7 @@ app.delete("/loans/:loan_id", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send("Loan deleted.");
+  res.status(200).json({ message: "Loan deleted." });
 });
 
 app.patch("/loans/:loan_id", requireAuth, async (req, res) => {
@@ -533,7 +551,7 @@ app.patch("/loans/:loan_id", requireAuth, async (req, res) => {
     return;
   }
 
-  res.status(200).send(updatedLoan);
+  res.status(200).json(updatedLoan);
 });
 
 app.listen(8000, () => {

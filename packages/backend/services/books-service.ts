@@ -147,12 +147,8 @@ async function updateBook(
  *
  * On error, returns undefined.
  */
-async function getUniqueGenres(
-  supabase: SupabaseClient<Database>
-) {
-  const { data, error } = await supabase
-    .from("unique_genres")
-    .select();
+async function getUniqueGenres(supabase: SupabaseClient<Database>) {
+  const { data, error } = await supabase.from("unique_genres").select();
 
   if (error) {
     console.error(error);
