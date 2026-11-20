@@ -1,13 +1,11 @@
-import { useState } from "react";
 import { Pressable, Text, View, useWindowDimensions } from "react-native";
 
 import CoverPattern, { PATTERN_COUNT } from "./CoverPattern";
 
 // Mirrors the "Fresh finds" grid cell from the Figma mock:
-// a tall color-blocked cover with a heart in the top-right, title + meta below.
+// a tall color-blocked cover with title + meta below.
 // Renamed from BookCard to avoid colliding with the profile BookCard.
 export default function ListingCard({ listing, onPress }) {
-  const [liked, setLiked] = useState(false);
   const { width } = useWindowDimensions();
   // 2-up grid: 20px horizontal screen padding + 16px gutter between cards.
   const cardWidth = (width - 20 * 2 - 16) / 2;
@@ -44,20 +42,6 @@ export default function ListingCard({ listing, onPress }) {
         >
           {listing.author.toUpperCase()}
         </Text>
-
-        <Pressable
-          hitSlop={8}
-          className="absolute top-sm right-sm w-28 h-28 rounded-full bg-white items-center justify-center"
-          onPress={() => setLiked((v) => !v)}
-        >
-          <Text
-            className={`text-16 -mt-2 ${
-              liked ? "text-heart-active" : "text-heart-idle"
-            }`}
-          >
-            {liked ? "♥" : "♡"}
-          </Text>
-        </Pressable>
       </View>
 
       <Text

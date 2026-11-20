@@ -23,7 +23,6 @@ import { ProfileScreen } from "./src/screens/ProfileScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
 import GenrePreferencesScreen from "./src/screens/GenrePreferencesScreen";
-import { mockListings } from "./src/data/mockListings";
 
 import { restoreSession, logout } from "./src/services/auth-client";
 
@@ -40,9 +39,9 @@ export default function App() {
   });
 
   const [activeTab, setActiveTab] = useState("Home");
-  // When set, overlays the active tab with the listing detail screen. Null
-  // means no listing is open. Reset to null to "go back" to the tab.
-  const [selectedListingId, setSelectedListingId] = useState(null);
+  // The listing the user tapped on the Home tab, or null. Holding the whole
+  // object means the detail screen doesn't need to re-fetch it.
+  const [selectedListing, setSelectedListing] = useState(null);
   const [session, setSession] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authScreen, setAuthScreen] = useState("login");
@@ -135,13 +134,13 @@ export default function App() {
     setAuthScreen("login");
     setNeedsGenrePrefs(false);
     setActiveTab("Home");
-    setSelectedListingId(null);
+    setSelectedListing(null);
   };
 
   const screen = () => {
     switch (activeTab) {
       case "Home":
-        return <ListingsScreen onOpenListing={setSelectedListingId} />;
+        return <ListingsScreen onOpenListing={setSelectedListing} />;
       case "Browse":
         return <BrowseScreen />;
       case "Add":
@@ -151,25 +150,19 @@ export default function App() {
           <ProfileScreen userId={session.user.id} onLogout={handleLogout} />
         );
       default:
-        return <ListingsScreen onOpenListing={setSelectedListingId} />;
+        return <ListingsScreen onOpenListing={setSelectedListing} />;
     }
   };
 
   // When a listing is selected, present its detail screen full-bleed over
   // the tabs. No bottom nav on the detail screen to match the Figma mock.
-  // If the id doesn't resolve (stale state after a data refresh) we silently
-  // fall through to the tab view; the next card tap will overwrite the id.
-  const selectedListing = selectedListingId
-    ? mockListings.find((l) => l.id === selectedListingId)
-    : null;
-
   if (selectedListing) {
     return (
       <View className="flex-1 bg-canvas">
         <StatusBar style="dark" />
         <ListingDetailScreen
           listing={selectedListing}
-          onBack={() => setSelectedListingId(null)}
+          onBack={() => setSelectedListing(null)}
         />
       </View>
     );
