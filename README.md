@@ -1,4 +1,85 @@
 # CSC-3100-Project
+## Test-Driven Development
+
+The feature that was implemented using test-driven development was the acquiring the credits from a user. 
+Vitest was used during this development, thus vi test must be installed using 
+```bash
+npm install -D vitest
+```
+To run the test individually the command 
+```bash
+npm run test:vitest
+```
+To run test with other backend tests use command
+```bash
+npm test
+```
+Future tests for this feature will be a ui test with the user accessing their credit and past credit transacitons
+
+Workflow for TDD
+Feature being Implemented: Token Credit System
+	Frontend: Displays Credits
+	Backend: Fetches the credit balance that is linked to the logged in user
+Initial Failing Test:
+	import { expect, it, vi} from "vitest";
+import {getCredits} from "../services/credit-serivce";
+
+
+it('should return current user credits', async () => {
+    const mockDB= {
+        auth:{
+            getUser: vi.fn().mockResolvedValue({
+                data:{
+                    user:{id:'123'}
+                },
+                error:null
+            })
+        },
+        from:vi.fn().mockReturnValue({
+            select:vi.fn().mockReturnValue({
+                eq:vi.fn().mockReturnValue({
+                    single:vi.fn().mockResolvedValue({
+                        data:{credits:0},
+                        error:null
+                    })
+                })
+            })
+        })
+    };
+    const result = await getCredits(mockDB);
+    expect (result).toBe(0);
+});
+
+Code to make Test pass:
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+
+export async function getCredits(supabase:SupabaseClient){
+    const { data: {user}, error: authError}= await supabase.auth.getUser();
+
+
+    if(authError || !user){
+        throw new Error ("Not an authenticated user");
+    }
+    const { data, error} = await supabase
+    .from('user')
+    .select('credit_balance')
+    .eq('uid', user.id)
+    .single();
+
+
+    if (error||!data){
+        throw new Error ('Could not fetch credits');
+    }
+
+
+    return data.credit_balance;
+}
+
+
+
+Refactoring:
+After the initial code above was implemented the test file was then updated to fail for authenticated users, followed by the credit-services file to properly pass. 
 
 ## Backend unit tests
 
@@ -8,6 +89,10 @@ Install dependencies from the project root, then run the tests:
 
 ```bash
 npm install
+npm run test:node
+```
+Can also test with Vi tests using
+```bash
 npm test
 ```
 
