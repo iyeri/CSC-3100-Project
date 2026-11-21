@@ -15,8 +15,8 @@ import { colors, fonts, radii, spacing } from "../theme";
 // OurLibrary Figma mock. Reached by tapping a card on ListingsScreen.
 //
 // Props:
-//   - listing: a row from mockListings (title, author, genre, condition,
-//     format, tokens, postedAt, postedBy, cover, accent).
+//   - listing: a posting from src/api/listings.js (title, author, genre,
+//     condition, format, tokens, postedAt, postedBy, cover, accent).
 //   - onBack: called when the user taps the back chevron.
 //
 // All actions are stubbed: the mail button pops an Alert with the poster's
@@ -103,13 +103,15 @@ export default function ListingDetailScreen({ listing, onBack }) {
           <Text style={styles.author}>{listing.author}</Text>
 
           <View style={styles.tagRow}>
-            <Tag label={listing.condition} />
-            <Tag label={listing.format} />
+            {listing.condition ? <Tag label={listing.condition} /> : null}
+            {listing.format ? <Tag label={listing.format} /> : null}
           </View>
 
-          <Text style={styles.postedAt}>
-            Posted {formatDate(listing.postedAt)}
-          </Text>
+          {listing.postedAt ? (
+            <Text style={styles.postedAt}>
+              Posted {formatDate(listing.postedAt)}
+            </Text>
+          ) : null}
 
           <View style={styles.divider} />
 

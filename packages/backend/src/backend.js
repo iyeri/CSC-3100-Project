@@ -48,7 +48,16 @@ const reviewKeys = [
 // Initialize express web application.
 const app = express();
 const port = 8000;
-app.use(cors()); // FOR BROWSER TESTING; REMOVE THIS LINE IN PRODUCTION!!
+
+// Let the Expo web app (served by Metro on port 8081) call this API from the
+// browser. Phones and simulators don't need this; browsers do. Add other
+// origins with CORS_ORIGINS, comma-separated, e.g.
+// CORS_ORIGINS=http://localhost:8081,http://192.168.1.20:8081
+const allowedOrigins = (process.env.CORS_ORIGINS ?? "http://localhost:8081")
+  .split(",")
+  .map((origin) => origin.trim());
+app.use(cors({ origin: allowedOrigins }));
+
 app.use(express.json()); // Allow express to parse JSON data.
 app.use(attachAuthContext); // Attach authentication context to each request.
 

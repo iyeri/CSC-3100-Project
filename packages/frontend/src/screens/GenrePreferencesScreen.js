@@ -1,22 +1,12 @@
 import { useMemo, useState } from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
+import { GENRES } from "../data/genres";
+
 // Shown once after signup so new users can seed their recommendations.
 // For now onComplete just forwards the picks to App.js; wire this to
 // Supabase (e.g. upsert into a user_preferences table) when auth lands.
-
-const GENRES = [
-  "Drama",
-  "Romance",
-  "Fantasy",
-  "Mystery",
-  "Thriller",
-  "Horror",
-  "Science fiction",
-  "Historical fiction",
-  "Western",
-  "Comedy",
-];
+// The genre list is shared with the home page filter chips via ../data/genres.
 
 const MAX_SELECTIONS = 3;
 // Minimum genres a user must pick before Continue enables. Flip to

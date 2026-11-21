@@ -6,6 +6,7 @@
     "@expo-google-fonts/dm-sans": "^0.4.2",
     "@expo-google-fonts/source-serif-4": "^0.4.2",
     "expo": "~58.0.25",
+    "expo-constants": "~58.0.16",
     "expo-font": "~58.0.12",
     "expo-secure-store": "~58.0.3",
     "expo-splash-screen": "~58.0.14",
@@ -24,11 +25,23 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "export:web": "expo export --platform web --output-dir dist"
+    "export:web": "expo export --platform web --output-dir dist",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "testTimeout": 15000,
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/test-utils/"
+    ]
   },
   "private": true,
   "devDependencies": {
+    "@testing-library/react-native": "^14.1.0",
     "babel-preset-expo": "~58.0.0",
+    "jest": "~30.5.2",
+    "jest-expo": "~58.0.15",
     "tailwindcss": "^3.4.17"
   }
 }
